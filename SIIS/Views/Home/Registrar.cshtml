@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Registrar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="lead">Registrar-se no Sistema</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <p>@Html.ActionLink("Registrar-se como Paciente.", "RegisterPaciente", "Account")</p>
+        <p>@Html.ActionLink("Registrar-se como um Profissional de Saúde.", "RegisterProfissional", "Account")</p>
+    </div>
+</div>

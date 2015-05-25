@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using System.Web.Optimization
+@using System.Security.Principal
+@using SIIS.Models
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIIS - Sistema de Integração de Informações de Saúde</title>
+    @{
+        //var theme = Bootstrap.Theme.Stock;
+        var theme = "Amelia";
+        if (User.Identity.IsAuthenticated)
+        {
+            var userStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var manager = new UserManager<ApplicationUser>(userStore);
+            var user = manager.FindById(User.Identity.GetUserId());
+
+            //Desloga caso ficar armazenado em cache.
+            if (user == null)
+            {
+                FormsAuthentication.SignOut();
+                HttpContext.Current.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+            }
+            else
+            {
+                theme = user.CssTheme ?? theme;
+            }
+        }
+
+    }
+    @Styles.Render("~/bundles/theme")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body style="padding-top: 60px !important;">
+    @RenderSection("topLevel", required: false)
+    @*The structure for the navbar*@
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    @*These get rendered out as the 'expand' button when collapsed*@
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="@Url.Action("Index","Home")" title="Sistema de Integração de Informações de Saúde">
+                    <img style=" width: 75px;" class="" src="~/Content/imagens/logo_transparente.png" />
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @Html.Partial("_MenuPartial")
+                }
+
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @{ Html.RenderPartial("_Alerts"); }
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2015 - @DateTime.Now.Year - Sistema de Integração de Informações de Saúde</p>
+        </footer>
+    </div>
+    @*The Bootstrap JS is loaded here*@
+    @*The JS takes care of some things that can't happen in pure CSS and adds functionality *@
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Confirmação de Acesso";
+}
+
+<h2>@ViewBag.Title</h2>
+<div>
+    <p>
+        Obrigado por confirmar o seu acesso ao SIIS. Por favor, @Html.ActionLink("clique aqui para entrar.", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+    </p>
+</div>

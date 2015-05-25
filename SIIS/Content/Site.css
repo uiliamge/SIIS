@@ -1,0 +1,46 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    width: 300px;
+    color: #343434;
+}
+
+select {
+    padding-right: 6px !important;
+    padding-left: 6px!important;
+}
+
+legend {
+    font-family: 'Cabin',Arial,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.btn {
+    width: initial;
+}
+
+fieldset {
+    border-bottom: 1px solid #0d747c;
+    padding-bottom: 4px;
+}
+
+.comboPequena {
+    width: 100px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cabin', Arial, sans-serif;
+}

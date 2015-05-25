@@ -1,0 +1,22 @@
+﻿@using SIIS.Models
+
+<ul class="nav navbar-nav" style="margin: 7.5px 7px 7px 7px;">
+    <li>@Html.ActionLink("Início", "Index", "Home")</li>
+    <li>@Html.ActionLink("Extratos de Prontuário", "Index", "Extrato")</li>
+    <li>@Html.ActionLink("Consultas ao Sistema", "Index", "Home")</li>
+    
+    @if (ViewBag.Notifications != null)
+    {
+        foreach (NotificationViewModel notification in ViewBag.Notifications)
+        {
+            <li>
+                <a href="#">
+                    @notification.NotificationType
+                    <span class="badge badge-@notification.BadgeClass">
+                        @notification.Count
+                    </span>
+                </a>
+            </li>
+        }
+    }
+</ul>

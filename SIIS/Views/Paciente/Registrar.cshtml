@@ -1,0 +1,119 @@
+﻿@model SIIS.Models.RegisterPacienteViewModel
+@using System.Web.Optimization
+
+@{
+    ViewBag.Title = "Registrar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var listItens = new List<SelectListItem>();
+    listItens.Add(new SelectListItem() { Selected = false, Text = "123456 - João da Silva", Value = "123456" });
+    var list = new SelectList(listItens);
+
+}
+
+<p class="lead">Registrar-se como Paciente</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => Model.Cpf, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Cpf, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cpf, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6" style="padding-top: 10px; padding-left: 0;">
+                <label>Você receberá um e-mail de confirmação para ativar o seu cadastro.</label>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => Model.TipoPermissao, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option></option>
+                    <option>Qualquer Profissional</option>
+                    <option selected>Escolher quem poderá acessar</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.TipoPermissao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <fieldset>
+                    <legend>Profissionais que poderão acessar meu histórico</legend>
+                    <div class="col-md-3">
+
+                        <input class="top pull-left form-control" type="text" placeholder="Nº no Conselho do Profissional" />
+                    </div>
+                    <div class="col-md-1" style="padding-left: 0px; padding-right: 5px;">
+                        <select class="form-control">
+                            <option selected>RS</option>
+                            <option>SC</option>
+                            <option>SP</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.TipoPermissao, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        <a style="vertical-align: top; margin-left: 4px;" class="btn btn-default" href="#">Adicionar &raquo;</a>
+                    </div>
+                    <div class="col-md-5">
+                        @Html.ListBox("lstProfissionaisPermitidos", listItens, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salvar Cadastro" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Voltar", "Registrar", "Home")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

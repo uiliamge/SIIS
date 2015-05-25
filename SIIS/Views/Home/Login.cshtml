@@ -1,0 +1,125 @@
+﻿@using SIIS.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+<h2 class="text-center" style="font-family: 'Cabin',Arial,sans-serif;">@ViewBag.Title.</h2>
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6" style="">
+        <section id="loginForm">
+
+            <ul class="nav nav-tabs" role="tablist" id="accountTab">
+                <li class="active"><a href="#loginProfissional" role="tab" data-toggle="tab">Entrar como Profissional de Saúde</a></li>
+                <li><a href="#loginPaciente" role="tab" data-toggle="tab">Entrar como um Paciente</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active table-bordered" id="loginProfissional" style="padding: 15px;">
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl, tipoUsuario = (int)TipoUsuarioEnum.Profissional }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <br />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.RegisterProfissionalViewModel.NumeroConselho, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.RegisterProfissionalViewModel.NumeroConselho, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.RegisterProfissionalViewModel.NumeroConselho, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.RegisterProfissionalViewModel.ConselhoRegional, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.RegisterProfissionalViewModel.ConselhoRegional, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.RegisterProfissionalViewModel.ConselhoRegional, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.RegisterProfissionalViewModel.ConselhoRegional, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.RegisterProfissionalViewModel.ConselhoRegional, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.RegisterProfissionalViewModel.ConselhoRegional, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <div class="checkbox">
+                                        @Html.CheckBoxFor(m => m.RememberMe)
+                                        @Html.LabelFor(m => m.RememberMe)
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <input class="btn btn-success" type="submit" value="Entrar" class="btn btn-default" />
+                                    @Html.ActionLink("Registre-se", "Register", null, new { @class = "btn btn-default" })
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Enable this once you have account confirmation enabled for password reset functionality
+                            <p>
+                                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                            </p>*@
+                    }
+                </div>
+                <div class="tab-pane table-bordered" id="loginPaciente" style="padding-right: 5px;">
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl, tipoUsuario = (int)TipoUsuarioEnum.Paciente }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <h4 style="font-family: 'Cabin',Arial,sans-serif;">Informe os seus dados de Paciente.</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-4">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-4">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <div class="checkbox">
+                                        @Html.CheckBoxFor(m => m.RememberMe)
+                                        @Html.LabelFor(m => m.RememberMe)
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <input class="btn btn-success" type="submit" value="Entrar" class="btn btn-default" />
+                                    @Html.ActionLink("Registre-se", "Register", null, new { @class = "btn btn-default" })
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Enable this once you have account confirmation enabled for password reset functionality
+                            <p>
+                                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                            </p>*@
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNet.Identity
+@using SIIS.Helpers
+@using SIIS.Models
+
+@if (Request.IsAuthenticated)
+{
+    var username = User.Identity.GetUserName();
+
+    ApplicationUser usuario = ApplicationUser.GetUsuario(username);
+    
+    string nomeCompleto = usuario != null ? usuario.NomeCompleto : "";
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+
+        @Html.AntiForgeryToken()
+
+        @*<div class="navbar-image">
+                @Html.GravatarImage(username, new GravatarOptions { Size = 30, CssClass = "img-circle" })
+            </div>*@
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Olá @nomeCompleto ! <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        @Html.ActionLink("Manage Account", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    </li>
+                </ul>
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Sair</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right" style="margin: 7.5px 7px 7px 7px;">
+        <li>@Html.ActionLink("Registrar-se", "Registrar", "Home", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Entrar", "Login", "Account", routeValues: Url.Action("Index", "Home"), htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

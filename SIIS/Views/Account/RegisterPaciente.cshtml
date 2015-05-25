@@ -1,0 +1,137 @@
+﻿@model SIIS.Models.RegisterPacienteViewModel
+@{
+    ViewBag.Title = "Registro de Usuário";
+}
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("RegisterPaciente", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Registrando-se como um Paciente.</h4>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(m => m.NomeCompleto, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.NomeCompleto, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.NomeCompleto, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            <p style="margin-bottom: 0px;">Você receberá um e-mail de confirmação para ativar o seu cadastro.</p>
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Cpf, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.Cpf, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.Cpf, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.TipoPermissao, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.DropDownList("TipoPermissao", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.TipoPermissao, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group" id="divListaProfissionaisPermitidos">
+        <fieldset>
+            <legend>Profissionais que poderão acessar meu histórico</legend>            
+            <div class="col-md-12" style="padding-top: 5px;">
+                @Html.ValidationMessageFor(m => m.Permissao.NumeroConselho, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(m => m.Permissao.SiglaConselhoRegional, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(m => m.Permissao.UfConselhoRegional, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(m => m.Permissao.NumeroConselho, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Permissao.NumeroConselho, new { @class = "form-control" })
+            </div>            
+            <div class="col-md-1">
+                @Html.LabelFor(m => m.Permissao.SiglaConselhoRegional, new { @class = "control-label" })
+                @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
+            </div>            
+            <div class="col-md-1">
+                @Html.LabelFor(m => m.Permissao.UfConselhoRegional, new { @class = "control-label" })
+                @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
+            </div>
+            <div class="col-md-2" style="padding-top: 28px;">
+                <button type="button" class="btn btn-default" onclick="addProfissionalSelecionado();">Adicionar &raquo;</button>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">Profissionais Selecionados</label>
+                @Html.ListBox("lbxProfissionaisSelecionados", null, new { @class = "form-control" })
+            </div>
+        </fieldset>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-success" value="Salvar Registro" />
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    function addProfissionalSelecionado() {
+
+        var numero = $("#Permissao_NumeroConselho").val();
+        var sigla = $("#SiglaConselhoRegional").val();
+        var uf = $("#UfConselhoRegional").val();
+
+        if (numero == "" || sigla == "" || uf == "") {
+            if (numero == "") {
+                $('span[data-valmsg-for="Permissao_NumeroConselho"]').text('Informe o Nº no Conselho Regional.');
+            }
+            if (sigla == "") {
+                $('span[data-valmsg-for="SiglaConselhoRegional"]').text('Informe o Conselho Regional.');
+            }
+            if (uf == "") {
+                $('span[data-valmsg-for="UfConselhoRegional"]').text('Informe a UF.');
+            }
+        }
+        else {
+            if ($("#lbxProfissionaisSelecionados option:eq(0)").val() == "") {
+                $("#lbxProfissionaisSelecionados option:eq(0)").remove();
+            }
+
+            var selecionado = numero + " " + sigla + "-" + uf;
+            
+            $("#lbxProfissionaisSelecionados").append("<option value='" + selecionado + "'>" + selecionado + "</option>");
+        }
+    };
+</script>
