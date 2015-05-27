@@ -41,3 +41,32 @@ function addProfissionalSelecionado() {
         $("#PermissaoNumeroConselho").val("");
     }
 };
+
+function atualizaTempDataProfissionaisPermitidos() {
+  
+    var nData = {};
+    nData.unidadesolicitacaocatalogacao = form.serializeObject();
+    nData.unidadesolicitacaocatalogacao.UnidadeOperador = new Array();
+    nData.unidadesolicitacaocatalogacao.UnidadeOperador = gridOperadores.fnGetData();
+    $.ajax({
+        url: form.attr("action"),
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(nData),
+        success: function (json) {
+            var result = json;
+            if (result.Erro) {
+                mostrarAlerta(result.ErroMsg, 5, "erro");
+            }
+            else {
+                filtroOperadores();
+                mostrarAlerta(result.SucessoMsg);
+            }
+            esconderAguarde();
+        },
+        error: function (XMLHttpRequest) {
+            verificaStatus(XMLHttpRequest.status);
+        }
+    });
+};

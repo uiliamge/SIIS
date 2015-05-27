@@ -3,22 +3,22 @@
     ViewBag.Title = "Preencher";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Preencher</h2>
-
+<h2>Extrato de Prontuário</h2>
 @using (Html.BeginForm("Preencher", "Extrato", FormMethod.Post, new { @id = "formPreencherExtrato" }))
 {
     @Html.ValidationSummary()
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-6">
-                @Html.LabelFor(x => x.DataReferencia)
-                @Html.TextBoxFor(x => x.DataReferencia)
-            </div>
-            <div class="col-md-6">
-
-            </div>
+    <h4>Preenchendo um Extrato de Prontuário</h4>
+    <hr />
+    <div class="form-group">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.DataReferencia, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.DataReferencia, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DataReferencia, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4" style="padding-top: 5px;">
+            @Html.LabelFor(m => m.Responsavel, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.DataReferencia, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DataReferencia, "", new { @class = "text-danger" })
         </div>
     </div>
 }

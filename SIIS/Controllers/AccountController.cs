@@ -214,8 +214,17 @@ namespace SIIS.Controllers
             //foreach
             ViewBag.lbxProfissionaisSelecionados = profissionaisListItens;
 
+            RegisterPacienteViewModel model = new RegisterPacienteViewModel();
+            model.Permissao = new List<PermissaoPacienteViewModel>()
+            {
+                new PermissaoPacienteViewModel()
+                {
+                    NumeroConselho = 123456, SiglaConselhoRegional = "CRM", UfConselhoRegional = UfEnum.RS
+                }
+            };
             CarregarViewBags();
-            return View();
+
+            return View(model);
         }
 
         [HttpPost]

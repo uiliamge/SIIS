@@ -40,45 +40,22 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.TipoPermissao, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.TipoPermissao, new {@class = "col-md-2 control-label"})
         <div class="col-md-3">
-            @Html.DropDownList("TipoPermissao", null, new { @class = "form-control" })
+            @Html.DropDownList("TipoPermissao", null, new {@class = "form-control"})
         </div>
         <div class="col-md-6" style="padding-top: 5px;">
             <p id="txtExplicativoQualquerProfissionalPodeAcessar" style="margin-bottom: 0px;">
                 Indica que qualquer Profissional de Saúde poderá consultar e adicionar dados ao seu histórico.
             </p>
-            @Html.ValidationMessageFor(m => m.TipoPermissao, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.TipoPermissao, "", new {@class = "text-danger"})
         </div>
     </div>
+
     <div class="form-group hidden" id="divListaProfissionaisPermitidos">
-        <fieldset>
-            <legend>Profissionais que poderão acessar meu histórico</legend>
-            <div class="col-md-12" style="padding-top: 5px;">
-                <span class="text-danger" id="validationNumeroConselho"></span>
-            </div>
-            <div class="col-md-2">
-                <label class="control-label">Nº no Conselho Regional</label>
-                @Html.TextBox("PermissaoNumeroConselho", null, new { @class = "form-control" })
-            </div>
-            <div class="col-md-1">
-                <label class="control-label">Conselho</label>
-                @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
-            </div>
-            <div class="col-md-1">
-                <label class="control-label">UF</label>
-                @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
-            </div>
-            <div class="col-md-2" style="padding-top: 28px;">
-                <button type="button" class="btn btn-default" onclick="addProfissionalSelecionado();">Adicionar &raquo;</button>
-            </div>
-            <div class="col-md-4">
-                <label class="control-label">Profissionais Selecionados</label>
-                @Html.ListBoxFor(x => x.Permissao, new List<SelectListItem>(), new { @class = "form-control" })
-                @Html.ListBox("lbxProfissionaisSelecionados", new List<SelectListItem>(), new { @class = "form-control" })
-            </div>
-        </fieldset>
+        @{ Html.RenderPartial("_RegisterPacienteProfissionaisPermitidos", Model.Permissao); }
     </div>
+    
     <div class="form-group">
         @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
         <div class="col-md-3">

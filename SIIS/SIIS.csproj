@@ -311,6 +311,7 @@
     <Content Include="Views\Extrato\Preencher.cshtml" />
     <Content Include="Views\Home\Registrar.cshtml" />
     <Content Include="Views\Account\RegisterProfissional.cshtml" />
+    <Content Include="Views\Account\_RegisterPacienteProfissionaisPermitidos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
