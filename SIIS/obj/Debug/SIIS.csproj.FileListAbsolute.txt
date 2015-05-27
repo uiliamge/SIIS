@@ -184,3 +184,4 @@ C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.Migrations.Identity.DadosParaPacienteNo
 C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.csproj.GenerateResource.Cache
 C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.dll
 C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.pdb
+C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.csprojResolveAssemblyReference.cache

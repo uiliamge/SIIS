@@ -156,7 +156,7 @@ namespace SIIS.Controllers
         public async Task<ActionResult> RegisterProfissional(RegisterProfissionalViewModel model)
         {
             if (ModelState.IsValid)
-            {
+            {                
                 var user = new ApplicationUser()
                 {
                     UserName = model.userName,
@@ -167,7 +167,7 @@ namespace SIIS.Controllers
                     UfConselhoRegional = model.UfConselhoRegional,
                     TipoUsuario = TipoUsuarioEnum.Profissional
                 };
-
+                
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -176,11 +176,18 @@ namespace SIIS.Controllers
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                    string dominioAlterado = string.Join(null, System.Text.RegularExpressions.Regex.Split(callbackUrl.Split('/')[2], "[\\d]"));
+                    dominioAlterado = dominioAlterado.Remove(dominioAlterado.Length - 1) + "/";
+
+                    string strCallbackAlterada = callbackUrl.Split('/')[0] + "//" + dominioAlterado + callbackUrl.Split('/')[3] + "/" + callbackUrl.Split('/')[4];
+
+                    string hrefCallback = dominioAlterado == "localhost/" ? callbackUrl : strCallbackAlterada;
 
                     string mensagem = "<h2>Obrigado por se cadastrar no SIIS</h2>" +
                         "<h3>Sistema de Integração de Informações de Saúde</h3>" +
-                        "<p>Por favor, confirme a sua conta clicando <a href=\"" + callbackUrl + "\">aqui</a>.</p>";
+                        "<p>Por favor, confirme a sua conta clicando <a href=\"" + hrefCallback + "\">aqui</a>.</p>";
 
                     await UserManager.SendEmailAsync(user.Id, "Confirme sua Conta", mensagem);
 
