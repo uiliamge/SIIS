@@ -37,7 +37,7 @@ function addProfissionalSelecionado() {
         var selecionado = numero + " " + sigla + "-" + uf;
 
         $("#lbxProfissionaisSelecionados").append("<option value='" + selecionado + "'>" + selecionado + "</option>");
-        $("#Permissao").append("<option value='" + selecionado + "'>" + selecionado + "</option>");
+        //$("#Permissao").append("<option value='" + selecionado + "'>" + selecionado + "</option>");
         $("#PermissaoNumeroConselho").val("");
     }
 };
