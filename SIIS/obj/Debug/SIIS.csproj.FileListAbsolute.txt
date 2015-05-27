@@ -175,7 +175,6 @@ C:\Projetos\TCC\SIIS\SIIS\bin\Microsoft.Owin.Security.OAuth.xml
 C:\Projetos\TCC\SIIS\SIIS\bin\Microsoft.Owin.Security.Google.xml
 C:\Projetos\TCC\SIIS\SIIS\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Projetos\TCC\SIIS\SIIS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.csprojResolveAssemblyReference.cache
 C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.Migrations.Inicial.resources
 C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.Migrations.DescricaoParaConselhoRegional.resources
 C:\Projetos\TCC\SIIS\SIIS\obj\Debug\SIIS.Migrations.Identity.Inicial.resources
