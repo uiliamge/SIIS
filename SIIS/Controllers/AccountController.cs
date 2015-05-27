@@ -73,7 +73,7 @@ namespace SIIS.Controllers
 
             #region UfConselho
 
-            List<SelectListItem> ufListItens = new List<SelectListItem>();
+            List<SelectListItem> ufListItens = new List<SelectListItem>() { new SelectListItem { Selected = true, Text = "", Value = "" } };
             foreach (var uf in Enum.GetValues(typeof(UfEnum)))
             {
                 ufListItens.Add(new SelectListItem { Text = uf.ToString(), Value = uf.ToString() });
@@ -86,7 +86,7 @@ namespace SIIS.Controllers
             #region TipoPermissao
 
             List<SelectListItem> tipoPermissaoListItens = new List<SelectListItem>();
-            
+
             foreach (var tipoPermissao in Enum.GetValues(typeof(TipoPermissaoEnum)))
             {
                 FieldInfo fi = tipoPermissao.GetType().GetField(tipoPermissao.ToString());
@@ -156,7 +156,7 @@ namespace SIIS.Controllers
         public async Task<ActionResult> RegisterProfissional(RegisterProfissionalViewModel model)
         {
             if (ModelState.IsValid)
-            {                
+            {
                 var user = new ApplicationUser()
                 {
                     UserName = model.userName,
@@ -167,7 +167,7 @@ namespace SIIS.Controllers
                     UfConselhoRegional = model.UfConselhoRegional,
                     TipoUsuario = TipoUsuarioEnum.Profissional
                 };
-                
+
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -210,7 +210,7 @@ namespace SIIS.Controllers
         [AllowAnonymous]
         public ActionResult RegisterPaciente()
         {
-            List<SelectListItem> profissionaisListItens = new List<SelectListItem>() { new SelectListItem { Selected = true, Text = "", Value = "" } };
+            List<SelectListItem> profissionaisListItens = new List<SelectListItem>();
             //foreach
             ViewBag.lbxProfissionaisSelecionados = profissionaisListItens;
 

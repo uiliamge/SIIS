@@ -174,15 +174,12 @@ namespace SIIS.Models
     
     public class PermissaoPacienteViewModel
     {
-        [Required]
         [Display(Name = "Nº no Conselho Regional")]
         public int NumeroConselho { get; set; }
 
-        [Required]
         [Display(Name = "Conselho")]
         public string SiglaConselhoRegional { get; set; }
 
-        [Required]
         [Display(Name = "UF")]
         public UfEnum UfConselhoRegional { get; set; }
     }

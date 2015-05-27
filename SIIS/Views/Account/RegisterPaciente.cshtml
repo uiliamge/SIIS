@@ -43,12 +43,15 @@
             @Html.DropDownList("TipoPermissao", null, new { @class = "form-control" })
         </div>
         <div class="col-md-6" style="padding-top: 5px;">
+            <p id="txtExplicativoQualquerProfissionalPodeAcessar" style="margin-bottom: 0px;">
+                Indica que qualquer Profissional de Saúde poderá consultar e adicionar dados ao seu histórico.
+            </p>
             @Html.ValidationMessageFor(m => m.TipoPermissao, "", new { @class = "text-danger" })
         </div>
     </div>
-    <div class="form-group" id="divListaProfissionaisPermitidos">
+    <div class="form-group hidden" id="divListaProfissionaisPermitidos">
         <fieldset>
-            <legend>Profissionais que poderão acessar meu histórico</legend>            
+            <legend>Profissionais que poderão acessar meu histórico</legend>
             <div class="col-md-12" style="padding-top: 5px;">
                 @Html.ValidationMessageFor(m => m.Permissao.NumeroConselho, "", new { @class = "text-danger" })
                 @Html.ValidationMessageFor(m => m.Permissao.SiglaConselhoRegional, "", new { @class = "text-danger" })
@@ -56,12 +59,12 @@
             </div>
             <div class="col-md-2">
                 @Html.LabelFor(m => m.Permissao.NumeroConselho, new { @class = "control-label" })
-                @Html.TextBoxFor(m => m.Permissao.NumeroConselho, new { @class = "form-control" })
-            </div>            
+                @Html.TextBox("PermissaoNumeroConselho", null, new { @class = "form-control" })
+            </div>
             <div class="col-md-1">
                 @Html.LabelFor(m => m.Permissao.SiglaConselhoRegional, new { @class = "control-label" })
                 @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
-            </div>            
+            </div>
             <div class="col-md-1">
                 @Html.LabelFor(m => m.Permissao.UfConselhoRegional, new { @class = "control-label" })
                 @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
@@ -71,7 +74,8 @@
             </div>
             <div class="col-md-4">
                 <label class="control-label">Profissionais Selecionados</label>
-                @Html.ListBox("lbxProfissionaisSelecionados", null, new { @class = "form-control" })
+
+                @Html.ListBox("lbxProfissionaisSelecionados", new List<SelectListItem>(), new { @class = "form-control" })
             </div>
         </fieldset>
     </div>
@@ -107,9 +111,21 @@
 }
 
 <script type="text/javascript">
+
+    $(document).change("#TipoPermissao", function () {
+        
+        if ($("#TipoPermissao").val() == "QualquerProfissional") {
+            $("#divListaProfissionaisPermitidos").addClass("hidden");
+            $("#txtExplicativoQualquerProfissionalPodeAcessar").removeClass("hidden");
+        } else {
+            $("#divListaProfissionaisPermitidos").removeClass("hidden");
+            $("#txtExplicativoQualquerProfissionalPodeAcessar").addClass("hidden");
+        }
+    });
+
     function addProfissionalSelecionado() {
 
-        var numero = $("#Permissao_NumeroConselho").val();
+        var numero = $("#PermissaoNumeroConselho").val();
         var sigla = $("#SiglaConselhoRegional").val();
         var uf = $("#UfConselhoRegional").val();
 
@@ -130,8 +146,10 @@
             }
 
             var selecionado = numero + " " + sigla + "-" + uf;
-            
+
             $("#lbxProfissionaisSelecionados").append("<option value='" + selecionado + "'>" + selecionado + "</option>");
+
+            $("#PermissaoNumeroConselho").val("");
         }
     };
 </script>
