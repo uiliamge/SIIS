@@ -4,6 +4,8 @@
 }
 <h2>@ViewBag.Title</h2>
 
+@Scripts.Render("~/Scripts/Account/RegisterPaciente.js")
+
 @using (Html.BeginForm("RegisterPaciente", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
@@ -53,20 +55,18 @@
         <fieldset>
             <legend>Profissionais que poderão acessar meu histórico</legend>
             <div class="col-md-12" style="padding-top: 5px;">
-                @Html.ValidationMessageFor(m => m.Permissao.NumeroConselho, "", new { @class = "text-danger" })
-                @Html.ValidationMessageFor(m => m.Permissao.SiglaConselhoRegional, "", new { @class = "text-danger" })
-                @Html.ValidationMessageFor(m => m.Permissao.UfConselhoRegional, "", new { @class = "text-danger" })
+                <span class="text-danger" id="validationNumeroConselho"></span>
             </div>
             <div class="col-md-2">
-                @Html.LabelFor(m => m.Permissao.NumeroConselho, new { @class = "control-label" })
+                <label class="control-label">Nº no Conselho Regional</label>
                 @Html.TextBox("PermissaoNumeroConselho", null, new { @class = "form-control" })
             </div>
             <div class="col-md-1">
-                @Html.LabelFor(m => m.Permissao.SiglaConselhoRegional, new { @class = "control-label" })
+                <label class="control-label">Conselho</label>
                 @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
             </div>
             <div class="col-md-1">
-                @Html.LabelFor(m => m.Permissao.UfConselhoRegional, new { @class = "control-label" })
+                <label class="control-label">UF</label>
                 @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
             </div>
             <div class="col-md-2" style="padding-top: 28px;">
@@ -74,7 +74,7 @@
             </div>
             <div class="col-md-4">
                 <label class="control-label">Profissionais Selecionados</label>
-
+                @Html.ListBoxFor(x => x.Permissao, new List<SelectListItem>(), new { @class = "form-control" })
                 @Html.ListBox("lbxProfissionaisSelecionados", new List<SelectListItem>(), new { @class = "form-control" })
             </div>
         </fieldset>
@@ -105,51 +105,8 @@
 
 }
 
+@Html.Hidden("hdnAtualizarTempDataProfissionaisPermitidos", Url.Action("AtualizarTempDataProfissionaisPermitidos", "Account"))
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-
-<script type="text/javascript">
-
-    $(document).change("#TipoPermissao", function () {
-        
-        if ($("#TipoPermissao").val() == "QualquerProfissional") {
-            $("#divListaProfissionaisPermitidos").addClass("hidden");
-            $("#txtExplicativoQualquerProfissionalPodeAcessar").removeClass("hidden");
-        } else {
-            $("#divListaProfissionaisPermitidos").removeClass("hidden");
-            $("#txtExplicativoQualquerProfissionalPodeAcessar").addClass("hidden");
-        }
-    });
-
-    function addProfissionalSelecionado() {
-
-        var numero = $("#PermissaoNumeroConselho").val();
-        var sigla = $("#SiglaConselhoRegional").val();
-        var uf = $("#UfConselhoRegional").val();
-
-        if (numero == "" || sigla == "" || uf == "") {
-            if (numero == "") {
-                $('span[data-valmsg-for="Permissao_NumeroConselho"]').text('Informe o Nº no Conselho Regional.');
-            }
-            if (sigla == "") {
-                $('span[data-valmsg-for="SiglaConselhoRegional"]').text('Informe o Conselho Regional.');
-            }
-            if (uf == "") {
-                $('span[data-valmsg-for="UfConselhoRegional"]').text('Informe a UF.');
-            }
-        }
-        else {
-            if ($("#lbxProfissionaisSelecionados option:eq(0)").val() == "") {
-                $("#lbxProfissionaisSelecionados option:eq(0)").remove();
-            }
-
-            var selecionado = numero + " " + sigla + "-" + uf;
-
-            $("#lbxProfissionaisSelecionados").append("<option value='" + selecionado + "'>" + selecionado + "</option>");
-
-            $("#PermissaoNumeroConselho").val("");
-        }
-    };
-</script>

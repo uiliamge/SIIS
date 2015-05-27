@@ -46,16 +46,6 @@ namespace SIIS.Controllers
             }
         }
 
-        //
-        // GET: /Account/Login
-        [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            CarregarViewBags();
-            return View();
-        }
-
         private void CarregarViewBags()
         {
             #region SiglaConselhoRegional
@@ -99,6 +89,16 @@ namespace SIIS.Controllers
             ViewBag.TipoPermissao = tipoPermissaoListItens;
 
             #endregion
+        }
+
+        //
+        // GET: /Account/Login
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            CarregarViewBags();
+            return View();
         }
 
         //
@@ -265,6 +265,13 @@ namespace SIIS.Controllers
             CarregarViewBags();
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+
+        public void AtualizarTempDataProfissionaisPermitidos(List<PermissaoPacienteViewModel> permitidos)
+        {
+            TempData["ProfissionaisPermitidos"] = permitidos;
+
         }
 
         //

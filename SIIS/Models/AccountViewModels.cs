@@ -161,7 +161,7 @@ namespace SIIS.Models
         [Compare("Password", ErrorMessage = "A senha e a confirmação de senha não conferem.")]
         public string ConfirmPassword { get; set; }
 
-        public PermissaoPacienteViewModel Permissao { get; set; }
+        public List<PermissaoPacienteViewModel> Permissao { get; set; }
 
         public string userName
         {
