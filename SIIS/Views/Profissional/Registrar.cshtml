@@ -34,21 +34,17 @@
                 @Html.EditorFor(model => model.NumeroConselho, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.NumeroConselho, "", new { @class = "text-danger" })
             </div>
-            @Html.LabelFor(model => Model.ConselhoRegional, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => Model.SiglaConselhoRegional, htmlAttributes: new { @class = "control-label col-md-2" })
+            
             <div class="col-md-1">
-                <select class="form-control">
-                    <option></option>
-                    <option selected>CRM</option>
-                </select>
-                @Html.ValidationMessageFor(model => model.ConselhoRegional, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(x => x.SiglaConselhoRegional, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SiglaConselhoRegional, "", new { @class = "text-danger" })
             </div>
+            
             @Html.LabelFor(model => Model.UfConselhoRegional, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-1">
-                <select class="form-control">
-                    <option></option>
-                    <option selected>RS</option>
-                </select>
-                @Html.ValidationMessageFor(model => model.ConselhoRegional, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(x => x.UfConselhoRegional, null, htmlAttributes: new { @class="form-control" })
+                @Html.ValidationMessageFor(model => model.UfConselhoRegional, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
                 &ensp;aaa

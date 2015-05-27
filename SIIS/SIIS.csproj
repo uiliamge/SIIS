@@ -309,14 +309,14 @@
     <Content Include="Views\Extrato\Index.cshtml" />
     <Content Include="Views\Extrato\Preencher.cshtml" />
     <Content Include="Views\Home\Registrar.cshtml" />
-    <Content Include="Views\Paciente\Registrar.cshtml" />
-    <Content Include="Views\Profissional\Registrar.cshtml" />
     <Content Include="Views\Account\RegisterProfissional.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Paciente\" />
     <Folder Include="Views\Profile\" />
+    <Folder Include="Views\Profissional\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
