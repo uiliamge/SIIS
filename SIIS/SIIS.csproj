@@ -205,6 +205,7 @@
     <Compile Include="Models\Entrada.cs" />
     <Compile Include="Models\Enum\TipoPermissaoEnum.cs" />
     <Compile Include="Models\Enum\TipoUsuarioEnum.cs" />
+    <Compile Include="Models\Enum\ConselhoEnum.cs" />
     <Compile Include="Models\Enum\UfEnum.cs" />
     <Compile Include="Models\Extrato.cs" />
     <Compile Include="Models\IdentityModels.cs" />

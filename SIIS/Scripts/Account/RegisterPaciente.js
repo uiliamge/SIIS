@@ -13,60 +13,50 @@
 });
 
 function addProfissionalSelecionado() {
-
+    
     var numero = $("#PermissaoNumeroConselho").val();
     var sigla = $("#SiglaConselhoRegional").val();
     var uf = $("#UfConselhoRegional").val();
 
     if (numero == "" || sigla == "" || uf == "") {
-        //if (numero == "") {
-        //    $('span[data-valmsg-for="Permissao_NumeroConselho"]').text('Informe o Nº no Conselho Regional.');
-        //}
-        //if (sigla == "") {
-        //    $('span[data-valmsg-for="SiglaConselhoRegional"]').text('Informe o Conselho Regional.');
-        //}
-        //if (uf == "") {
-        //    $('span[data-valmsg-for="UfConselhoRegional"]').text('Informe a UF.');
-        //}
+        if (numero == "") {
+            $('#validationProfissionais').text('Informe o Nº no Conselho Regional.');
+        }
+        if (sigla == "") {
+            $('#validationProfissionais').text('Informe o Conselho Regional.');
+        }
+        if (uf == "") {
+            $('validationProfissionais').text('Informe a UF.');
+        }
     }
     else {
-        if ($("#lbxProfissionaisSelecionados option:eq(0)").val() == "") {
-            $("#lbxProfissionaisSelecionados option:eq(0)").remove();
-        }
+        $.ajax({
+            url: $("#hdnAddTempDataProfissionaisPermitidos").val(),
+            type: 'POST',
+            data: { numero: numero, sigla: sigla, uf: uf },
+            success: function (data) {
+                var result = data;
+                if (!result.Erro) {
+                    $('#divListaProfissionaisPermitidos').html(data);
+                }
+            }
+        });
 
-        var selecionado = numero + " " + sigla + "-" + uf;
-
-        $("#lbxProfissionaisSelecionados").append("<option value='" + selecionado + "'>" + selecionado + "</option>");
-        //$("#Permissao").append("<option value='" + selecionado + "'>" + selecionado + "</option>");
         $("#PermissaoNumeroConselho").val("");
     }
 };
 
-function atualizaTempDataProfissionaisPermitidos() {
-  
-    var nData = {};
-    nData.unidadesolicitacaocatalogacao = form.serializeObject();
-    nData.unidadesolicitacaocatalogacao.UnidadeOperador = new Array();
-    nData.unidadesolicitacaocatalogacao.UnidadeOperador = gridOperadores.fnGetData();
+function RemoveProfissionalSelecionado(numero, sigla, uf) {
+
     $.ajax({
-        url: form.attr("action"),
+        url: $("#hdnRemoveTempDataProfissionaisPermitidos").val(),
         type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(nData),
-        success: function (json) {
-            var result = json;
-            if (result.Erro) {
-                mostrarAlerta(result.ErroMsg, 5, "erro");
+        data: { numero: numero, sigla: sigla, uf: uf },
+        success: function (data) {
+            var result = data;
+            if (!result.Erro) {
+                $('#divListaProfissionaisPermitidos').html(data);
             }
-            else {
-                filtroOperadores();
-                mostrarAlerta(result.SucessoMsg);
-            }
-            esconderAguarde();
-        },
-        error: function (XMLHttpRequest) {
-            verificaStatus(XMLHttpRequest.status);
         }
     });
 };

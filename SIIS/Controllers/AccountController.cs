@@ -49,12 +49,11 @@ namespace SIIS.Controllers
         private void CarregarViewBags()
         {
             #region SiglaConselhoRegional
-
-            var conselhosRegionais = _context.ConselhosRegionais.ToList();
+            
             List<SelectListItem> conselhosListItens = new List<SelectListItem>() { new SelectListItem { Selected = true, Text = "", Value = "" } };
-            foreach (var conselho in conselhosRegionais)
+            foreach (var conselho in Enum.GetValues(typeof(ConselhoEnum)))
             {
-                conselhosListItens.Add(new SelectListItem { Text = conselho.Sigla, Value = conselho.Sigla });
+                conselhosListItens.Add(new SelectListItem { Text = conselho.ToString(), Value = ((int)conselho).ToString() });
             }
 
             ViewBag.SiglaConselhoRegional = conselhosListItens;
@@ -66,7 +65,7 @@ namespace SIIS.Controllers
             List<SelectListItem> ufListItens = new List<SelectListItem>() { new SelectListItem { Selected = true, Text = "", Value = "" } };
             foreach (var uf in Enum.GetValues(typeof(UfEnum)))
             {
-                ufListItens.Add(new SelectListItem { Text = uf.ToString(), Value = uf.ToString() });
+                ufListItens.Add(new SelectListItem { Text = uf.ToString(), Value = ((int)uf).ToString() });
             }
 
             ViewBag.UfConselhoRegional = ufListItens;
@@ -215,14 +214,10 @@ namespace SIIS.Controllers
             ViewBag.lbxProfissionaisSelecionados = profissionaisListItens;
 
             RegisterPacienteViewModel model = new RegisterPacienteViewModel();
-            model.Permissao = new List<PermissaoPacienteViewModel>()
-            {
-                new PermissaoPacienteViewModel()
-                {
-                    NumeroConselho = 123456, SiglaConselhoRegional = "CRM", UfConselhoRegional = UfEnum.RS
-                }
-            };
+            model.Permissao = new List<PermissaoPacienteViewModel>();
             CarregarViewBags();
+
+            TempData["ProfissionaisPermitidos"] = null;
 
             return View(model);
         }
@@ -232,6 +227,8 @@ namespace SIIS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterPaciente(RegisterPacienteViewModel model)
         {
+            model.Permissao = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel>;
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser()
@@ -276,13 +273,56 @@ namespace SIIS.Controllers
             return View(model);
         }
 
-
-        public void AtualizarTempDataProfissionaisPermitidos(List<PermissaoPacienteViewModel> permitidos)
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult AddTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
         {
-            TempData["ProfissionaisPermitidos"] = permitidos;
+            var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel>;
+            
+            if (permitidosAtuais == null)
+                permitidosAtuais = new List<PermissaoPacienteViewModel>();
 
+            var nova = new PermissaoPacienteViewModel 
+            { 
+                NumeroConselho = Convert.ToInt32(numero), 
+                SiglaConselhoRegional = (ConselhoEnum)sigla, 
+                UfConselhoRegional = (UfEnum)uf
+            };
+
+            if (!permitidosAtuais.Contains(nova))
+                permitidosAtuais.Add(nova);
+
+            CarregarViewBags();
+
+            TempData["ProfissionaisPermitidos"] = permitidosAtuais;
+
+            return PartialView("_RegisterPacienteProfissionaisPermitidos", permitidosAtuais);
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult RemoveTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
+        {            
+            var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel>;
+
+            if (permitidosAtuais == null)
+                permitidosAtuais = new List<PermissaoPacienteViewModel>();
+
+            var remover = new PermissaoPacienteViewModel
+            {
+                NumeroConselho = Convert.ToInt32(numero),
+                SiglaConselhoRegional = (ConselhoEnum)sigla,
+                UfConselhoRegional = (UfEnum)uf
+            };
+
+            permitidosAtuais = permitidosAtuais.Where(x => x.NumeroConselho != remover.NumeroConselho).ToList();
+
+            CarregarViewBags();
+
+            TempData["ProfissionaisPermitidos"] = permitidosAtuais;
+
+            return PartialView("_RegisterPacienteProfissionaisPermitidos", permitidosAtuais);
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

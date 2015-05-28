@@ -1,49 +1,54 @@
 ﻿@model IEnumerable<SIIS.Models.PermissaoPacienteViewModel>
 
-<div class="form-group hidden" id="divListaProfissionaisPermitidos">
-    <fieldset>
-        <legend>Profissionais que poderão acessar meu histórico</legend>
-        <div class="col-md-12" style="padding-top: 5px;">
-            <span class="text-danger" id="validationNumeroConselho"></span>
-        </div>
-        <div class="col-md-2">
-            <label class="control-label">Nº no Conselho Regional</label>
-            @Html.TextBox("PermissaoNumeroConselho", null, new { @class = "form-control" })
-        </div>
-        <div class="col-md-1">
-            <label class="control-label">Conselho</label>
-            @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
-        </div>
-        <div class="col-md-1">
-            <label class="control-label">UF</label>
-            @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
-        </div>
-        <div class="col-md-2" style="padding-top: 28px;">
-            <button type="button" class="btn btn-default" onclick="addProfissionalSelecionado();">Adicionar &raquo;</button>
-        </div>
-        <div class="col-md-4">
-            <label class="control-label">Profissionais Selecionados</label>
-            @*@Html.ListBoxFor(x => x.Permissao, new List<SelectListItem>(), new { @class = "form-control" })*@
-            @Html.ListBox("lbxProfissionaisSelecionados", new List<SelectListItem>(), new { @class = "form-control" })
-
-
-            @*<label class="control-label">Profissionais Selecionados</label>
-            <select class="form-control" id="Permissao" multiple="multiple" name="Permissao">
+<fieldset>
+    <legend>Profissionais que poderão acessar meu histórico</legend>
+    <div class="col-md-12" style="padding-top: 5px;">
+        <span class="text-danger" id="validationProfissionais"></span>
+    </div>
+    <div class="col-md-2">
+        <label class="control-label">Nº no Conselho Regional</label>
+        @Html.TextBox("PermissaoNumeroConselho", null, new { @class = "form-control" })
+    </div>
+    <div class="col-md-1">
+        <label class="control-label">Conselho</label>
+        @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
+    </div>
+    <div class="col-md-1">
+        <label class="control-label">UF</label>
+        @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
+    </div>
+    <div class="col-md-2" style="padding-top: 28px;">
+        <button type="button" class="btn btn-default" onclick="addProfissionalSelecionado();">Adicionar &raquo;</button>
+    </div>
+    <div class="col-md-4">
+        <label class="control-label">Profissionais Selecionados</label>
+        <table class="table table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-center">Nº no Conselho Regional</th>
+                    <th class="text-center">Conselho</th>
+                    <th class="text-center">UF</th>
+                    <th class="text-center"><span class="glyphicon glyphicon-remove"></span></th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (var item in Model)
                 {
-                    string strOption = item.NumeroConselho + " " + item.SiglaConselhoRegional + "/" + item.UfConselhoRegional;
-
-                    <option value="@item.NumeroConselho">@strOption</option>
+                    int siglaConselho = (int)item.SiglaConselhoRegional;
+                    int ufConselho = (int)item.UfConselhoRegional;
+                    <tr>
+                        <td class="text-right">@item.NumeroConselho</td>
+                        <td class="text-center">@item.SiglaConselhoRegional</td>
+                        <td class="text-center">@item.UfConselhoRegional</td>
+                        <td class="text-center">
+                            <a style="cursor: pointer" class="" 
+                               onclick="RemoveProfissionalSelecionado('@item.NumeroConselho', @siglaConselho, @ufConselho)">
+                                <span title="Excluir" alt="Excluir" class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        </td>
+                    </tr>
                 }
-            </select>*@
-
-
-        </div>
-    </fieldset>
-</div>
-
-@Html.Hidden("hdnAtualizarTempDataProfissionaisPermitidos", Url.Action("AtualizarTempDataProfissionaisPermitidos", "Account"))
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+            </tbody>
+        </table>        
+    </div>
+</fieldset>
