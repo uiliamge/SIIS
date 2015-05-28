@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -69,23 +71,23 @@ namespace SIIS
             var pwd = "knhoto007";
 
             // Configure the client:
-            System.Net.Mail.SmtpClient client =
-                new System.Net.Mail.SmtpClient("smtp.gmail.com");
+            SmtpClient client =
+                new SmtpClient("smtp.gmail.com");
 
             client.Port = 587;
-            client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
 
             // Creatte the credentials:
-            System.Net.NetworkCredential credentials =
-                new System.Net.NetworkCredential(credentialUserName, pwd);
+            NetworkCredential credentials =
+                new NetworkCredential(credentialUserName, pwd);
 
             client.EnableSsl = true;
             client.Credentials = credentials;
 
             // Create the message:
             var mail =
-                new System.Net.Mail.MailMessage(sentFrom, message.Destination);
+                new MailMessage(sentFrom, message.Destination);
 
             mail.Subject = message.Subject;
             mail.Body = message.Body;

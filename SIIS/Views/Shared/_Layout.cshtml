@@ -1,7 +1,6 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using System.Security.Principal
+@using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity.EntityFramework
-@using System.Web.Optimization
-@using System.Security.Principal
 @using SIIS.Models
 <!DOCTYPE html>
 <html>
@@ -34,6 +33,7 @@
     @Styles.Render("~/bundles/theme")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/util.js")
 </head>
 <body style="padding-top: 60px !important;">
     @RenderSection("topLevel", required: false)

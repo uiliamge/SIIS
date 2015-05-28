@@ -1,15 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Collections.Generic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using SIIS.Models;
-
 
 namespace SIIS.Models
 {
@@ -39,6 +32,8 @@ namespace SIIS.Models
         public TipoPermissaoEnum TipoPermissao { get; set; }
 
         public string Cpf { get; set; }
+
+        public string Ip { get; set; }
         
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

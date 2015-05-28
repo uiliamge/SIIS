@@ -1,8 +1,7 @@
+using System.Data.Entity.Migrations;
+
 namespace SIIS.Migrations.Identity
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class DadosParaPacienteNoApplicationUser : DbMigration
     {
         public override void Up()

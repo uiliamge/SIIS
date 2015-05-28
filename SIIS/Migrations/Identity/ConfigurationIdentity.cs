@@ -1,11 +1,9 @@
+using System.Data.Entity.Migrations;
+using SIIS.Models;
+
 namespace SIIS.Migrations.Identity
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-
-    internal sealed class ConfigurationIdentity : DbMigrationsConfiguration<SIIS.Models.ApplicationDbContext>
+    internal sealed class ConfigurationIdentity : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public ConfigurationIdentity()
         {
@@ -14,7 +12,7 @@ namespace SIIS.Migrations.Identity
             ContextKey = "SIIS.Models.ApplicationDbContext";
         }
 
-        protected override void Seed(SIIS.Models.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

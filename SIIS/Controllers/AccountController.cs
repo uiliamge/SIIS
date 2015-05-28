@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Linq;
-using System.Security.Claims;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Owin;
+using SIIS.Helpers;
 using SIIS.Models;
-using System.Web.UI.WebControls;
-using System.Reflection;
-using System.ComponentModel;
-
+using SIIS.Negocio;
 
 namespace SIIS.Controllers
 {
@@ -49,7 +49,7 @@ namespace SIIS.Controllers
         private void CarregarViewBags()
         {
             #region SiglaConselhoRegional
-            
+
             List<SelectListItem> conselhosListItens = new List<SelectListItem>() { new SelectListItem { Selected = true, Text = "", Value = "" } };
             foreach (var conselho in Enum.GetValues(typeof(ConselhoEnum)))
             {
@@ -177,7 +177,7 @@ namespace SIIS.Controllers
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 
-                    string dominioAlterado = string.Join(null, System.Text.RegularExpressions.Regex.Split(callbackUrl.Split('/')[2], "[\\d]"));
+                    string dominioAlterado = string.Join(null, Regex.Split(callbackUrl.Split('/')[2], "[\\d]"));
                     dominioAlterado = dominioAlterado.Remove(dominioAlterado.Length - 1) + "/";
 
                     string strCallbackAlterada = callbackUrl.Split('/')[0] + "//" + dominioAlterado + callbackUrl.Split('/')[3] + "/" + callbackUrl.Split('/')[4];
@@ -227,45 +227,81 @@ namespace SIIS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterPaciente(RegisterPacienteViewModel model)
         {
-            model.Permissao = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel>;
-
-            if (ModelState.IsValid)
+            try
             {
-                var user = new ApplicationUser()
+                model.Permissao = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel> ??
+                                  new List<PermissaoPacienteViewModel>();
+
+                if (ModelState.IsValid)
                 {
-                    UserName = model.userName,
-                    NomeCompleto = model.NomeCompleto,
-                    Email = model.Email,
-                    Cpf = model.Cpf,
-                    TipoPermissao = model.TipoPermissao,
-                    TipoUsuario = TipoUsuarioEnum.Paciente
-                };
+                    var user = new ApplicationUser()
+                    {
+                        UserName = model.userName,
+                        NomeCompleto = model.NomeCompleto,
+                        Email = model.Email,
+                        Cpf = model.Cpf.RemoverMascara(),
+                        TipoPermissao = model.TipoPermissao,
+                        TipoUsuario = TipoUsuarioEnum.Paciente,
+                        Ip = Request.UserHostAddress
+                    };
 
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    //await SignInAsync(user, isPersistent: false);
+                    IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        using (PacienteNeg pacienteNeg = new PacienteNeg())
+                        {
+                            pacienteNeg.Inserir(user, model);
+                        }
+                        using (PacienteNeg pacienteNeg = new PacienteNeg())
+                        {
+                            pacienteNeg.SalvarPermissoesPaciente(user.Id, model.Permissao);
+                        }
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
+                        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+                            protocol: Request.Url.Scheme);
 
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        string dominioAlterado = string.Join(null, Regex.Split(callbackUrl.Split('/')[2], "[\\d]"));
+                        dominioAlterado = dominioAlterado.Remove(dominioAlterado.Length - 1) + "/";
 
-                    string mensagem = "<h2>Obrigado por se cadastrar no SIIS</h2>" +
-                        "<h3>Sistema de Integração de Informações de Saúde</h3>" +
-                        "<p>Por favor, confirme a sua conta clicando <a href=\"" + callbackUrl + "\">aqui</a>.</p>";
+                        string strCallbackAlterada = callbackUrl.Split('/')[0] + "//" + dominioAlterado +
+                                                     callbackUrl.Split('/')[3] + "/" + callbackUrl.Split('/')[4];
 
-                    await UserManager.SendEmailAsync(user.Id, "Confirme sua Conta", mensagem);
+                        string hrefCallback = dominioAlterado == "localhost/" ? callbackUrl : strCallbackAlterada;
 
-                    Success("Obrigado! Confira a sua caixa de e-mail \"" + model.Email + "\" para validar o seu acesso.", true);
+                        string mensagem = "<h2>Obrigado por se cadastrar no SIIS</h2>" +
+                                          "<h3>Sistema de Integração de Informações de Saúde</h3>" +
+                                          "<p>Por favor, confirme a sua conta clicando <a href=\"" + hrefCallback +
+                                          "\">aqui</a>.</p>";
 
-                    return RedirectToAction("Index", "Home");
+                        await UserManager.SendEmailAsync(user.Id, "Confirme sua Conta", mensagem);
+
+                        Success(
+                            "Obrigado! Confira a sua caixa de e-mail \"" + model.Email + "\" para validar o seu acesso.",
+                            true);
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        Danger(String.Join("\n", result.Errors.ToList()), true);
+                        AddErrors(result);
+                    }
                 }
-                else
-                {
-                    Danger(String.Join("\n", result.Errors.ToList()), true);
-                    AddErrors(result);
-                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                Danger(String.Join("\n", e.EntityValidationErrors.ToList()), true);
+            }
+            catch (DbUpdateException e)
+            {
+                Danger(e.InnerException.ToString(), true);
+            }
+            catch (Exception e)
+            {
+                CarregarViewBags();
+                Danger(e.Message, true);
             }
 
             CarregarViewBags();
@@ -278,14 +314,14 @@ namespace SIIS.Controllers
         public ActionResult AddTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
         {
             var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel>;
-            
+
             if (permitidosAtuais == null)
                 permitidosAtuais = new List<PermissaoPacienteViewModel>();
 
-            var nova = new PermissaoPacienteViewModel 
-            { 
-                NumeroConselho = Convert.ToInt32(numero), 
-                SiglaConselhoRegional = (ConselhoEnum)sigla, 
+            var nova = new PermissaoPacienteViewModel
+            {
+                NumeroConselho = Convert.ToInt32(numero),
+                SiglaConselhoRegional = (ConselhoEnum)sigla,
                 UfConselhoRegional = (UfEnum)uf
             };
 
@@ -302,7 +338,7 @@ namespace SIIS.Controllers
         [AllowAnonymous]
         [HttpPost]
         public ActionResult RemoveTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
-        {            
+        {
             var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel>;
 
             if (permitidosAtuais == null)
@@ -345,6 +381,8 @@ namespace SIIS.Controllers
                 return View();
             }
         }
+
+        #region Password
 
         //
         // GET: /Account/ForgotPassword
@@ -440,6 +478,8 @@ namespace SIIS.Controllers
         {
             return View();
         }
+
+        #endregion
 
         //
         // POST: /Account/Disassociate
@@ -827,17 +867,17 @@ namespace SIIS.Controllers
         }
         #endregion
 
-        private Usuario BuscarUsuarioProfissional(LoginViewModel model)
-        {
-            var numeroConselho = model.LoginProfissionalViewModel.NumeroConselho;
-            var siglaConselho = model.LoginProfissionalViewModel.SiglaConselhoRegional;
-            var ufConselho = model.LoginProfissionalViewModel.UfConselhoRegional;
+        //private Usuario BuscarUsuarioProfissional(LoginViewModel model)
+        //{
+        //    var numeroConselho = model.LoginProfissionalViewModel.NumeroConselho;
+        //    var siglaConselho = model.LoginProfissionalViewModel.SiglaConselhoRegional;
+        //    var ufConselho = model.LoginProfissionalViewModel.UfConselhoRegional;
 
-            Usuario usuario = _context.Usuarios.FirstOrDefault(x => x.Responsavel.NumeroConselho == numeroConselho
-                && x.Responsavel.ConselhoRegional.Sigla == siglaConselho
-                && x.Responsavel.UfConselhoRegional == ufConselho);
+        //    Usuario usuario = _context.Usuarios.FirstOrDefault(x => x.Responsavel.NumeroConselho == numeroConselho
+        //        && x.Responsavel.ConselhoRegional.Sigla == siglaConselho
+        //        && x.Responsavel.UfConselhoRegional == ufConselho);
 
-            return usuario;
-        }
+        //    return usuario;
+        //}
     }
 }

@@ -142,6 +142,24 @@ namespace SIIS.Models
         public string Cpf { get; set; }
 
         [Required]
+        [DataType(DataType.PostalCode)]
+        [Display(Name = "CEP")]
+        public string Cep { get; set; }
+
+        [Display(Name = "Logradouro, Nº")]
+        public string Endereco { get; set; }
+
+        [Display(Name = "UF")]
+        public UfEnum Uf { get; set; }
+
+        [Required]
+        [Display(Name = "Cidade")]
+        public string Cidade { get; set; }
+
+        [Display(Name = "Telefone")]
+        public string fone { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "E-mail")]
         public string Email { get; set; }

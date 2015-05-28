@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace SIIS.Models
 {
@@ -23,6 +20,6 @@ namespace SIIS.Models
 
         [Required]
         [Display(Name = "IP de Origem")]
-        public string IP { get; set; }
+        public string Ip { get; set; }
     }
 }

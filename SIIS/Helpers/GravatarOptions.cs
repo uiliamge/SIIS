@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace SIIS.Helpers
+﻿namespace SIIS.Helpers
 {
     public class GravatarOptions
     {
@@ -36,9 +31,9 @@ namespace SIIS.Helpers
         {
             return new GravatarOptions
             {
-                DefaultImageType = GravatarOptions.DefaultImage.Retro,
+                DefaultImageType = DefaultImage.Retro,
                 Size = 150,
-                RatingLevel = GravatarOptions.Rating.G
+                RatingLevel = Rating.G
             };
         }
     }

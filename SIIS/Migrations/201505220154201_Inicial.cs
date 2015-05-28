@@ -1,8 +1,7 @@
+using System.Data.Entity.Migrations;
+
 namespace SIIS.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class Inicial : DbMigration
     {
         public override void Up()

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace SIIS.Models
 {
@@ -14,9 +10,15 @@ namespace SIIS.Models
         public int Id { get; set; }
         
         [Required]
-        public virtual Paciente Paciente { get; set; }
+        public int NumeroConselho { get; set; }
 
         [Required]
-        public virtual Responsavel Responsavel { get; set; }
+        public ConselhoEnum SiglaConselhoRegional { get; set; }
+
+        [Required]
+        public UfEnum UfConselhoRegional { get; set; }
+
+        [Required]
+        public virtual Paciente Paciente { get; set; }
     }
 }

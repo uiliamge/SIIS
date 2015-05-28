@@ -1,5 +1,5 @@
 ﻿@using SIIS.Models
-@model LoginViewModel
+@model SIIS.Models.LoginViewModel
 @{
     ViewBag.Title = "Login";
     ViewBag.ReturnUrl = Url.Action("Index", "home");
@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 @Html.LabelFor(m => m.LoginProfissionalViewModel.NumeroConselho, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.LoginProfissionalViewModel.NumeroConselho, new { @class = "form-control" })
+                                @Html.TextBoxFor(m => m.LoginProfissionalViewModel.NumeroConselho, new { @class = "numero form-control", @maxlength = "7" })
                                 @Html.ValidationMessageFor(m => m.LoginProfissionalViewModel.NumeroConselho, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -33,7 +33,6 @@
                             <div class="col-md-6">
                                 @Html.LabelFor(m => m.LoginProfissionalViewModel.SiglaConselhoRegional, new { @class = "control-label" })
                                 @Html.DropDownListFor(x => x.LoginProfissionalViewModel.SiglaConselhoRegional, siglasConselho, new { @class = "form-control" })
-                                @*@Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })*@
                                 @Html.ValidationMessageFor(m => m.LoginProfissionalViewModel.SiglaConselhoRegional, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-6">
@@ -74,7 +73,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 @Html.LabelFor(m => m.LoginPacienteViewModel.Cpf, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.LoginPacienteViewModel.Cpf, new { @class = "form-control" })
+                                @Html.TextBoxFor(m => m.LoginPacienteViewModel.Cpf, new { @class = "cpf form-control", @maxlength = "7" })
                                 @Html.ValidationMessageFor(m => m.LoginPacienteViewModel.Cpf, "", new { @class = "text-danger" })
                             </div>
                         </div>

@@ -1,26 +1,19 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+
 }
 
 <div class="jumbotron">
-    @*<h1 style="font-family: 'Cabin',Arial,sans-serif;">SIIS</h1>*@
     <div class="row">
         <div class="col-md-12">
-            <img style="margin-right: 15px; background-color: #fff; border-radius: 6px;" class="pull-left img-thumbnail" src="~/Content/imagens/logo_transparente.png" />
-            <p class="lead" style=" margin-top: 50px;">Bem-Vindo ao Sistema de Integração de Informações de Saúde</p>
-            <p>
-                @*<a href="#" class="btn btn-primary btn-lg">Registrar &raquo;</a>
-                <a href="#" class="btn btn-success btn-lg">Entrar &raquo;</a>*@
-            </p>
+            <img id="imgBemVindo" style="margin-right: 15px; background-color: #fff; border-radius: 6px;"
+                 class="img-responsive pull-left img-thumbnail" src="~/Content/imagens/logo_transparente.png" />
+            <p id="txtBemVindo" class="lead" style=" margin-top: 50px;">Bem-Vindo ao Sistema de Integração de Informações de Saúde</p>
         </div>
-        @*<div class="col-md-9">
-            
-        </div>*@
     </div>
-    
-    
+
 </div>
-<div class="row">    
+<div class="row">
     <div class="col-md-6">
         <h2 style="font-family: 'Cabin',Arial,sans-serif;">Para que serve o SIIS</h2>
         <p style="text-align: justify">
@@ -37,27 +30,15 @@
             Do ponto de vista global, toda esta informação acaba ficando fragmentada por não estar centralizada em um mesmo banco de dados.
         </p>
         <p><a class="btn btn-default" href="#">Leia mais &raquo;</a></p>
-    </div>    
+    </div>
 </div>
 
-@*<div class="row">
-        <div class="col-md-9">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="lead">Bem-vindo ao portal do Programa da Saúde Brasileira</p>
-                </div>
-            </div>
-        </div>
-        @* Painel direito - Twitter
-        <div class="col-md-3 pull-right">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    Twitter
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-        </div>
-    </div>*@
+<script type="text/javascript">
+    if (window.innerWidth < 400) {
+        $("#imgBemVindo").width("50px");
+        $("#txtBemVindo").attr("style", "margin-top:0px;font-size:11px;");
+    } else {
+        $("#imgBemVindo").width("146px");
+        $("#txtBemVindo").attr("style", "font-size:21px;margin-top:50px;");
+    }
+</script>

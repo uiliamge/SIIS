@@ -1,7 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using SIIS;
 
-[assembly: OwinStartupAttribute(typeof(SIIS.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 namespace SIIS
 {
     public partial class Startup

@@ -14,7 +14,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.NomeCompleto, new { @class = "col-md-2 control-label" })
         <div class="col-md-3">
-            @Html.TextBoxFor(m => m.NomeCompleto, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.NomeCompleto, new { @class = "form-control", @maxlength = "100" })
         </div>
         <div class="col-md-6" style="padding-top: 5px;">
             @Html.ValidationMessageFor(m => m.NomeCompleto, "", new { @class = "text-danger" })
@@ -31,14 +31,38 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Cpf, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.Cpf, new {@class = "col-md-2 control-label"})
         <div class="col-md-3">
-            @Html.TextBoxFor(m => m.Cpf, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Cpf, new {@class = "cpf form-control"})
         </div>
         <div class="col-md-6" style="padding-top: 5px;">
-            @Html.ValidationMessageFor(m => m.Cpf, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.Cpf, "", new {@class = "text-danger"})
         </div>
     </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Endereço</label>
+        <div class="col-md-2">
+            @Html.LabelFor(m => m.Cep, new {@class = "control-label"})
+            @Html.TextBoxFor(m => m.Cep, new {@class = "cep form-control"})
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Endereco, new {@class = "control-label"})
+            @Html.TextBoxFor(m => m.Endereco, new {@class = "form-control", @maxlength = "200"})
+        </div>
+        <div class="col-md-1">
+            @Html.LabelFor(m => m.Uf, new { @class = "control-label" })
+            @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Cidade, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Cidade, new { @class = "form-control", @maxlength = "200" })
+        </div>
+        @Html.ValidationMessageFor(m => m.Endereco, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Cep, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Uf, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Cidade, "", new { @class = "text-danger" })
+    </div>
+    
     <div class="form-group">
         @Html.LabelFor(m => m.TipoPermissao, new {@class = "col-md-2 control-label"})
         <div class="col-md-3">
@@ -80,7 +104,6 @@
             <input type="submit" class="btn btn-success" value="Salvar Registro" />
         </div>
     </div>
-
 }
 
 @Html.Hidden("hdnAddTempDataProfissionaisPermitidos", Url.Action("AddTempDataProfissionaisPermitidos", "Account"))

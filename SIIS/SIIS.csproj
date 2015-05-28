@@ -172,6 +172,7 @@
     <Compile Include="Helpers\Bootstrap.cs" />
     <Compile Include="Helpers\GravatarHelper.cs" />
     <Compile Include="Helpers\GravatarOptions.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Migrations\201505220154201_Inicial.cs" />
     <Compile Include="Migrations\201505220154201_Inicial.Designer.cs">
       <DependentUpon>201505220154201_Inicial.cs</DependentUpon>
@@ -179,6 +180,46 @@
     <Compile Include="Migrations\201505220355046_DescricaoParaConselhoRegional.cs" />
     <Compile Include="Migrations\201505220355046_DescricaoParaConselhoRegional.Designer.cs">
       <DependentUpon>201505220355046_DescricaoParaConselhoRegional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281351546_PermissaoResponsavelPaciente.cs" />
+    <Compile Include="Migrations\201505281351546_PermissaoResponsavelPaciente.Designer.cs">
+      <DependentUpon>201505281351546_PermissaoResponsavelPaciente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281734084_UserIdEmPacienteEResponsavel.cs" />
+    <Compile Include="Migrations\201505281734084_UserIdEmPacienteEResponsavel.Designer.cs">
+      <DependentUpon>201505281734084_UserIdEmPacienteEResponsavel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281822082_AjustesEmPessoa.cs" />
+    <Compile Include="Migrations\201505281822082_AjustesEmPessoa.Designer.cs">
+      <DependentUpon>201505281822082_AjustesEmPessoa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281913515_AjustesEmIdPacienteResponsavel.cs" />
+    <Compile Include="Migrations\201505281913515_AjustesEmIdPacienteResponsavel.Designer.cs">
+      <DependentUpon>201505281913515_AjustesEmIdPacienteResponsavel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281923354_ExclusaoPessoa.cs" />
+    <Compile Include="Migrations\201505281923354_ExclusaoPessoa.Designer.cs">
+      <DependentUpon>201505281923354_ExclusaoPessoa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281944591_AjusteIdentity.cs" />
+    <Compile Include="Migrations\201505281944591_AjusteIdentity.Designer.cs">
+      <DependentUpon>201505281944591_AjusteIdentity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505281952242_IdentityEmPacienteEProfissional.cs" />
+    <Compile Include="Migrations\201505281952242_IdentityEmPacienteEProfissional.Designer.cs">
+      <DependentUpon>201505281952242_IdentityEmPacienteEProfissional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505282007510_Ajuste.cs" />
+    <Compile Include="Migrations\201505282007510_Ajuste.Designer.cs">
+      <DependentUpon>201505282007510_Ajuste.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505282011311_ReinclusaoPaciente.cs" />
+    <Compile Include="Migrations\201505282011311_ReinclusaoPaciente.Designer.cs">
+      <DependentUpon>201505282011311_ReinclusaoPaciente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505282040468_Ajustes.cs" />
+    <Compile Include="Migrations\201505282040468_Ajustes.Designer.cs">
+      <DependentUpon>201505282040468_Ajustes.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505220203113_Inicial.cs" />
@@ -196,6 +237,10 @@
     <Compile Include="Migrations\Identity\201505242307300_DadosParaPacienteNoApplicationUser.cs" />
     <Compile Include="Migrations\Identity\201505242307300_DadosParaPacienteNoApplicationUser.Designer.cs">
       <DependentUpon>201505242307300_DadosParaPacienteNoApplicationUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201505281721142_InsercaoDoIpUsuario.cs" />
+    <Compile Include="Migrations\Identity\201505281721142_InsercaoDoIpUsuario.Designer.cs">
+      <DependentUpon>201505281721142_InsercaoDoIpUsuario.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Identity\ConfigurationIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -216,11 +261,10 @@
     <Compile Include="Models\Paciente.cs" />
     <Compile Include="Models\PermissaoResponsavelPaciente.cs" />
     <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\Pessoa.cs" />
     <Compile Include="Models\Responsavel.cs" />
     <Compile Include="Models\Secao.cs" />
     <Compile Include="Models\SiteDataContext.cs" />
-    <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Negocio\PacienteNeg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -256,6 +300,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\util.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -334,6 +379,36 @@
     <EmbeddedResource Include="Migrations\201505220355046_DescricaoParaConselhoRegional.resx">
       <DependentUpon>201505220355046_DescricaoParaConselhoRegional.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281351546_PermissaoResponsavelPaciente.resx">
+      <DependentUpon>201505281351546_PermissaoResponsavelPaciente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281734084_UserIdEmPacienteEResponsavel.resx">
+      <DependentUpon>201505281734084_UserIdEmPacienteEResponsavel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281822082_AjustesEmPessoa.resx">
+      <DependentUpon>201505281822082_AjustesEmPessoa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281913515_AjustesEmIdPacienteResponsavel.resx">
+      <DependentUpon>201505281913515_AjustesEmIdPacienteResponsavel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281923354_ExclusaoPessoa.resx">
+      <DependentUpon>201505281923354_ExclusaoPessoa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281944591_AjusteIdentity.resx">
+      <DependentUpon>201505281944591_AjusteIdentity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505281952242_IdentityEmPacienteEProfissional.resx">
+      <DependentUpon>201505281952242_IdentityEmPacienteEProfissional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505282007510_Ajuste.resx">
+      <DependentUpon>201505282007510_Ajuste.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505282011311_ReinclusaoPaciente.resx">
+      <DependentUpon>201505282011311_ReinclusaoPaciente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505282040468_Ajustes.resx">
+      <DependentUpon>201505282040468_Ajustes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505220203113_Inicial.resx">
       <DependentUpon>201505220203113_Inicial.cs</DependentUpon>
     </EmbeddedResource>
@@ -345,6 +420,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505242307300_DadosParaPacienteNoApplicationUser.resx">
       <DependentUpon>201505242307300_DadosParaPacienteNoApplicationUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201505281721142_InsercaoDoIpUsuario.resx">
+      <DependentUpon>201505281721142_InsercaoDoIpUsuario.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

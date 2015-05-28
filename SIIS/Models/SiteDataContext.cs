@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity;
 
 namespace SIIS.Models
 {
@@ -15,10 +11,9 @@ namespace SIIS.Models
         public DbSet<Responsavel> Responsaveis { get; set; }
         public DbSet<Extrato> Extratos { get; set; }
         public DbSet<Secao> Secoes { get; set; }
-        public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<ConselhoRegional> ConselhosRegionais { get; set; }
         public DbSet<Paciente> Pacientes { get; set; }
         public DbSet<LogAcessoResponsavel> LogsAcessoResponsavel { get; set; }
-        public DbSet<Pessoa> Pessoas { get; set; }
+        public DbSet<PermissaoResponsavelPaciente> PermissoesResponsavelPaciente { get; set; }
     }
 }
