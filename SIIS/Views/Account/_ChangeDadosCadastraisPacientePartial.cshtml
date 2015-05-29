@@ -1,0 +1,76 @@
+﻿@model SIIS.Models.Paciente
+
+@Scripts.Render("~/Scripts/Account/RegisterPaciente.js")
+
+@using (Html.BeginForm("RegisterPaciente", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.HiddenFor(x => x.Id)
+    
+    @Html.AntiForgeryToken()
+    <h4>Registrando-se como um Paciente.</h4>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nome, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.Nome, new { @class = "form-control", @maxlength = "100" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            <p style="margin-bottom: 0px;">Você receberá um e-mail de confirmação para ativar o seu cadastro.</p>
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.CpfCnpj, new {@class = "col-md-2 control-label"})
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.CpfCnpj, new {@class = "cpf form-control"})
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.CpfCnpj, "", new {@class = "text-danger"})
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Endereço</label>
+        <div class="col-md-2">
+            @Html.LabelFor(m => m.Cep, new {@class = "control-label"})
+            @Html.TextBoxFor(m => m.Cep, new {@class = "cep form-control"})
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Endereco, new {@class = "control-label"})
+            @Html.TextBoxFor(m => m.Endereco, new {@class = "form-control", @maxlength = "200"})
+        </div>
+        <div class="col-md-1">
+            @Html.LabelFor(m => m.Uf, new { @class = "control-label" })
+            @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Cidade, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Cidade, new { @class = "form-control", @maxlength = "200" })
+        </div>
+        @Html.ValidationMessageFor(m => m.Endereco, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Cep, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Uf, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Cidade, "", new { @class = "text-danger" })
+    </div>
+    
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-success" value="Salvar Registro" />
+        </div>
+    </div>
+}
+
+@Html.Hidden("hdnAddTempDataProfissionaisPermitidos", Url.Action("AddTempDataProfissionaisPermitidos", "Account"))
+@Html.Hidden("hdnRemoveTempDataProfissionaisPermitidos", Url.Action("RemoveTempDataProfissionaisPermitidos", "Account"))
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

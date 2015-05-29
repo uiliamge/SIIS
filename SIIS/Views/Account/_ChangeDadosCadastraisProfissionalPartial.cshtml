@@ -1,0 +1,83 @@
+﻿@model SIIS.Models.RegisterProfissionalViewModel
+@{
+    ViewBag.Title = "Registro de Usuário";
+}
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("RegisterProfissional", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Registrando-se como um Profissional de Saúde.</h4>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(m => m.NomeCompleto, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.NomeCompleto, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.NomeCompleto, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            <p style="margin-bottom: 0px;">Você receberá um e-mail de confirmação para ativar o seu cadastro.</p>
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NumeroConselho, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.NumeroConselho, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.NumeroConselho, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SiglaConselhoRegional, new { @class = "col-md-2 control-label" })
+        <div class="col-md-1">
+            @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.UfConselhoRegional, new { @class = "col-md-1 control-label" })
+        <div class="col-md-1">
+            @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.SiglaConselhoRegional, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.UfConselhoRegional, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-success" value="Salvar Registro" />
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

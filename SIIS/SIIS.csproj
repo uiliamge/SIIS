@@ -358,6 +358,8 @@
     <Content Include="Views\Home\Registrar.cshtml" />
     <Content Include="Views\Account\RegisterProfissional.cshtml" />
     <Content Include="Views\Account\_RegisterPacienteProfissionaisPermitidos.cshtml" />
+    <Content Include="Views\Account\_ChangeDadosCadastraisPacientePartial.cshtml" />
+    <Content Include="Views\Account\_ChangeDadosCadastraisProfissionalPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

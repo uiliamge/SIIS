@@ -142,6 +142,8 @@ namespace SIIS.Controllers
             return View(model);
         }
 
+        #region Profissional Register e Editar
+
         [AllowAnonymous]
         public ActionResult RegisterProfissional()
         {
@@ -206,6 +208,9 @@ namespace SIIS.Controllers
             return View(model);
         }
 
+        #endregion
+
+        #region Paciente Register e Editar
         [AllowAnonymous]
         public ActionResult RegisterPaciente()
         {
@@ -309,6 +314,59 @@ namespace SIIS.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditarPaciente(Paciente model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = _userManager.FindById(model.UserId);
+
+                    user.NomeCompleto = model.Nome;
+                    user.Email = model.Email;
+                    user.Cpf = model.CpfCnpj.RemoverMascara();
+                    user.Ip = Request.UserHostAddress;
+
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        using (PacienteNeg pacienteNeg = new PacienteNeg())
+                        {
+                            pacienteNeg.Editar(model);
+                        }
+                        
+                        Success("Dados cadastrais alterados com sucesso.", true);
+
+                        return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
+                    }
+                    else
+                    {
+                        Danger(String.Join("\n", result.Errors.ToList()), true);
+                        AddErrors(result);
+                    }
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                Danger(String.Join("\n", e.EntityValidationErrors.ToList()), true);
+            }
+            catch (DbUpdateException e)
+            {
+                Danger(e.InnerException.ToString(), true);
+            }
+            catch (Exception e)
+            {
+                CarregarViewBags();
+                Danger(e.Message, true);
+            }
+
+            CarregarViewBags();
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
         [AllowAnonymous]
         [HttpPost]
         public ActionResult AddTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
@@ -359,6 +417,9 @@ namespace SIIS.Controllers
 
             return PartialView("_RegisterPacienteProfissionaisPermitidos", permitidosAtuais);
         }
+
+        #endregion
+        
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -502,77 +563,18 @@ namespace SIIS.Controllers
             return RedirectToAction("Manage", new { Message = message });
         }
 
-        //private IEnumerable<Notification> GetUserNotifications()
-        //{
-        //    // get the user ID
-        //    var userId = User.Identity.GetUserId();
-
-        //    // load our notifications
-        //    var notifications = _context.Notifications
-        //        .Where(n => n.UserId == userId)
-        //        .Where(n => !n.IsDismissed)
-        //        .Select(n => n)
-        //        .ToList();
-        //    return notifications;
-        //}
-
-        //[HttpPost]
-        //public ActionResult MarkNotificationAsRead(int id)
-        //{
-        //    var userNotification = GetUserNotifications().FirstOrDefault(n => n.NotificationId == id);
-
-        //    if (userNotification == null)
-        //    {
-        //        return new HttpNotFoundResult();
-        //    }
-
-        //    userNotification.IsDismissed = true;
-        //    _context.SaveChanges();
-
-        //    return RedirectToAction("Manage");
-        //}
-
-        //public ActionResult GetNotification(int id)
-        //{
-        //    var userNotification = GetUserNotifications().FirstOrDefault(n => n.NotificationId == id);
-
-        //    if (userNotification == null)
-        //    {
-        //        return new HttpNotFoundResult();
-        //    }
-
-        //    return PartialView("_RenderNotifications.ModalPreview", userNotification);
-        //}
-
-        //[HttpPost]
-        //public ActionResult Delete(int id)
-        //{
-        //    var userNotification = GetUserNotifications().FirstOrDefault(n => n.NotificationId == id);
-
-        //    if (userNotification == null)
-        //    {
-        //        return new HttpNotFoundResult();
-        //    }
-
-        //    _context.Notifications.Remove(userNotification);
-        //    _context.SaveChanges();
-
-        //    return RedirectToAction("Manage");
-        //}
-
         //
         // GET: /Account/Manage
         public ActionResult Manage(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.Error ? "An error has occurred."
+                message == ManageMessageId.ChangePasswordSuccess ? "Sua senha foi alterada com sucesso."
+                : message == ManageMessageId.DadosCadastraisAlterados ? "Dados cadastrais alterados com sucesso."
+                : message == ManageMessageId.Error ? "Ocorreu um erro."
                 : "";
             ViewBag.HasLocalPassword = HasPassword();
             ViewBag.ReturnUrl = Url.Action("Manage");
-            //ViewBag.NotificationList = GetUserNotifications();
+            CarregarViewBags();
             return View();
         }
 
@@ -585,7 +587,6 @@ namespace SIIS.Controllers
             bool hasPassword = HasPassword();
             ViewBag.HasLocalPassword = hasPassword;
             ViewBag.ReturnUrl = Url.Action("Manage");
-            //ViewBag.NotificationList = GetUserNotifications();
             if (hasPassword)
             {
                 if (ModelState.IsValid)
@@ -595,6 +596,7 @@ namespace SIIS.Controllers
                     {
                         var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                         await SignInAsync(user, isPersistent: false);
+                        Success("Sua senha foi alterada com sucesso.", true);
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                     }
                     else
@@ -822,7 +824,8 @@ namespace SIIS.Controllers
             ChangePasswordSuccess,
             SetPasswordSuccess,
             RemoveLoginSuccess,
-            Error
+            Error,
+            DadosCadastraisAlterados
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
@@ -866,18 +869,5 @@ namespace SIIS.Controllers
             }
         }
         #endregion
-
-        //private Usuario BuscarUsuarioProfissional(LoginViewModel model)
-        //{
-        //    var numeroConselho = model.LoginProfissionalViewModel.NumeroConselho;
-        //    var siglaConselho = model.LoginProfissionalViewModel.SiglaConselhoRegional;
-        //    var ufConselho = model.LoginProfissionalViewModel.UfConselhoRegional;
-
-        //    Usuario usuario = _context.Usuarios.FirstOrDefault(x => x.Responsavel.NumeroConselho == numeroConselho
-        //        && x.Responsavel.ConselhoRegional.Sigla == siglaConselho
-        //        && x.Responsavel.UfConselhoRegional == ufConselho);
-
-        //    return usuario;
-        //}
     }
 }

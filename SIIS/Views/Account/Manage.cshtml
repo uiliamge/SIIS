@@ -1,58 +1,37 @@
-﻿@using SIIS.Models
+﻿@using Microsoft.AspNet.Identity
+@using SIIS.Models
 @{
-    ViewBag.Title = "Manage Account";
+    ViewBag.Title = "Alterar meus Dados";
+    var username = User.Identity.GetUserName();
+
+    ApplicationUser user = ApplicationUser.GetUsuario(username);
 }
-
-<h2>@ViewBag.Title.</h2>
-
+<h2>@ViewBag.Title</h2>
 <div class="row">
     <div class="col-md-12">
         <p class="text-success">@ViewBag.StatusMessage</p>
-
         <ul class="nav nav-tabs" role="tablist" id="accountTab">
-            <li class="active"><a href="#notifications" role="tab" data-toggle="tab">Notifications</a></li>
-            <li><a href="#linkedAccounts" role="tab" data-toggle="tab">Linked Accounts</a></li>
-            <li><a href="#passwordReset" role="tab" data-toggle="tab">Password Reset</a></li>
+            <li class="active"><a href="#dadosCadastrais" role="tab" data-toggle="tab">Notifications</a></li>
+            <li><a href="#passwordReset" role="tab" data-toggle="tab">Alterar a Senha</a></li>
         </ul>
-
         <div class="tab-content">
-
-            <div class="tab-pane active" id="notifications">
-                @Html.Partial("_RenderNotifications", ViewBag.NotificationList as IEnumerable<Notification>)
-            </div>
-
-            <div class="tab-pane " id="linkedAccounts">
-                <section id="externalLogins">
-                    @Html.Action("RemoveAccountList")
-                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })
-                </section>
-            </div>
-
-            <div class="tab-pane " id="passwordReset">
-                @if (ViewBag.HasLocalPassword)
+            <div class="tab-pane active" id="dadosCadastrais">
+                @if (user.TipoUsuario == TipoUsuarioEnum.Paciente)
                 {
-                    @Html.Partial("_ChangePasswordPartial")
+                    Paciente paciente = Paciente.GetByUserId(user.Id);
+                    @Html.Partial("_ChangeDadosCadastraisPacientePartial", paciente)
                 }
                 else
                 {
-                    @Html.Partial("_SetPasswordPartial")
+                    @Html.Partial("_ChangeDadosCadastraisProfissionalPartial")
                 }
             </div>
-
+            <div class="tab-pane " id="passwordReset">
+                @Html.Partial("_ChangePasswordPartial")
+            </div>
         </div>
     </div>
 </div>
-
-@section topLevel{
-
-    @{ Html.RenderPartial("_RenderNotifications.Modal"); }
-
-}
-
-
 @section Scripts {
-
     @Scripts.Render("~/bundles/jqueryval")
-    @{ Html.RenderPartial("_RenderNotifications.js"); }
-
 }

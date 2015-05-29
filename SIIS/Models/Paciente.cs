@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Linq;
 
 namespace SIIS.Models
 {
     [Table("Paciente")]
     public class Paciente
-    {        
+    {
+        public static Paciente GetByUserId(string userId)
+        {
+            SiteDataContext _contexto = new SiteDataContext();
+
+            return _contexto.Pacientes.FirstOrDefault(x => x.UserId == userId);
+        }
+
         [Display(Name = "Código")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
