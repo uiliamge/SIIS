@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace SIIS.Models
 {
     [Table("Responsavel")]
     public class Responsavel
     {
+        public static Responsavel GetByUserId(string userId)
+        {
+            SiteDataContext contexto = new SiteDataContext();
+
+            return contexto.Responsaveis.FirstOrDefault(x => x.UserId == userId);
+        }
+      
         [Display(Name = "Código")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -16,7 +24,7 @@ namespace SIIS.Models
         public int NumeroConselho { get; set; }
 
         [Required]
-        public virtual ConselhoRegional ConselhoRegional { get; set; }
+        public ConselhoEnum ConselhoRegional { get; set; }
 
         [Required]
         [Display(Name = "UF")]

@@ -29,7 +29,7 @@ namespace SIIS.Models
 
         [Required]
         [StringLength(14)]
-        [Display(Name = "CPF/CNPJ")]
+        [Display(Name = "CPF")]
         public string CpfCnpj { get; set; }
 
         [Required]
@@ -60,6 +60,9 @@ namespace SIIS.Models
         public string Ip { get; set; }
 
         public DateTime DataHora { get; set; }
+
+        [Display(Name = "Tipo de Permissão")]
+        public TipoPermissaoEnum TipoPermissao { get; set; }
 
         public virtual ICollection<Composicao> Composicoes { get; set; }
 

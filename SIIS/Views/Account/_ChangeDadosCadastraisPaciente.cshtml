@@ -7,8 +7,7 @@
     @Html.HiddenFor(x => x.Id)
     
     @Html.AntiForgeryToken()
-    <h4>Registrando-se como um Paciente.</h4>
-    <hr />
+    <br/>
     <div class="form-group">
         @Html.LabelFor(m => m.Nome, new { @class = "col-md-2 control-label" })
         <div class="col-md-3">
@@ -21,7 +20,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-3">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" , @readonly = true})
         </div>
         <div class="col-md-6" style="padding-top: 5px;">
             <p style="margin-bottom: 0px;">Você receberá um e-mail de confirmação para ativar o seu cadastro.</p>
@@ -49,7 +48,7 @@
         </div>
         <div class="col-md-1">
             @Html.LabelFor(m => m.Uf, new { @class = "control-label" })
-            @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
+            @Html.DropDownListFor(x => x.Uf, null, new { @class = "form-control" })
         </div>
         <div class="col-md-3">
             @Html.LabelFor(m => m.Cidade, new { @class = "control-label" })

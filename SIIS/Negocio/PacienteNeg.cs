@@ -23,6 +23,7 @@ namespace SIIS.Negocio
                 Endereco = model.Endereco,
                 Uf = model.Uf,
                 Cidade = model.Cidade,
+                TipoPermissao = model.TipoPermissao,
                 Ip = user.Ip
             };
             _contexto.Pacientes.Add(paciente);
@@ -41,11 +42,13 @@ namespace SIIS.Negocio
 
         public void SalvarPermissoesPaciente(string userId, List<PermissaoPacienteViewModel> lstPermissaoPaciente)
         {
+            Paciente paciente = _contexto.Pacientes.FirstOrDefault(x => x.UserId == userId);
+
             List<PermissaoResponsavelPaciente> permissoesAtuais = _contexto.PermissoesResponsavelPaciente.ToList();
             List<PermissaoResponsavelPaciente> permissoesNovas =
                 lstPermissaoPaciente.Select(permissaoNova => new PermissaoResponsavelPaciente
                 {
-                    Paciente = _contexto.Pacientes.FirstOrDefault(x => x.UserId == userId),
+                    Paciente = paciente,
                     NumeroConselho = permissaoNova.NumeroConselho,
                     SiglaConselhoRegional = permissaoNova.SiglaConselhoRegional,
                     UfConselhoRegional = permissaoNova.UfConselhoRegional
@@ -68,6 +71,52 @@ namespace SIIS.Negocio
                     _contexto.PermissoesResponsavelPaciente.Remove(permissaoAtual);
                 }
             }            
+        }
+
+        public void SalvarPermissoesPaciente(int idPaciente, List<PermissaoPacienteViewModel> lstPermissaoPaciente)
+        {
+            Paciente paciente = _contexto.Pacientes.FirstOrDefault(x => x.Id == idPaciente);
+
+            List<PermissaoResponsavelPaciente> permissoesAtuais = _contexto.PermissoesResponsavelPaciente.ToList();
+            List<PermissaoResponsavelPaciente> permissoesNovas =
+                lstPermissaoPaciente.Select(permissaoNova => new PermissaoResponsavelPaciente
+                {
+                    Paciente = paciente,
+                    NumeroConselho = permissaoNova.NumeroConselho,
+                    SiglaConselhoRegional = permissaoNova.SiglaConselhoRegional,
+                    UfConselhoRegional = permissaoNova.UfConselhoRegional
+                }).ToList();
+
+            //Adiciona novos
+            foreach (var permissaoNova in permissoesNovas)
+            {
+                if (!permissoesAtuais.Contains(permissaoNova))
+                {
+                    _contexto.PermissoesResponsavelPaciente.Add(permissaoNova);
+                }
+            }
+
+            //Remove os excluídos da lista
+            foreach (var permissaoAtual in permissoesAtuais)
+            {
+                if (!permissoesNovas.Contains(permissaoAtual))
+                {
+                    _contexto.PermissoesResponsavelPaciente.Remove(permissaoAtual);
+                }
+            }
+        }
+
+        public void AlterarTipoPermissao(Paciente paciente)
+        {
+            var old = _contexto.Pacientes.FirstOrDefault(x => x.Id == paciente.Id);
+            var novo = old;
+            novo.TipoPermissao = paciente.TipoPermissao;
+
+            if (old != null)
+            {
+                _contexto.Entry(old).CurrentValues.SetValues(novo);
+                _contexto.Entry(old).State = EntityState.Modified;
+            }
         }
 
         public void Dispose()

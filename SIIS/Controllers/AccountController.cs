@@ -15,6 +15,7 @@ using Microsoft.Owin.Security;
 using SIIS.Helpers;
 using SIIS.Models;
 using SIIS.Negocio;
+using Microsoft.AspNet.Identity;
 
 namespace SIIS.Controllers
 {
@@ -46,57 +47,13 @@ namespace SIIS.Controllers
             }
         }
 
-        private void CarregarViewBags()
-        {
-            #region SiglaConselhoRegional
-
-            List<SelectListItem> conselhosListItens = new List<SelectListItem>() { new SelectListItem { Selected = true, Text = "", Value = "" } };
-            foreach (var conselho in Enum.GetValues(typeof(ConselhoEnum)))
-            {
-                conselhosListItens.Add(new SelectListItem { Text = conselho.ToString(), Value = ((int)conselho).ToString() });
-            }
-
-            ViewBag.SiglaConselhoRegional = conselhosListItens;
-
-            #endregion
-
-            #region UfConselho
-
-            List<SelectListItem> ufListItens = new List<SelectListItem>() { new SelectListItem { Selected = true, Text = "", Value = "" } };
-            foreach (var uf in Enum.GetValues(typeof(UfEnum)))
-            {
-                ufListItens.Add(new SelectListItem { Text = uf.ToString(), Value = ((int)uf).ToString() });
-            }
-
-            ViewBag.UfConselhoRegional = ufListItens;
-
-            #endregion
-
-            #region TipoPermissao
-
-            List<SelectListItem> tipoPermissaoListItens = new List<SelectListItem>();
-
-            foreach (var tipoPermissao in Enum.GetValues(typeof(TipoPermissaoEnum)))
-            {
-                FieldInfo fi = tipoPermissao.GetType().GetField(tipoPermissao.ToString());
-                DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                string description = attributes[0].Description;
-
-                tipoPermissaoListItens.Add(new SelectListItem { Text = description, Value = tipoPermissao.ToString() });
-            }
-
-            ViewBag.TipoPermissao = tipoPermissaoListItens;
-
-            #endregion
-        }
-
-        //
-        // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            CarregarViewBags();
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+
             return View();
         }
 
@@ -131,14 +88,13 @@ namespace SIIS.Controllers
                 }
                 else
                 {
-                    CarregarViewBags();
-                    //Danger("Login inválido", true);
                     ModelState.AddModelError("", "Login inválido.");
                 }
             }
-
             // If we got this far, something failed, redisplay form
-            CarregarViewBags();
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+
             return View(model);
         }
 
@@ -147,7 +103,10 @@ namespace SIIS.Controllers
         [AllowAnonymous]
         public ActionResult RegisterProfissional()
         {
-            CarregarViewBags();
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagUf();
+
             return View();
         }
 
@@ -203,7 +162,9 @@ namespace SIIS.Controllers
                 }
             }
 
-            CarregarViewBags();
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagUf();
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -218,11 +179,17 @@ namespace SIIS.Controllers
             //foreach
             ViewBag.lbxProfissionaisSelecionados = profissionaisListItens;
 
-            RegisterPacienteViewModel model = new RegisterPacienteViewModel();
-            model.Permissao = new List<PermissaoPacienteViewModel>();
-            CarregarViewBags();
+            RegisterPacienteViewModel model = new RegisterPacienteViewModel
+            {
+                Permissao = new List<PermissaoPacienteViewModel>()
+            };
 
             TempData["ProfissionaisPermitidos"] = null;
+
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagTipoPermissao();
+            CarregarViewBagUf();
 
             return View(model);
         }
@@ -245,7 +212,6 @@ namespace SIIS.Controllers
                         NomeCompleto = model.NomeCompleto,
                         Email = model.Email,
                         Cpf = model.Cpf.RemoverMascara(),
-                        TipoPermissao = model.TipoPermissao,
                         TipoUsuario = TipoUsuarioEnum.Paciente,
                         Ip = Request.UserHostAddress
                     };
@@ -305,11 +271,14 @@ namespace SIIS.Controllers
             }
             catch (Exception e)
             {
-                CarregarViewBags();
                 Danger(e.Message, true);
             }
 
-            CarregarViewBags();
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagTipoPermissao();
+            CarregarViewBagUf();
+
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -336,7 +305,7 @@ namespace SIIS.Controllers
                         {
                             pacienteNeg.Editar(model);
                         }
-                        
+
                         Success("Dados cadastrais alterados com sucesso.", true);
 
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -358,23 +327,68 @@ namespace SIIS.Controllers
             }
             catch (Exception e)
             {
-                CarregarViewBags();
                 Danger(e.Message, true);
             }
 
-            CarregarViewBags();
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagTipoPermissao();
+            CarregarViewBagUf();
+
+            return View("Manage", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditarPermissoesPaciente(Paciente paciente)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var permissoes = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel> ??
+                                  new List<PermissaoPacienteViewModel>();
+
+                    using (PacienteNeg pacienteNeg = new PacienteNeg())
+                    {
+                        pacienteNeg.AlterarTipoPermissao(paciente);
+                        pacienteNeg.SalvarPermissoesPaciente(paciente.Id, permissoes);
+                    }
+
+                    Success("Dados de permissão alterados com sucesso.", true);
+
+                    return RedirectToAction("Manage", new { Message = ManageMessageId.PermissoesAlteradas });
+
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                Danger(String.Join("\n", e.EntityValidationErrors.ToList()), true);
+            }
+            catch (DbUpdateException e)
+            {
+                Danger(e.InnerException.ToString(), true);
+            }
+            catch (Exception e)
+            {
+                Danger(e.Message, true);
+            }
+
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagTipoPermissao();
+            CarregarViewBagUf();
+
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return RedirectToAction("Manage");
         }
 
         [AllowAnonymous]
         [HttpPost]
         public ActionResult AddTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
         {
-            var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel>;
-
-            if (permitidosAtuais == null)
-                permitidosAtuais = new List<PermissaoPacienteViewModel>();
+            var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel> ??
+                                   new List<PermissaoPacienteViewModel>();
 
             var nova = new PermissaoPacienteViewModel
             {
@@ -386,21 +400,24 @@ namespace SIIS.Controllers
             if (!permitidosAtuais.Contains(nova))
                 permitidosAtuais.Add(nova);
 
-            CarregarViewBags();
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagTipoPermissao();
 
             TempData["ProfissionaisPermitidos"] = permitidosAtuais;
 
-            return PartialView("_RegisterPacienteProfissionaisPermitidos", permitidosAtuais);
+            //if(register)
+                return PartialView("_RegisterPacienteProfissionaisPermitidos", permitidosAtuais);
+
+            //return PartialView("_ChangePermissoesPaciente", permitidosAtuais);
         }
 
         [AllowAnonymous]
         [HttpPost]
         public ActionResult RemoveTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
         {
-            var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel>;
-
-            if (permitidosAtuais == null)
-                permitidosAtuais = new List<PermissaoPacienteViewModel>();
+            var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel> ??
+                                   new List<PermissaoPacienteViewModel>();
 
             var remover = new PermissaoPacienteViewModel
             {
@@ -411,7 +428,10 @@ namespace SIIS.Controllers
 
             permitidosAtuais = permitidosAtuais.Where(x => x.NumeroConselho != remover.NumeroConselho).ToList();
 
-            CarregarViewBags();
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagTipoPermissao();
+            CarregarViewBagUf();
 
             TempData["ProfissionaisPermitidos"] = permitidosAtuais;
 
@@ -419,7 +439,7 @@ namespace SIIS.Controllers
         }
 
         #endregion
-        
+
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -563,18 +583,40 @@ namespace SIIS.Controllers
             return RedirectToAction("Manage", new { Message = message });
         }
 
-        //
-        // GET: /Account/Manage
         public ActionResult Manage(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Sua senha foi alterada com sucesso."
                 : message == ManageMessageId.DadosCadastraisAlterados ? "Dados cadastrais alterados com sucesso."
+                : message == ManageMessageId.PermissoesAlteradas ? "Dados de permissão alterados com sucesso."
                 : message == ManageMessageId.Error ? "Ocorreu um erro."
                 : "";
             ViewBag.HasLocalPassword = HasPassword();
             ViewBag.ReturnUrl = Url.Action("Manage");
-            CarregarViewBags();
+
+            var username = User.Identity.GetUserName();
+            ApplicationUser user = ApplicationUser.GetUsuario(username);
+
+            if (user.TipoUsuario == TipoUsuarioEnum.Paciente)
+            {
+                Paciente paciente = Paciente.GetByUserId(User.Identity.GetUserId());
+                paciente.CpfCnpj = paciente.CpfCnpj.FormataCpf();
+
+                CarregarViewBagUf(paciente);
+                CarregarViewBagTipoPermissao();
+                CarregarViewBagSiglaConselhoRegional();
+                CarregarViewBagUfConselhoRegional();
+            }
+            else
+            {
+                Responsavel responsavel = Responsavel.GetByUserId(User.Identity.GetUserId());
+                responsavel.CpfCnpj = responsavel.CpfCnpj.FormataCpf();
+
+                CarregarViewBagUf(null, responsavel);
+                CarregarViewBagSiglaConselhoRegional();
+                CarregarViewBagUfConselhoRegional(responsavel);
+            }
+
             return View();
         }
 
@@ -778,6 +820,87 @@ namespace SIIS.Controllers
             base.Dispose(disposing);
         }
 
+        #region ViewBags
+
+        private void CarregarViewBagTipoPermissao(Paciente paciente = null)
+        {
+            List<SelectListItem> tipoPermissaoListItens = new List<SelectListItem>();
+
+            foreach (var tipoPermissao in Enum.GetValues(typeof(TipoPermissaoEnum)))
+            {
+                FieldInfo fi = tipoPermissao.GetType().GetField(tipoPermissao.ToString());
+                DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                string description = attributes[0].Description;
+
+                tipoPermissaoListItens.Add(new SelectListItem
+                {
+                    Text = description,
+                    Value = tipoPermissao.ToString(),
+                    Selected = (paciente != null && paciente.TipoPermissao == (TipoPermissaoEnum)tipoPermissao)
+                });
+            }
+
+            ViewBag.TipoPermissao = tipoPermissaoListItens;
+        }
+        private void CarregarViewBagUf(Paciente paciente = null, Responsavel responsavel = null)
+        {
+            #region UfConselho
+
+            List<SelectListItem> ufListItens = new List<SelectListItem>();
+
+            if (paciente == null && responsavel == null)
+                ufListItens.Add(new SelectListItem { Selected = true, Text = "", Value = "" });
+
+            ufListItens.AddRange(from object uf in Enum.GetValues(typeof(UfEnum))
+                                 select new SelectListItem
+                                 {
+                                     Text = uf.ToString(),
+                                     Value = ((int)uf).ToString(),
+                                     Selected = (paciente != null && paciente.Uf == (UfEnum)uf) || (responsavel != null && responsavel.Uf == (UfEnum)uf)
+                                 });
+
+            ViewBag.Uf = ufListItens;
+
+            #endregion
+        }
+        private void CarregarViewBagUfConselhoRegional(Responsavel responsavel = null)
+        {
+            List<SelectListItem> ufListItens = new List<SelectListItem>();
+
+            if (responsavel == null)
+                ufListItens.Add(new SelectListItem { Selected = true, Text = "", Value = "" });
+
+            ufListItens.AddRange(from object uf in Enum.GetValues(typeof(UfEnum))
+                                 select new SelectListItem
+                                 {
+                                     Text = uf.ToString(),
+                                     Value = ((int)uf).ToString(),
+                                     Selected = (responsavel != null && responsavel.Uf == (UfEnum)uf)
+                                 });
+
+            ViewBag.UfConselhoRegional = ufListItens;
+        }
+        private void CarregarViewBagSiglaConselhoRegional(Responsavel responsavel = null)
+        {
+            List<SelectListItem> conselhosListItens = new List<SelectListItem>();
+            if (responsavel == null)
+                conselhosListItens.Add(new SelectListItem { Selected = true, Text = "", Value = "" });
+
+            foreach (var conselho in Enum.GetValues(typeof(ConselhoEnum)))
+            {
+                conselhosListItens.Add(new SelectListItem
+                {
+                    Text = conselho.ToString(),
+                    Value = ((int)conselho).ToString(),
+                    Selected = (responsavel != null && responsavel.ConselhoRegional == (ConselhoEnum)conselho)
+                });
+            }
+
+            ViewBag.SiglaConselhoRegional = conselhosListItens;
+        }
+
+        #endregion
+
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
@@ -825,7 +948,8 @@ namespace SIIS.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             Error,
-            DadosCadastraisAlterados
+            DadosCadastraisAlterados,
+            PermissoesAlteradas
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

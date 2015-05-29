@@ -29,8 +29,6 @@ namespace SIIS.Models
 
         public UfEnum UfConselhoRegional { get; set; }
 
-        public TipoPermissaoEnum TipoPermissao { get; set; }
-
         public string Cpf { get; set; }
 
         public string Ip { get; set; }

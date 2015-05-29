@@ -51,7 +51,7 @@
         </div>
         <div class="col-md-1">
             @Html.LabelFor(m => m.Uf, new { @class = "control-label" })
-            @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
+            @Html.DropDownListFor(x => x.Uf, null, new { @class = "form-control" })
         </div>
         <div class="col-md-3">
             @Html.LabelFor(m => m.Cidade, new { @class = "control-label" })

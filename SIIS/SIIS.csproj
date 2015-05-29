@@ -221,6 +221,10 @@
     <Compile Include="Migrations\201505282040468_Ajustes.Designer.cs">
       <DependentUpon>201505282040468_Ajustes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505292001475_Coloquei TipoPermissao no Paciente.cs" />
+    <Compile Include="Migrations\201505292001475_Coloquei TipoPermissao no Paciente.Designer.cs">
+      <DependentUpon>201505292001475_Coloquei TipoPermissao no Paciente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505220203113_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505220203113_Inicial.Designer.cs">
@@ -241,6 +245,10 @@
     <Compile Include="Migrations\Identity\201505281721142_InsercaoDoIpUsuario.cs" />
     <Compile Include="Migrations\Identity\201505281721142_InsercaoDoIpUsuario.Designer.cs">
       <DependentUpon>201505281721142_InsercaoDoIpUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201505291958340_RetireiTipoPermissaoDoUserEColoqueiEmPaciente.cs" />
+    <Compile Include="Migrations\Identity\201505291958340_RetireiTipoPermissaoDoUserEColoqueiEmPaciente.Designer.cs">
+      <DependentUpon>201505291958340_RetireiTipoPermissaoDoUserEColoqueiEmPaciente.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Identity\ConfigurationIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -358,8 +366,9 @@
     <Content Include="Views\Home\Registrar.cshtml" />
     <Content Include="Views\Account\RegisterProfissional.cshtml" />
     <Content Include="Views\Account\_RegisterPacienteProfissionaisPermitidos.cshtml" />
-    <Content Include="Views\Account\_ChangeDadosCadastraisPacientePartial.cshtml" />
-    <Content Include="Views\Account\_ChangeDadosCadastraisProfissionalPartial.cshtml" />
+    <Content Include="Views\Account\_ChangeDadosCadastraisPaciente.cshtml" />
+    <Content Include="Views\Account\_ChangeDadosCadastraisProfissional.cshtml" />
+    <Content Include="Views\Account\_ChangePermissoesPaciente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -411,6 +420,9 @@
     <EmbeddedResource Include="Migrations\201505282040468_Ajustes.resx">
       <DependentUpon>201505282040468_Ajustes.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505292001475_Coloquei TipoPermissao no Paciente.resx">
+      <DependentUpon>201505292001475_Coloquei TipoPermissao no Paciente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505220203113_Inicial.resx">
       <DependentUpon>201505220203113_Inicial.cs</DependentUpon>
     </EmbeddedResource>
@@ -425,6 +437,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505281721142_InsercaoDoIpUsuario.resx">
       <DependentUpon>201505281721142_InsercaoDoIpUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201505291958340_RetireiTipoPermissaoDoUserEColoqueiEmPaciente.resx">
+      <DependentUpon>201505291958340_RetireiTipoPermissaoDoUserEColoqueiEmPaciente.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

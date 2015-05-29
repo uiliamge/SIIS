@@ -32,7 +32,7 @@ namespace SIIS.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirmação da Nova Senha")]
-        [Compare("NewPassword", ErrorMessage = "A senha e a confirmação de senha não conferemh.")]
+        [Compare("NewPassword", ErrorMessage = "A senha e a confirmação de senha não conferem.")]
         public string ConfirmPassword { get; set; }
     }
 

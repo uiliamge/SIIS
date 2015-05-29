@@ -4,29 +4,42 @@
     ViewBag.Title = "Alterar meus Dados";
     var username = User.Identity.GetUserName();
 
+    var paciente = new Paciente();
+    var responsavel = new Responsavel();
     ApplicationUser user = ApplicationUser.GetUsuario(username);
+    if (user.TipoUsuario == TipoUsuarioEnum.Paciente)
+    {
+        paciente = Paciente.GetByUserId(user.Id);
+        paciente.CpfCnpj = paciente.CpfCnpj.FormataCpf();
+    }
 }
 <h2>@ViewBag.Title</h2>
 <div class="row">
     <div class="col-md-12">
         <p class="text-success">@ViewBag.StatusMessage</p>
         <ul class="nav nav-tabs" role="tablist" id="accountTab">
-            <li class="active"><a href="#dadosCadastrais" role="tab" data-toggle="tab">Notifications</a></li>
+            <li class="active"><a href="#dadosCadastrais" role="tab" data-toggle="tab">Dados Cadastrais</a></li>
+            @if (user.TipoUsuario == TipoUsuarioEnum.Paciente)
+            {
+                <li><a href="#permissoes" role="tab" data-toggle="tab">Permissões</a></li>
+            }
             <li><a href="#passwordReset" role="tab" data-toggle="tab">Alterar a Senha</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="dadosCadastrais">
+                @(user.TipoUsuario == TipoUsuarioEnum.Paciente
+                ? Html.Partial("_ChangeDadosCadastraisPaciente", paciente)
+                : Html.Partial("_ChangeDadosCadastraisProfissional", responsavel))
+            </div>
+            
                 @if (user.TipoUsuario == TipoUsuarioEnum.Paciente)
                 {
-                    Paciente paciente = Paciente.GetByUserId(user.Id);
-                    @Html.Partial("_ChangeDadosCadastraisPacientePartial", paciente)
+                    <div class="tab-pane" id="permissoes">
+                        @Html.Partial("_ChangePermissoesPaciente", paciente)
+
+                    </div>
                 }
-                else
-                {
-                    @Html.Partial("_ChangeDadosCadastraisProfissionalPartial")
-                }
-            </div>
-            <div class="tab-pane " id="passwordReset">
+            <div class="tab-pane" id="passwordReset">
                 @Html.Partial("_ChangePasswordPartial")
             </div>
         </div>
