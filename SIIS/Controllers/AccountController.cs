@@ -123,15 +123,19 @@ namespace SIIS.Controllers
                     NomeCompleto = model.NomeCompleto,
                     Email = model.Email,
                     NumeroConselho = model.NumeroConselho,
-                    SiglaConselhoRegional = model.SiglaConselhoRegional,
+                    SiglaConselhoRegional = model.SiglaConselhoRegional.ToString(),
                     UfConselhoRegional = model.UfConselhoRegional,
-                    TipoUsuario = TipoUsuarioEnum.Profissional
+                    TipoUsuario = TipoUsuarioEnum.Profissional,
+                    Ip = Request.UserHostAddress
                 };
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    //await SignInAsync(user, isPersistent: false);
+                    using (ProfissionalNeg profissionalNeg = new ProfissionalNeg())
+                    {
+                        profissionalNeg.Inserir(user, model);
+                    }
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -291,12 +295,13 @@ namespace SIIS.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var user = _userManager.FindById(model.UserId);
+                    var user = UserManager.FindById(model.UserId);
 
                     user.NomeCompleto = model.Nome;
                     user.Email = model.Email;
                     user.Cpf = model.CpfCnpj.RemoverMascara();
                     user.Ip = Request.UserHostAddress;
+                    model.Ip = Request.UserHostAddress;
 
                     IdentityResult result = await UserManager.UpdateAsync(user);
                     if (result.Succeeded)
@@ -308,7 +313,8 @@ namespace SIIS.Controllers
 
                         Success("Dados cadastrais alterados com sucesso.", true);
 
-                        return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
+                        //return RedirectToAction("Manage", new { Message = ManageMessageId.DadosCadastraisAlterados });
+                        return RedirectToAction("Manage");
                     }
                     else
                     {
@@ -332,10 +338,10 @@ namespace SIIS.Controllers
 
             CarregarViewBagSiglaConselhoRegional();
             CarregarViewBagUfConselhoRegional();
-            CarregarViewBagTipoPermissao();
-            CarregarViewBagUf();
+            CarregarViewBagTipoPermissao(model);
+            CarregarViewBagUf(model);
 
-            return View("Manage", model);
+            return RedirectToAction("Manage");
         }
 
         [HttpPost]
@@ -344,22 +350,19 @@ namespace SIIS.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var permissoes = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel> ??
+                var permissoes = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel> ??
                                   new List<PermissaoPacienteViewModel>();
 
-                    using (PacienteNeg pacienteNeg = new PacienteNeg())
-                    {
-                        pacienteNeg.AlterarTipoPermissao(paciente);
-                        pacienteNeg.SalvarPermissoesPaciente(paciente.Id, permissoes);
-                    }
-
-                    Success("Dados de permissão alterados com sucesso.", true);
-
-                    return RedirectToAction("Manage", new { Message = ManageMessageId.PermissoesAlteradas });
-
+                using (PacienteNeg pacienteNeg = new PacienteNeg())
+                {
+                    pacienteNeg.AlterarTipoPermissao(paciente);
+                    pacienteNeg.SalvarPermissoesPaciente(paciente.Id, permissoes);
                 }
+
+                Success("Dados de permissão alterados com sucesso.", true);
+
+                return RedirectToAction("Manage");
+
             }
             catch (DbEntityValidationException e)
             {
@@ -376,7 +379,7 @@ namespace SIIS.Controllers
 
             CarregarViewBagSiglaConselhoRegional();
             CarregarViewBagUfConselhoRegional();
-            CarregarViewBagTipoPermissao();
+            CarregarViewBagTipoPermissao(paciente);
             CarregarViewBagUf();
 
             // If we got this far, something failed, redisplay form
@@ -385,7 +388,7 @@ namespace SIIS.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult AddTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
+        public ActionResult AddTempDataProfissionaisPermitidos(string numero, int sigla, int uf, bool edicao)
         {
             var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel> ??
                                    new List<PermissaoPacienteViewModel>();
@@ -406,15 +409,15 @@ namespace SIIS.Controllers
 
             TempData["ProfissionaisPermitidos"] = permitidosAtuais;
 
-            //if(register)
-                return PartialView("_RegisterPacienteProfissionaisPermitidos", permitidosAtuais);
+            if (edicao)
+                return PartialView("_PermissoesPaciente", permitidosAtuais);
 
-            //return PartialView("_ChangePermissoesPaciente", permitidosAtuais);
+            return PartialView("_RegisterPacienteProfissionaisPermitidos", permitidosAtuais);
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult RemoveTempDataProfissionaisPermitidos(string numero, int sigla, int uf)
+        public ActionResult RemoveTempDataProfissionaisPermitidos(string numero, int sigla, int uf, bool edicao)
         {
             var permitidosAtuais = TempData["ProfissionaisPermitidos"] as List<PermissaoPacienteViewModel> ??
                                    new List<PermissaoPacienteViewModel>();
@@ -434,6 +437,9 @@ namespace SIIS.Controllers
             CarregarViewBagUf();
 
             TempData["ProfissionaisPermitidos"] = permitidosAtuais;
+
+            if (edicao)
+                return PartialView("_PermissoesPaciente", permitidosAtuais);
 
             return PartialView("_RegisterPacienteProfissionaisPermitidos", permitidosAtuais);
         }
@@ -600,17 +606,17 @@ namespace SIIS.Controllers
             if (user.TipoUsuario == TipoUsuarioEnum.Paciente)
             {
                 Paciente paciente = Paciente.GetByUserId(User.Identity.GetUserId());
-                paciente.CpfCnpj = paciente.CpfCnpj.FormataCpf();
+                paciente.CpfCnpj = paciente.CpfCnpj;
 
                 CarregarViewBagUf(paciente);
-                CarregarViewBagTipoPermissao();
+                CarregarViewBagTipoPermissao(paciente);
                 CarregarViewBagSiglaConselhoRegional();
                 CarregarViewBagUfConselhoRegional();
             }
             else
             {
                 Responsavel responsavel = Responsavel.GetByUserId(User.Identity.GetUserId());
-                responsavel.CpfCnpj = responsavel.CpfCnpj.FormataCpf();
+                responsavel.CpfCnpj = responsavel.CpfCnpj;
 
                 CarregarViewBagUf(null, responsavel);
                 CarregarViewBagSiglaConselhoRegional();

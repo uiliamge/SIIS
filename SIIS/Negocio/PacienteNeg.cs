@@ -18,9 +18,14 @@ namespace SIIS.Negocio
                 Email = user.Email,
                 CpfCnpj = user.Cpf,
                 DataHora = DateTime.Now,
+                DataNascimento = model.DataNascimento,
                 UserId = user.Id,
                 Cep = model.Cep,
                 Endereco = model.Endereco,
+                NumeroEndereco = model.NumeroEndereco,
+                Telefone = model.fone,
+                Bairro = model.Bairro,
+                Complemento = model.Complemento,
                 Uf = model.Uf,
                 Cidade = model.Cidade,
                 TipoPermissao = model.TipoPermissao,
@@ -31,6 +36,7 @@ namespace SIIS.Negocio
 
         public void Editar(Paciente paciente)
         {
+            paciente.DataHora = DateTime.Now;
             var old = _contexto.Pacientes.FirstOrDefault(x => x.Id == paciente.Id);
 
             if (old != null)

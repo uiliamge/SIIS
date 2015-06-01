@@ -1,78 +1,72 @@
 ﻿@model SIIS.Models.Paciente
+@using SIIS.Models;
 
-@Scripts.Render("~/Scripts/Account/RegisterPaciente.js")
+@Scripts.Render("~/Scripts/Account/EdicaoPaciente.js")
 
 @using (Html.BeginForm("EditarPermissoesPaciente", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
-    @Html.HiddenFor(x => x.Id)
-
+    var displayPermissoes = (Model.TipoPermissao == TipoPermissaoEnum.EscolherQuemPodeAcessar) ? "normal" : "none";    
+    
+    @Html.HiddenFor(x => x.Id)    
+    
     @Html.AntiForgeryToken()
     <br />
     <div class="col-md-12" style="padding-top: 5px;">
         <span class="text-danger" id="validationProfissionais"></span>
     </div>
     <div class="form-group">
-        @Html.LabelFor(x => x.TipoPermissao, new { @class = "control-label col-md-4" })
+        @Html.LabelFor(x => x.TipoPermissao, new { @class = "control-label col-md-2" })
         <div class="col-md-3">
             @Html.DropDownList("TipoPermissao", null, new { @class = "form-control" })
         </div>
+        <p id="txtExplicativoQualquerProfissionalPodeAcessar" style="margin-bottom: 0px; display: none;">
+            Indica que qualquer Profissional de Saúde poderá consultar e adicionar dados ao seu histórico.
+        </p>
     </div>
-    <div class="form-group">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label col-md-4">Nº no Conselho Regional</label>
-                <div class="col-md-6">
-                    @Html.TextBox("PermissaoNumeroConselho", null, new { @class = "numero form-control", @maxlength = "7" })
+    <hr />
+    
+    <div id="divListaProfissionaisPermitidos" style="display: @displayPermissoes;">
+        <div class="form-group">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-4">Nº no Conselho Regional</label>
+                    <div class="col-md-6">
+                        @Html.TextBox("PermissaoNumeroConselho", null, new { @class = "numero form-control", @maxlength = "7" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Conselho</label>
+                    <div class="col-md-6">
+                        @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">UF</label>
+                    <div class="col-md-6">
+                        @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-6">
+                        <button type="button" class="btn btn-default" onclick=" addProfissionalSelecionado(); ">Adicionar &raquo;</button>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-4">Conselho</label>
-                <div class="col-md-6">
-                    @Html.DropDownList("SiglaConselhoRegional", null, new { @class = "form-control" })
-                </div>
+            <div id="divPermissoes" class="col-md-6">
+                @{
+    var permissoesViewModel = new List<PermissaoPacienteViewModel>();
+    foreach (var permissao in Model.PermissoesResponsavelPaciente)
+    {
+        permissoesViewModel.Add(new PermissaoPacienteViewModel
+        {
+            NumeroConselho = permissao.NumeroConselho,
+            SiglaConselhoRegional = permissao.SiglaConselhoRegional,
+            UfConselhoRegional = permissao.UfConselhoRegional
+        });
+    }
+                }
+                @Html.Partial("_PermissoesPaciente", permissoesViewModel)
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-4">UF</label>
-                <div class="col-md-6">
-                    @Html.DropDownList("UfConselhoRegional", null, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-4 col-md-6">
-                    <button type="button" class="btn btn-default" onclick=" addProfissionalSelecionado(); ">Adicionar &raquo;</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <label class="control-label">Profissionais Selecionados</label>
-            <table class="table table-bordered table-responsive">
-                <thead>
-                    <tr>
-                        <th class="text-center">Nº no Conselho Regional</th>
-                        <th class="text-center">Conselho</th>
-                        <th class="text-center">UF</th>
-                        <th class="text-center"><span class="glyphicon glyphicon-remove"></span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.PermissoesResponsavelPaciente)
-                    {
-                        int siglaConselho = (int)item.SiglaConselhoRegional;
-                        int ufConselho = (int)item.UfConselhoRegional;
-                        <tr>
-                            <td class="text-right">@item.NumeroConselho</td>
-                            <td class="text-center">@item.SiglaConselhoRegional</td>
-                            <td class="text-center">@item.UfConselhoRegional</td>
-                            <td class="text-center">
-                                <a style="cursor: pointer" class=""
-                                   onclick="RemoveProfissionalSelecionado('@item.NumeroConselho', @siglaConselho, @ufConselho)">
-                                    <span title="Excluir" alt="Excluir" class="glyphicon glyphicon-remove"></span>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
         </div>
     </div>
     <br />

@@ -1,8 +1,11 @@
 ﻿$(function () {
     atualizarCpf();
     atualizarCnpj();
+    atualizarCpfCnpj();
     atualizarNumericos();
     atualizarCep();
+    atualizarTelefone();
+    atualizarDate();
 });
 
 function atualizarCpf() {
@@ -20,6 +23,78 @@ function atualizarCnpj() {
         cnpj(this);
     });
 }
+
+function atualizarCpfCnpj() {
+    $(".cpfCnpj").attr("maxlength", "18");
+
+    $(".cpfCnpj").keyup(function () {
+
+        if ($(this).val().length < 14) {
+            cpf(this);
+        } else {
+            cnpj(this);
+        }
+    });
+
+}
+function atualizarNumericos() {
+    $(".numero").keydown(function (e) {
+        var key = e.charCode || e.keyCode || 0;
+
+        // allow backspace, tab, delete, arrows, numbers and keypad numbers ONLY
+        if (e.shiftKey == true && (key == 7 || key == 9))
+            return true;
+        if (e.shiftKey == false && (key == 8 || key == 9 || key == 46 || key == 194 || key == 110 || key == 188 || key == 190 || (key >= 37 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105)))
+            return true;
+        else
+            return false;
+    });
+
+    $(".numero").keypress(function (e) {
+        var key = e.charCode || e.keyCode || 0;
+
+        // allow backspace, tab, delete, arrows, numbers and keypad numbers ONLY
+        if (e.shiftKey == true && (key == 7 || key == 9))
+            return true;
+        if (e.shiftKey == false && (key == 8 || key == 9 || key == 46 || key == 194 || key == 110 || key == 188 || key == 190 || (key >= 37 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105)))
+            return true;
+        else
+            return false;
+    });
+}
+
+function atualizarCep() {
+    $(".cep").attr("maxlength", "10");
+
+    $(".cep").keyup(function () {
+        cep(this);
+    });
+}
+
+function atualizarTelefone() {
+
+    $(".telefone").attr("maxlength", "15");
+    $(".telefone").keyup(function () {
+        telefone(this);
+    });
+};
+
+function atualizarDate() {
+
+    $(".data").mask("99/99/9999");
+
+    $(".data").blur(function () {
+
+        var dia = $(this).val().split("/")[0];
+        var mes = $(this).val().split("/")[1];
+        var ano = $(this).val().split("/")[2];
+
+        if ((dia == "00" || dia > 31) || (mes == "00" || mes > 12) || (ano == "0000" || ano < 1900)) {
+            $(this).focus();
+        }
+    });
+};
+
 
 function cpf(obj) {
     //Remove tudo o que não é dígito
@@ -57,41 +132,15 @@ function cnpj(obj) {
     $(obj).val(v);
 }
 
-function atualizarNumericos() {
-    $(".numero").keydown(function (e) {
-        var key = e.charCode || e.keyCode || 0;
-
-        // allow backspace, tab, delete, arrows, numbers and keypad numbers ONLY
-        if (e.shiftKey == true && (key == 7 || key == 9))
-            return true;
-        if (e.shiftKey == false && (key == 8 || key == 9 || key == 46 || key == 194 || key == 110 || key == 188 || key == 190 || (key >= 37 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105)))
-            return true;
-        else
-            return false;
-    });
-
-    $(".numero").keypress(function (e) {
-        var key = e.charCode || e.keyCode || 0;
-
-        // allow backspace, tab, delete, arrows, numbers and keypad numbers ONLY
-        if (e.shiftKey == true && (key == 7 || key == 9))
-            return true;
-        if (e.shiftKey == false && (key == 8 || key == 9 || key == 46 || key == 194 || key == 110 || key == 188 || key == 190 || (key >= 37 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105)))
-            return true;
-        else
-            return false;
-    });
+function telefone(obj) {
+    
+    var v = $(obj).val();
+    v = v.replace(/\D/g, "");             //Remove tudo o que não é dígito
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2"); //Coloca parênteses em volta dos dois primeiros dígitos
+    v = v.replace(/(\d)(\d{4})$/, "$1-$2");    //Coloca hífen entre o quarto e o quinto dígitos
+    $(obj).val(v);    
 }
 
-function atualizarCep() {
-    $(".cep").attr("maxlength", "10");
-
-    $(".cep").keyup(function () {
-        cep(this);
-    });
-}
-
-//MASCARA PARA CEP '00.000-000'
 function cep(campo) {
     var v = $(campo).val().replace(/\D/g, "");
     var tam = v.length;
@@ -105,4 +154,10 @@ function cep(campo) {
     }
 
     $(campo).val(v);
+}
+
+function apenasNumero(obj) {
+    //Remove tudo o que não é número
+    var v = $(obj).val().replace(/\D/g, "");
+    $(obj).val(v);
 }

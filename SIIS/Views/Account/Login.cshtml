@@ -12,8 +12,14 @@
         <section id="loginForm">
 
             <ul class="nav nav-tabs" role="tablist" id="accountTab">
-                <li class="active"><a href="#loginProfissional" role="tab" data-toggle="tab">Profissional de Saúde</a></li>
-                <li><a href="#loginPaciente" role="tab" data-toggle="tab">Paciente</a></li>
+                <li class="active">
+                    <a onclick="setTimeout(function(){ $('#LoginProfissionalViewModel_NumeroConselho').focus() }, 50)"
+                       href="#loginProfissional" role="tab" data-toggle="tab">Profissional de Saúde</a>
+                </li>
+                <li>
+                    <a onclick="setTimeout(function(){ $('#LoginPacienteViewModel_Cpf').focus() }, 50)"
+                       href="#loginPaciente" role="tab" data-toggle="tab">Paciente</a>
+                </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active table-bordered" id="loginProfissional" style="padding: 15px;">
@@ -107,3 +113,6 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+<script type="text/javascript">
+    $('#LoginProfissionalViewModel_NumeroConselho').focus();
+</script>

@@ -10,7 +10,7 @@
     if (user.TipoUsuario == TipoUsuarioEnum.Paciente)
     {
         paciente = Paciente.GetByUserId(user.Id);
-        paciente.CpfCnpj = paciente.CpfCnpj.FormataCpf();
+        paciente.DataNascimento = Convert.ToDateTime(paciente.DataNascimento).ToShortDateString();
     }
 }
 <h2>@ViewBag.Title</h2>

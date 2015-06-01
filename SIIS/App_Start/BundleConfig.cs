@@ -8,6 +8,7 @@ namespace SIIS
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                        "~/Scripts/jquery.maskedinput.min.js",
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -21,6 +22,7 @@ namespace SIIS
             // This is where the JS library is added to the bundle...
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap-datepicker.js",
                       "~/Scripts/respond.js"));
 
             // ...and here is the CSS
@@ -34,6 +36,9 @@ namespace SIIS
             bundles.Add(new StyleBundle("~/bundles/theme").Include(
                         stylePath,
                         "~/Content/bootstrap.custom.css",
+                        "~/Content/bootstrap.datepicker.css",
+                        "~/Content/build_standalone.less",
+                        "~/Content/dropdowns.less",
                         "~/Content/site.css"));
             //}
 

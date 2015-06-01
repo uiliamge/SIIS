@@ -1,0 +1,32 @@
+﻿@model IEnumerable<SIIS.Models.PermissaoPacienteViewModel>
+
+<label class="control-label">Profissionais Selecionados</label>
+<table class="table table-bordered table-responsive">
+    <thead>
+        <tr>
+            <th class="text-center">Nº no Conselho Regional</th>
+            <th class="text-center">Conselho</th>
+            <th class="text-center">UF</th>
+            <th class="text-center"><span class="glyphicon glyphicon-remove"></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            int siglaConselho = (int)item.SiglaConselhoRegional;
+            int ufConselho = (int)item.UfConselhoRegional;
+            <tr>
+                <td class="text-right">@item.NumeroConselho</td>
+                <td class="text-center">@item.SiglaConselhoRegional</td>
+                <td class="text-center">@item.UfConselhoRegional</td>
+                <td class="text-center">
+                    <a style="cursor: pointer" class=""
+                       onclick="RemoveProfissionalSelecionado('@item.NumeroConselho', @siglaConselho, @ufConselho)">
+                        <span title="Excluir" alt="Excluir" class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace SIIS.Models
@@ -96,7 +97,7 @@ namespace SIIS.Models
 
         [Required]
         [Display(Name = "Conselho Regional")]
-        public string SiglaConselhoRegional { get; set; }
+        public ConselhoEnum SiglaConselhoRegional { get; set; }
 
         [Required]
         [Display(Name = "UF")]
@@ -106,6 +107,38 @@ namespace SIIS.Models
         [EmailAddress]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "CPF/CNPJ")]
+        public string CpfCnpj { get; set; }
+
+        [Required]
+        [Display(Name = "Telefone")]
+        public string Telefone { get; set; }
+
+        [Required]
+        [DataType(DataType.PostalCode)]
+        [Display(Name = "CEP")]
+        public string Cep { get; set; }
+
+        [Display(Name = "Logradouro")]
+        public string Endereco { get; set; }
+
+        [Display(Name = "Nº")]
+        public string NumeroEndereco { get; set; }
+
+        [Display(Name = "Complemento")]
+        public string Complemento { get; set; }
+
+        [Display(Name = "Bairro")]
+        public string Bairro { get; set; }
+
+        [Display(Name = "UF")]
+        public UfEnum Uf { get; set; }
+
+        [Required]
+        [Display(Name = "Cidade")]
+        public string Cidade { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "A {0} deve ter pelo menos {2} caracteres.", MinimumLength = 6)]
@@ -126,7 +159,7 @@ namespace SIIS.Models
         {
             get
             {
-                return NumeroConselho + SiglaConselhoRegional + UfConselhoRegional;
+                return NumeroConselho + SiglaConselhoRegional.ToString() + UfConselhoRegional.ToString();
             }
         }
     }
@@ -142,12 +175,25 @@ namespace SIIS.Models
         public string Cpf { get; set; }
 
         [Required]
+        [Display(Name = "Data de Nascimento")]
+        public string DataNascimento { get; set; }
+
+        [Required]
         [DataType(DataType.PostalCode)]
         [Display(Name = "CEP")]
         public string Cep { get; set; }
 
-        [Display(Name = "Logradouro, Nº")]
+        [Display(Name = "Logradouro")]
         public string Endereco { get; set; }
+
+        [Display(Name = "Nº")]
+        public string NumeroEndereco { get; set; }
+
+        [Display(Name = "Complemento")]
+        public string Complemento { get; set; }
+
+        [Display(Name = "Bairro")]
+        public string Bairro { get; set; }
 
         [Display(Name = "UF")]
         public UfEnum Uf { get; set; }

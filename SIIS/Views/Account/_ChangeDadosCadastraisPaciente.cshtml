@@ -2,12 +2,14 @@
 
 @Scripts.Render("~/Scripts/Account/RegisterPaciente.js")
 
-@using (Html.BeginForm("RegisterPaciente", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("EditarPaciente", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.HiddenFor(x => x.Id)
-    
+    @Html.HiddenFor(x => x.Ip)
+    @Html.HiddenFor(x => x.UserId)
+
     @Html.AntiForgeryToken()
-    <br/>
+    <br />
     <div class="form-group">
         @Html.LabelFor(m => m.Nome, new { @class = "col-md-2 control-label" })
         <div class="col-md-3">
@@ -20,49 +22,76 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-3">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" , @readonly = true})
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = true })
         </div>
         <div class="col-md-6" style="padding-top: 5px;">
-            <p style="margin-bottom: 0px;">Você receberá um e-mail de confirmação para ativar o seu cadastro.</p>
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.CpfCnpj, new {@class = "col-md-2 control-label"})
+        @Html.LabelFor(m => m.CpfCnpj, new { @class = "col-md-2 control-label" })
         <div class="col-md-3">
-            @Html.TextBoxFor(m => m.CpfCnpj, new {@class = "cpf form-control"})
+            @Html.TextBoxFor(m => m.CpfCnpj, new { @class = "cpf form-control" })
         </div>
         <div class="col-md-6" style="padding-top: 5px;">
-            @Html.ValidationMessageFor(m => m.CpfCnpj, "", new {@class = "text-danger"})
+            @Html.ValidationMessageFor(m => m.CpfCnpj, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
-        <label class="col-md-2 control-label">Endereço</label>
-        <div class="col-md-2">
-            @Html.LabelFor(m => m.Cep, new {@class = "control-label"})
-            @Html.TextBoxFor(m => m.Cep, new {@class = "cep form-control"})
-        </div>
+        @Html.LabelFor(m => m.DataNascimento, new { @class = "col-md-2 control-label" })
         <div class="col-md-3">
-            @Html.LabelFor(m => m.Endereco, new {@class = "control-label"})
-            @Html.TextBoxFor(m => m.Endereco, new {@class = "form-control", @maxlength = "200"})
+            @Html.TextBoxFor(x => x.DataNascimento, new { @class = "data form-control" })            
         </div>
-        <div class="col-md-1">
-            @Html.LabelFor(m => m.Uf, new { @class = "control-label" })
-            @Html.DropDownListFor(x => x.Uf, null, new { @class = "form-control" })
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.DataNascimento, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Telefone, new { @class = "col-md-2 control-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.Telefone, new { @class = "cpf form-control" })
+        </div>
+        <div class="col-md-6" style="padding-top: 5px;">
+            @Html.ValidationMessageFor(m => m.Telefone, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <label id="validationCep" class="col-md-offset-2 text-danger control-label" style="display: none"></label>
+    @Html.ValidationMessageFor(m => m.Cep, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <label class="col-md-2 control-label">Endereço</label>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Cep, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Cep, new { @class = "cep form-control" })
         </div>
         <div class="col-md-3">
             @Html.LabelFor(m => m.Cidade, new { @class = "control-label" })
-            @Html.TextBoxFor(m => m.Cidade, new { @class = "form-control", @maxlength = "200" })
+            @Html.TextBoxFor(m => m.Cidade, new { @class = "form-control", @maxlength = "200", @readonly = true })
         </div>
-        @Html.ValidationMessageFor(m => m.Endereco, "", new { @class = "text-danger" })
-        @Html.ValidationMessageFor(m => m.Cep, "", new { @class = "text-danger" })
-        @Html.ValidationMessageFor(m => m.Uf, "", new { @class = "text-danger" })
-        @Html.ValidationMessageFor(m => m.Cidade, "", new { @class = "text-danger" })
+        <div class="col-md-1">
+            @Html.LabelFor(m => m.Uf, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.Uf, new { @class = "form-control", @readonly = true })
+        </div>
+        <div class="col-md-offset-2 col-md-3">
+            @Html.LabelFor(m => m.Bairro, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Bairro, new { @class = "form-control", @maxlength = "200", @readonly = true })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Endereco, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Endereco, new { @class = "form-control", @maxlength = "200", @readonly = true })
+        </div>
+        <div class="col-md-1">
+            @Html.LabelFor(m => m.NumeroEndereco, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.NumeroEndereco, new { @class = "form-control", @maxlength = "10" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(m => m.Complemento, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Complemento, new { @class = "form-control", @maxlength = "10" })
+        </div>
     </div>
-    
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-success" value="Salvar Registro" />
+            <input type="submit" class="btn btn-success" value="Salvar Dados Cadastrais" />
         </div>
     </div>
 }
