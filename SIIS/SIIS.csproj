@@ -185,6 +185,10 @@
     <Compile Include="Migrations\201505311753461_AjusteData.Designer.cs">
       <DependentUpon>201505311753461_AjusteData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506012053028_AjusteTamanhoCpfCnpjPessoa.cs" />
+    <Compile Include="Migrations\201506012053028_AjusteTamanhoCpfCnpjPessoa.Designer.cs">
+      <DependentUpon>201506012053028_AjusteTamanhoCpfCnpjPessoa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
@@ -348,6 +352,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505311753461_AjusteData.resx">
       <DependentUpon>201505311753461_AjusteData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506012053028_AjusteTamanhoCpfCnpjPessoa.resx">
+      <DependentUpon>201506012053028_AjusteTamanhoCpfCnpjPessoa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>

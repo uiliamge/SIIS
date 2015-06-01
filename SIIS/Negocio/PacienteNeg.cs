@@ -17,8 +17,7 @@ namespace SIIS.Negocio
                 Nome = user.NomeCompleto,
                 Email = user.Email,
                 CpfCnpj = user.Cpf,
-                DataHora = DateTime.Now,
-                DataNascimento = model.DataNascimento,
+                DataHora = DateTime.Now,                
                 UserId = user.Id,
                 Cep = model.Cep,
                 Endereco = model.Endereco,
@@ -27,9 +26,11 @@ namespace SIIS.Negocio
                 Bairro = model.Bairro,
                 Complemento = model.Complemento,
                 Uf = model.Uf,
-                Cidade = model.Cidade,
+                Cidade = model.Cidade,                
+                Ip = user.Ip,
+
                 TipoPermissao = model.TipoPermissao,
-                Ip = user.Ip
+                DataNascimento = model.DataNascimento,
             };
             _contexto.Pacientes.Add(paciente);
         }

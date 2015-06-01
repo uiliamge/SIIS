@@ -15,7 +15,7 @@ namespace SIIS.Models
         public string UserId { get; set; }
 
         [Required]
-        [StringLength(14)]
+        [StringLength(18)]
         [Display(Name = "CPF")]
         public string CpfCnpj { get; set; }
 

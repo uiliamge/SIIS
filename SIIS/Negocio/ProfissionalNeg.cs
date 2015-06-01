@@ -15,11 +15,8 @@ namespace SIIS.Negocio
             var responsavel = new Responsavel
             {
                 Nome = user.NomeCompleto,
-                Email = model.Email,
-                CpfCnpj = model.CpfCnpj,
-                NumeroConselhoRegional = model.NumeroConselho,
-                ConselhoRegional = model.SiglaConselhoRegional,
-                UfConselhoRegional = model.UfConselhoRegional,
+                Email = user.Email,
+                CpfCnpj = model.CpfCnpj,                
                 DataHora = DateTime.Now,
                 UserId = user.Id,
                 Cep = model.Cep,
@@ -29,8 +26,12 @@ namespace SIIS.Negocio
                 Bairro = model.Bairro,
                 Complemento = model.Complemento,
                 Uf = model.Uf,
-                Cidade = model.Cidade,
-                Ip = user.Ip
+                Cidade = model.Cidade,                
+                Ip = user.Ip,
+
+                NumeroConselhoRegional = model.NumeroConselho,
+                ConselhoRegional = model.SiglaConselhoRegional,
+                UfConselhoRegional = model.UfConselhoRegional,
             };
             _contexto.Responsaveis.Add(responsavel);
         }
