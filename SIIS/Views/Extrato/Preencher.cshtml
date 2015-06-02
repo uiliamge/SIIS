@@ -10,15 +10,21 @@
     <h4>Preenchendo um Extrato de Prontuário</h4>
     <hr />
     <div class="form-group">
-        <div class="col-md-4">
+        <div class="col-md-3">
             @Html.LabelFor(m => m.DataReferencia, new { @class = "control-label" })
-            @Html.TextBoxFor(m => m.DataReferencia, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.DataReferencia, new { @class = "data form-control" })
             @Html.ValidationMessageFor(m => m.DataReferencia, "", new { @class = "text-danger" })
         </div>
-        <div class="col-md-4" style="padding-top: 5px;">
-            @Html.LabelFor(m => m.Responsavel, new { @class = "control-label" })
-            @Html.TextBoxFor(m => m.DataReferencia, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.DataReferencia, "", new { @class = "text-danger" })
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Paciente.CpfCnpj, new {@class = "control-label"})
+            @Html.TextBoxFor(m => m.Paciente.CpfCnpj, new {@class = "cpf form-control"})
+            @Html.ValidationMessageFor(m => m.Paciente.CpfCnpj, "", new {@class = "text-danger"})
         </div>
+        <div class="col-md-3">
+            <label id="mensagemPaciente" class="col-md-offset-2 text-info control-label" style="display: none"></label>
+        </div>
+        </div>
+    <div class="form-group">
+        @Html.Partial("_PreencherComposicoes", Model.Composicoes)
     </div>
 }

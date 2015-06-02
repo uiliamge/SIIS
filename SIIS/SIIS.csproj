@@ -189,6 +189,10 @@
     <Compile Include="Migrations\201506012053028_AjusteTamanhoCpfCnpjPessoa.Designer.cs">
       <DependentUpon>201506012053028_AjusteTamanhoCpfCnpjPessoa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506021357267_AjusteResponsavel.cs" />
+    <Compile Include="Migrations\201506021357267_AjusteResponsavel.Designer.cs">
+      <DependentUpon>201506021357267_AjusteResponsavel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
@@ -246,6 +250,7 @@
     <Content Include="Content\build_standalone.less" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Icon.png" />
+    <Content Include="Scripts\Account\Manage.js" />
     <Content Include="Scripts\Account\EdicaoPaciente.js" />
     <Content Include="Scripts\Account\RegisterProfissional.js" />
     <Content Include="Scripts\Account\RegisterPaciente.js" />
@@ -329,6 +334,8 @@
     <Content Include="Views\Account\_ChangeDadosCadastraisProfissional.cshtml" />
     <Content Include="Views\Account\_ChangePermissoesPaciente.cshtml" />
     <Content Include="Views\Account\_PermissoesPaciente.cshtml" />
+    <Content Include="Views\Extrato\_PreencherComposicoes.cshtml" />
+    <Content Include="Views\Extrato\_PreencherComposicoesSecoes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -355,6 +362,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506012053028_AjusteTamanhoCpfCnpjPessoa.resx">
       <DependentUpon>201506012053028_AjusteTamanhoCpfCnpjPessoa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506021357267_AjusteResponsavel.resx">
+      <DependentUpon>201506021357267_AjusteResponsavel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>

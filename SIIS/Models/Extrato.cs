@@ -33,6 +33,8 @@ namespace SIIS.Models
 
         public virtual Responsavel Responsavel { get; set; }
 
+        public virtual Paciente Paciente { get; set; }
+
         public virtual ICollection<Composicao> Composicoes { get; set; }
     }
 }

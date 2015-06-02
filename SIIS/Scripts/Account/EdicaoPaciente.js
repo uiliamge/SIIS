@@ -35,11 +35,6 @@
             }
         });
     });
-
-    $("#Cidade,#Uf,#Bairro,#Endereco").focus(function () {
-        
-        $("#NumeroEndereco").focus();
-    });
 });
 
 function addProfissionalSelecionado() {

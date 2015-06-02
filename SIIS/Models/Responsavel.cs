@@ -13,7 +13,7 @@ namespace SIIS.Models
         public int NumeroConselhoRegional { get; set; }
 
         [Required]
-        public ConselhoEnum ConselhoRegional { get; set; }
+        public ConselhoEnum SiglaConselhoRegional { get; set; }
 
         [Required]
         [Display(Name = "UF")]

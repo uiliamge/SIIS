@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using SIIS.Models;
 
 namespace SIIS.Negocio
 {
-    public class ProfissionalNeg : IDisposable
+    public class ResponsavelNeg : IDisposable
     {
         readonly SiteDataContext _contexto = new SiteDataContext();
 
@@ -30,7 +29,7 @@ namespace SIIS.Negocio
                 Ip = user.Ip,
 
                 NumeroConselhoRegional = model.NumeroConselho,
-                ConselhoRegional = model.SiglaConselhoRegional,
+                SiglaConselhoRegional = model.SiglaConselhoRegional,
                 UfConselhoRegional = model.UfConselhoRegional,
             };
             _contexto.Responsaveis.Add(responsavel);

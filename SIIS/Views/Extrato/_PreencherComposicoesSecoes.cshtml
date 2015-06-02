@@ -1,0 +1,12 @@
+﻿@using SIIS.Models
+@model IEnumerable<Secao>
+
+@foreach (Secao secao in Model)
+{
+    <div class="form-group">
+        <div class="col-md-4">
+            <label class="control-label">Procedimento</label>
+            @Html.TextArea("Secao_Nome", secao.Nome, new { @class = "form-control" })
+        </div>
+    </div>
+}

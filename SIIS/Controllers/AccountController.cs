@@ -75,16 +75,14 @@ namespace SIIS.Controllers
 
                 if (user != null)
                 {
-                    if (user.EmailConfirmed)
-                    {
-                        await SignInAsync(user, model.RememberMe);
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else
+                    if (!user.EmailConfirmed)
                     {
                         Danger("O seu cadastro ainda não foi validado. Por favor, confira a sua caixa de e-mail \"" +
-                            user.Email + "\".", true);
+                               user.Email + "\".", true);
                     }
+
+                    await SignInAsync(user, model.RememberMe);
+                        return RedirectToLocal(returnUrl);                    
                 }
                 else
                 {
@@ -134,7 +132,7 @@ namespace SIIS.Controllers
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
-                        using (ProfissionalNeg profissionalNeg = new ProfissionalNeg())
+                        using (ResponsavelNeg profissionalNeg = new ResponsavelNeg())
                         {
                             profissionalNeg.Inserir(user, model);
                         }
@@ -329,7 +327,7 @@ namespace SIIS.Controllers
 
                     user.NomeCompleto = model.Nome;
                     user.Email = model.Email;
-                    user.Cpf = model.CpfCnpj.RemoverMascara();
+                    user.Cpf = model.CpfCnpj;
                     user.Ip = Request.UserHostAddress;
                     model.Ip = Request.UserHostAddress;
 
@@ -370,6 +368,67 @@ namespace SIIS.Controllers
             CarregarViewBagUfConselhoRegional();
             CarregarViewBagTipoPermissao(model);
             CarregarViewBagUf(model);
+
+            return RedirectToAction("Manage");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditarResponsavel(Responsavel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = UserManager.FindById(model.UserId);
+
+                    user.NomeCompleto = model.Nome;
+                    user.Email = model.Email;
+                    user.Cpf = model.CpfCnpj;
+                    user.Ip = Request.UserHostAddress;
+                    model.Ip = Request.UserHostAddress;
+                    user.NumeroConselho = model.NumeroConselhoRegional;
+                    user.SiglaConselhoRegional = model.SiglaConselhoRegional.ToString();
+                    user.UfConselhoRegional = model.UfConselhoRegional;
+
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        using (ResponsavelNeg responsavelNeg = new ResponsavelNeg())
+                        {
+                            responsavelNeg.Editar(model);
+                        }
+
+                        Success("Dados cadastrais alterados com sucesso.", true);
+                        return RedirectToAction("Manage");
+                    }
+                    else
+                    {
+                        Danger(String.Join("\n", result.Errors.ToList()), true);
+                        AddErrors(result);
+                    }
+                }
+                else
+                {
+                    Danger("O Cadastro não foi atualizado.", true);
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                Danger(String.Join("\n", e.EntityValidationErrors.ToList()), true);
+            }
+            catch (DbUpdateException e)
+            {
+                Danger(e.InnerException.ToString(), true);
+            }
+            catch (Exception e)
+            {
+                Danger(e.Message, true);
+            }
+
+            CarregarViewBagSiglaConselhoRegional();
+            CarregarViewBagUfConselhoRegional();
+            CarregarViewBagUf(null, model);
 
             return RedirectToAction("Manage");
         }
@@ -476,8 +535,6 @@ namespace SIIS.Controllers
 
         #endregion
 
-        //
-        // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -598,8 +655,6 @@ namespace SIIS.Controllers
 
         #endregion
 
-        //
-        // POST: /Account/Disassociate
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disassociate(string loginProvider, string providerKey)
@@ -649,7 +704,7 @@ namespace SIIS.Controllers
                 responsavel.CpfCnpj = responsavel.CpfCnpj;
 
                 CarregarViewBagUf(null, responsavel);
-                CarregarViewBagSiglaConselhoRegional();
+                CarregarViewBagSiglaConselhoRegional(responsavel);
                 CarregarViewBagUfConselhoRegional(responsavel);
             }
 
@@ -928,7 +983,7 @@ namespace SIIS.Controllers
                 {
                     Text = conselho.ToString(),
                     Value = ((int)conselho).ToString(),
-                    Selected = (responsavel != null && responsavel.ConselhoRegional == (ConselhoEnum)conselho)
+                    Selected = (responsavel != null && responsavel.SiglaConselhoRegional == (ConselhoEnum)conselho)
                 });
             }
 

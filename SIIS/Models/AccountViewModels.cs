@@ -59,7 +59,7 @@ namespace SIIS.Models
         public int NumeroConselho { get; set; }
 
         [Display(Name = "Conselho Regional")]
-        public string SiglaConselhoRegional { get; set; }
+        public ConselhoEnum SiglaConselhoRegional { get; set; }
         
         [Display(Name = "UF")]
         public UfEnum UfConselhoRegional { get; set; }
@@ -71,9 +71,8 @@ namespace SIIS.Models
         {
             get
             {
-                return NumeroConselho + SiglaConselhoRegional + UfConselhoRegional;
+                return NumeroConselho.ToString() + SiglaConselhoRegional + UfConselhoRegional;
             }
-
         }
     }
 
