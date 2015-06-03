@@ -173,34 +173,18 @@
     <Compile Include="Helpers\GravatarHelper.cs" />
     <Compile Include="Helpers\GravatarOptions.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
-    <Compile Include="Migrations\201505302152560_Inicial.cs" />
-    <Compile Include="Migrations\201505302152560_Inicial.Designer.cs">
-      <DependentUpon>201505302152560_Inicial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505302343181_AlteracoesDeEndereco.cs" />
-    <Compile Include="Migrations\201505302343181_AlteracoesDeEndereco.Designer.cs">
-      <DependentUpon>201505302343181_AlteracoesDeEndereco.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201505311753461_AjusteData.cs" />
-    <Compile Include="Migrations\201505311753461_AjusteData.Designer.cs">
-      <DependentUpon>201505311753461_AjusteData.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506012053028_AjusteTamanhoCpfCnpjPessoa.cs" />
-    <Compile Include="Migrations\201506012053028_AjusteTamanhoCpfCnpjPessoa.Designer.cs">
-      <DependentUpon>201506012053028_AjusteTamanhoCpfCnpjPessoa.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506021357267_AjusteResponsavel.cs" />
-    <Compile Include="Migrations\201506021357267_AjusteResponsavel.Designer.cs">
-      <DependentUpon>201506021357267_AjusteResponsavel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506030152171_Ajuste.cs" />
-    <Compile Include="Migrations\201506030152171_Ajuste.Designer.cs">
-      <DependentUpon>201506030152171_Ajuste.cs</DependentUpon>
+    <Compile Include="Migrations\201506031639016_Inicial.cs" />
+    <Compile Include="Migrations\201506031639016_Inicial.Designer.cs">
+      <DependentUpon>201506031639016_Inicial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201506031640084_Ajuste.cs" />
+    <Compile Include="Migrations\Identity\201506031640084_Ajuste.Designer.cs">
+      <DependentUpon>201506031640084_Ajuste.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Identity\ConfigurationIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -262,6 +246,7 @@
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Extrato\Extrato.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -341,6 +326,7 @@
     <Content Include="Views\Account\_PermissoesPaciente.cshtml" />
     <Content Include="Views\Extrato\_PreencherComposicoes.cshtml" />
     <Content Include="Views\Extrato\_PreencherComposicoesSecoes.cshtml" />
+    <Content Include="Views\Extrato\_DadosCadastraisPaciente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -356,26 +342,14 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201505302152560_Inicial.resx">
-      <DependentUpon>201505302152560_Inicial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505302343181_AlteracoesDeEndereco.resx">
-      <DependentUpon>201505302343181_AlteracoesDeEndereco.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505311753461_AjusteData.resx">
-      <DependentUpon>201505311753461_AjusteData.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506012053028_AjusteTamanhoCpfCnpjPessoa.resx">
-      <DependentUpon>201506012053028_AjusteTamanhoCpfCnpjPessoa.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506021357267_AjusteResponsavel.resx">
-      <DependentUpon>201506021357267_AjusteResponsavel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506030152171_Ajuste.resx">
-      <DependentUpon>201506030152171_Ajuste.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201506031639016_Inicial.resx">
+      <DependentUpon>201506031639016_Inicial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201506031640084_Ajuste.resx">
+      <DependentUpon>201506031640084_Ajuste.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,13 @@
+﻿@model SIIS.Models.Paciente
+@{
+    var idade = (DateTime.Now - Convert.ToDateTime(Model.DataNascimento));
+    var textoIdade = idade != null ? idade + "anos" : "idade não informada";
+}
+
+@Html.HiddenFor(x => x.Id)
+
+<div class="col-md-4">
+    <p class="text-info">@Model.Nome (@textoIdade)</p>
+    <p class="text-info">@Model.Cidade - @Model.Uf</p>
+    <p class="text-info">@Model.Email</p>
+</div>

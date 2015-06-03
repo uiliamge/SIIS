@@ -3,28 +3,33 @@
     ViewBag.Title = "Preencher";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@Scripts.Render("~/Scripts/Extrato/Extrato.js")
+
 <h2>Extrato de Prontuário</h2>
 @using (Html.BeginForm("Preencher", "Extrato", FormMethod.Post, new { @id = "formPreencherExtrato" }))
 {
     @Html.ValidationSummary()
     <h4>Preenchendo um Extrato de Prontuário</h4>
     <hr />
-    <div class="form-group">
-        <div class="col-md-3">
-            @Html.LabelFor(m => m.DataReferencia, new { @class = "control-label" })
-            @Html.TextBoxFor(m => m.DataReferencia, new { @class = "data form-control" })
-            @Html.ValidationMessageFor(m => m.DataReferencia, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(m => m.DataReferencia, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.DataReferencia, new { @class = "data form-control" })
+                @Html.ValidationMessageFor(m => m.DataReferencia, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">CPF do Paciente</label>
+                @Html.TextBoxFor(m => m.Paciente.CpfCnpj, new { @class = "cpf form-control" })
+                @Html.ValidationMessageFor(m => m.Paciente.CpfCnpj, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6" id="divInformacoesPaciente">
+                
+            </div>
         </div>
-        <div class="col-md-3">
-            @Html.LabelFor(m => m.Paciente.CpfCnpj, new {@class = "control-label"})
-            @Html.TextBoxFor(m => m.Paciente.CpfCnpj, new {@class = "cpf form-control"})
-            @Html.ValidationMessageFor(m => m.Paciente.CpfCnpj, "", new {@class = "text-danger"})
+        <div class="form-group">
+            @Html.Partial("_PreencherComposicoes", Model.Composicoes)
         </div>
-        <div class="col-md-3">
-            <label id="mensagemPaciente" class="col-md-offset-2 text-info control-label" style="display: none"></label>
-        </div>
-        </div>
-    <div class="form-group">
-        @Html.Partial("_PreencherComposicoes", Model.Composicoes)
     </div>
 }

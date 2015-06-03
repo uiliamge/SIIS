@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Validation;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using SIIS.Helpers;
 using SIIS.Models;
-using SIIS.Negocio;
 
 namespace SIIS.Controllers
 {
@@ -76,6 +65,7 @@ namespace SIIS.Controllers
 
             var extrato = new Extrato
             {
+                DataReferencia = DateTime.Now,
                 Responsavel = responsavel,
                 IndImportado = 0,
                 IP = Request.UserHostAddress
