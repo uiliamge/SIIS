@@ -8,6 +8,11 @@ namespace SIIS.Models
     [Table("Extrato")]
     public class Extrato
     {
+        public Extrato()
+        {
+            Composicoes = new List<Composicao>();
+        }
+
         [Display(Name = "Código")]
         public int Id { get; set; }
 

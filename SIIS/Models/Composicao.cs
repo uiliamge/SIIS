@@ -12,6 +12,11 @@ namespace SIIS.Models
     [Table("Composicao")]
     public class Composicao
     {
+        public Composicao()
+        {
+            Secoes = new List<Secao>();
+        }
+
         [Display(Name = "Código")]
         public int Id { get; set; }
 

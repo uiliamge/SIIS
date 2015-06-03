@@ -1,13 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using SIIS.Helpers;
 using SIIS.Models;
+using SIIS.Negocio;
 
 namespace SIIS.Controllers
 {
-    public class ExtratoController : Controller
+    [Authorize]
+    public class ExtratoController : BaseController
     {
-        //
-        // GET: /Extrato/
+        private ApplicationUserManager _userManager;
+
+        public ExtratoController() { }
+
+        public ExtratoController(ApplicationUserManager userManager)
+        {
+            UserManager = userManager;
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
 
         public ActionResult Index()
         {
@@ -15,7 +48,7 @@ namespace SIIS.Controllers
             return View();
         }
 
-        
+
         public ActionResult Importar()
         {
             return View();
@@ -38,7 +71,17 @@ namespace SIIS.Controllers
 
         public ActionResult Preencher()
         {
-            return View();
+            string userId = HttpContext.GetOwinContext().Authentication.User.Identity.GetUserId();
+            var responsavel = Responsavel.GetByUserId(userId);
+
+            var extrato = new Extrato
+            {
+                Responsavel = responsavel,
+                IndImportado = 0,
+                IP = Request.UserHostAddress
+            };
+
+            return View(extrato);
         }
 
         [HttpPost]
