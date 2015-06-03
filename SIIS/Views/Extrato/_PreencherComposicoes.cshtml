@@ -1,0 +1,13 @@
+﻿
+@using SIIS.Models
+@model IEnumerable<Composicao>
+
+@foreach (Composicao composicao in Model)
+{
+    <div class="form-group">
+        <div class="col-md-4">
+            <label class="control-label">Composição</label>
+            @Html.TextArea("composicao_Descricao", composicao.Descricao, new { @class = "form-control" })
+        </div>
+    </div>
+}
