@@ -193,6 +193,10 @@
     <Compile Include="Migrations\201506021357267_AjusteResponsavel.Designer.cs">
       <DependentUpon>201506021357267_AjusteResponsavel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506030152171_Ajuste.cs" />
+    <Compile Include="Migrations\201506030152171_Ajuste.Designer.cs">
+      <DependentUpon>201506030152171_Ajuste.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
@@ -366,6 +370,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506021357267_AjusteResponsavel.resx">
       <DependentUpon>201506021357267_AjusteResponsavel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506030152171_Ajuste.resx">
+      <DependentUpon>201506030152171_Ajuste.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>
