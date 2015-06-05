@@ -34,7 +34,15 @@ namespace SIIS.Models
 
         [Required]
         [Display(Name = "IP de Origem")]
-        public string IP { get; set; }
+        public string Ip { get; set; }
+
+        [Required]
+        [Display(Name = "Cidade")]
+        public string Cidade { get; set; }
+
+        [Required]
+        [Display(Name = "UF")]
+        public UfEnum Uf { get; set; }
 
         public virtual Responsavel Responsavel { get; set; }
 

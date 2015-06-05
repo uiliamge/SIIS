@@ -177,6 +177,10 @@
     <Compile Include="Migrations\201506031639016_Inicial.Designer.cs">
       <DependentUpon>201506031639016_Inicial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506051717179_IndiceEmComposicaoESecao.cs" />
+    <Compile Include="Migrations\201506051717179_IndiceEmComposicaoESecao.Designer.cs">
+      <DependentUpon>201506051717179_IndiceEmComposicaoESecao.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
@@ -347,6 +351,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201506031639016_Inicial.resx">
       <DependentUpon>201506031639016_Inicial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506051717179_IndiceEmComposicaoESecao.resx">
+      <DependentUpon>201506051717179_IndiceEmComposicaoESecao.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>

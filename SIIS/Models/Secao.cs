@@ -15,6 +15,9 @@ namespace SIIS.Models
         [Display(Name = "Código")]
         public int Id { get; set; }
 
+        [Display(Name = "Índice")]
+        public int Indice { get; set; }
+
         [MaxLength(100)]
         [Display(Name = "Título")]
         public string Nome { get; set; }

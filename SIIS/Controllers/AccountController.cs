@@ -12,10 +12,8 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using SIIS.Helpers;
 using SIIS.Models;
 using SIIS.Negocio;
-using Microsoft.AspNet.Identity;
 
 namespace SIIS.Controllers
 {
@@ -23,8 +21,6 @@ namespace SIIS.Controllers
     public class AccountController : BaseController
     {
         private ApplicationUserManager _userManager;
-        private readonly SiteDataContext _context = new SiteDataContext();
-        private readonly ApplicationDbContext _contextUsers = new ApplicationDbContext();
 
         public AccountController()
         {

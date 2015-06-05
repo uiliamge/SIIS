@@ -37,7 +37,9 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.Partial("_PreencherComposicoes", Model.Composicoes)
+            <div id="divPreencherComposicoes" style="">
+                @Html.Partial("_PreencherComposicoes", Model.Composicoes)
+            </div>
         </div>
     </div>
 }

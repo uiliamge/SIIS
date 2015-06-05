@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -70,7 +71,7 @@ namespace SIIS.Controllers
                 DataReferencia = DateTime.Now,
                 Responsavel = responsavel,
                 IndImportado = 0,
-                IP = Request.UserHostAddress
+                Ip = Request.UserHostAddress
             };
 
             return View(extrato);
@@ -110,6 +111,26 @@ namespace SIIS.Controllers
                 Danger(e.Message, true);
             }
             return PartialView("_DadosCadastraisPaciente", new Paciente());
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult AddTempDataComposicoes(string descricao)
+        {
+            var composicoesAtuais = TempData["ComposicoesPreenchimentoExtrato"] as List<Composicao> ??
+                                   new List<Composicao>();
+
+            var nova = new Composicao
+            {
+                Descricao = descricao                
+            };
+
+            if (!composicoesAtuais.Contains(nova))
+                composicoesAtuais.Add(nova);
+
+            TempData["ComposicoesPreenchimentoExtrato"] = composicoesAtuais;
+
+            return PartialView("_PreencherComposicoes", composicoesAtuais);
         }
     }
 }

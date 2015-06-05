@@ -21,7 +21,7 @@
 
         $.ajax({
             url: "http://api.postmon.com.br/v1/cep/" + cep,
-            type: 'GET',
+            type: "GET",
             success: function (data) {
 
                 $("#Cidade").val(data.cidade);
@@ -50,12 +50,12 @@ function verificarCpf() {
     debugger;
     $.ajax({
         url: $("#urlBuscarPaciente").val(),
-        type: 'POST',
+        type: "POST",
         data: { cpf: $("#Paciente_CpfCnpj").val() },
         success: function (data) {
             var result = data;
             if (!result.Erro) {
-                $('#divInformacoesPaciente').html(data);
+                $("#divInformacoesPaciente").html(data);
             }
         },
         complete: function (result) {
