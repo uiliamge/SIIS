@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using SIIS.Models;
+using SIIS.Negocio;
 
 namespace SIIS.Controllers
 {
@@ -65,6 +66,7 @@ namespace SIIS.Controllers
 
             var extrato = new Extrato
             {
+                Paciente = new Paciente(),
                 DataReferencia = DateTime.Now,
                 Responsavel = responsavel,
                 IndImportado = 0,
@@ -88,6 +90,26 @@ namespace SIIS.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpPost]
+        public ActionResult BuscarPaciente(string cpf)
+        {
+            Paciente paciente = new Paciente();
+            try
+            {
+                using (PacienteNeg pacienteNeg = new PacienteNeg())
+                {
+                    paciente = pacienteNeg.BuscarPorCpf(cpf);
+                }
+
+                return PartialView("_DadosCadastraisPaciente", paciente);
+            }
+            catch (Exception e)
+            {
+                Danger(e.Message, true);
+            }
+            return PartialView("_DadosCadastraisPaciente", new Paciente());
         }
     }
 }

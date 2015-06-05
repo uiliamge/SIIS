@@ -20,7 +20,7 @@
             O SIIS é um portal que serve para integrar informações da saúde pública possibilitando a posterior
             consulta por profissionais de saúde, primando sempre pela segurança das informações.
         </p>
-        <p><a class="btn btn-default" href="#">Leia mais &raquo;</a></p>
+        <p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#modalPdf">Leia mais &raquo;</a></p>
     </div>
     <div class="col-md-6">
         <h2 style="font-family: 'Cabin',Arial,sans-serif;">Porque utilizar o Portal SIIS</h2>
@@ -29,16 +29,20 @@
             Existem também os que utilizam planilhas eletrônicas ou formulários em papel.
             Do ponto de vista global, toda esta informação acaba ficando fragmentada por não estar centralizada em um mesmo banco de dados.
         </p>
-        <p><a class="btn btn-default" href="#">Leia mais &raquo;</a></p>
+        <p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#modalPdf">Leia mais &raquo;</a></p>
     </div>
 </div>
 
 <script type="text/javascript">
-    if (window.innerWidth < 400) {
-        $("#imgBemVindo").width("50px");
-        $("#txtBemVindo").attr("style", "margin-top:0px;font-size:11px;");
-    } else {
-        $("#imgBemVindo").width("146px");
-        $("#txtBemVindo").attr("style", "font-size:21px;margin-top:50px;");
-    }
+    $(function () {
+
+        if (window.innerWidth < 400) {
+            $("#imgBemVindo").width("50px");
+            $("#txtBemVindo").attr("style", "margin-top:0px;font-size:11px;");
+        } else {
+            $("#imgBemVindo").width("146px");
+            $("#txtBemVindo").attr("style", "font-size:21px;margin-top:50px;");
+        }
+    });
+
 </script>

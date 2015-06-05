@@ -1,5 +1,9 @@
 ﻿$(function () {
 
+    $("#btnVerificarCpf").click(function () {
+        verificarCpf();
+    });
+
     $("#Paciente_CpfCnpj").change(function () {
 
         if ($("#TipoPermissao").val() == "QualquerProfissional") {
@@ -43,21 +47,21 @@
 });
 
 function verificarCpf() {
-
+    debugger;
     $.ajax({
-        url: $("#urlVerificarCpf").val(),
+        url: $("#urlBuscarPaciente").val(),
         type: 'POST',
-        data: { numero: numero, sigla: sigla, uf: uf, edicao: false },
+        data: { cpf: $("#Paciente_CpfCnpj").val() },
         success: function (data) {
             var result = data;
             if (!result.Erro) {
                 $('#divInformacoesPaciente').html(data);
             }
         },
-        complete: function () {
-
-            $("#PermissaoNumeroConselho").val("");
-            $("#PermissaoNumeroConselho").focus();
+        complete: function (result) {
+            debugger;
+            //$("#PermissaoNumeroConselho").val("");
+            //$("#PermissaoNumeroConselho").focus();
         }
     });
 };

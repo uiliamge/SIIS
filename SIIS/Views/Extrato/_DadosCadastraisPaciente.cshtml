@@ -1,13 +1,25 @@
 ﻿@model SIIS.Models.Paciente
 @{
-    var idade = (DateTime.Now - Convert.ToDateTime(Model.DataNascimento));
-    var textoIdade = idade != null ? idade + "anos" : "idade não informada";
+    var textoIdade = "idade não informada";
+    if (Model != null)
+    {
+        var dataNascimento = Convert.ToDateTime(Model.DataNascimento);
+        int anos = DateTime.Now.Year - dataNascimento.Year;
+        if (DateTime.Now.Month < dataNascimento.Month || (DateTime.Now.Month == dataNascimento.Month && DateTime.Now.Day < dataNascimento.Day))
+        {
+            anos--;
+        }
+        textoIdade = Model.DataNascimento != null ? anos + " anos" : "idade não informada";
+
+        @Html.HiddenFor(x => x.Id)
+
+        if (Model.Id > 0)
+        {
+            <div class="col-md-12">
+                <p class="text-info" style="margin: 0;">@Model.Nome (@textoIdade)</p>
+                <p class="text-info" style="margin: 0;">@Model.Cidade - @Model.Uf</p>
+                <p class="text-info" style="margin: 0;">@Model.Email</p>
+            </div>
+        }
+    }
 }
-
-@Html.HiddenFor(x => x.Id)
-
-<div class="col-md-4">
-    <p class="text-info">@Model.Nome (@textoIdade)</p>
-    <p class="text-info">@Model.Cidade - @Model.Uf</p>
-    <p class="text-info">@Model.Email</p>
-</div>

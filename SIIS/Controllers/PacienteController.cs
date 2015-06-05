@@ -5,10 +5,13 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SIIS.Models;
+using System;
+using SIIS.Negocio;
 
 namespace SIIS.Controllers
 {
-    public class PacienteController : Controller
+    [Authorize]
+    public class PacienteController : BaseController
     {
         private ApplicationUserManager _userManager;
         private readonly SiteDataContext _context = new SiteDataContext();
@@ -33,7 +36,7 @@ namespace SIIS.Controllers
                 _userManager = value;
             }
         }
-
-
+        
+        
     }
 }

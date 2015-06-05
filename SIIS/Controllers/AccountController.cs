@@ -238,7 +238,7 @@ namespace SIIS.Controllers
                         UserName = model.userName,
                         NomeCompleto = model.NomeCompleto,
                         Email = model.Email,
-                        Cpf = model.Cpf.RemoverMascara(),
+                        Cpf = model.Cpf,
                         TipoUsuario = TipoUsuarioEnum.Paciente,
                         Ip = Request.UserHostAddress
                     };

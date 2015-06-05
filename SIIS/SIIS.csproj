@@ -220,6 +220,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\imagens\logo_transparente.png" />
+    <Content Include="Content\jquery-ui-1.10.4.custom.css" />
     <Content Include="Content\Themes\Amelia\bootstrap.css" />
     <Content Include="Content\Themes\Darkly\bootstrap.css" />
     <Content Include="Content\Themes\Stock\bootstrap.css" />
@@ -236,6 +237,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\dropdowns.less" />
     <Content Include="Content\build_standalone.less" />
+    <Content Include="Content\Pdf\Banner_SIIS.pdf" />
     <None Include="Properties\PublishProfiles\Publish local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Icon.png" />
@@ -250,6 +252,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.10.4.custom.js" />
     <Content Include="Scripts\jquery.maskedinput.js" />
     <Content Include="Scripts\jquery.maskedinput.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
