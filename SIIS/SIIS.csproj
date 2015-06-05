@@ -306,10 +306,6 @@
     <Content Include="Views\Shared\EditorTemplates\BooleanButtonLabel.cshtml" />
     <Content Include="Views\Simple\Create.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Person.cshtml" />
-    <Content Include="Views\Person\Index.cshtml" />
-    <Content Include="Views\Person\_PersonSearchForm.cshtml" />
-    <Content Include="Views\Person\_SearchPeople.cshtml" />
-    <Content Include="Views\Person\Create.cshtml" />
     <Content Include="Views\Shared\_Alerts.cshtml" />
     <Content Include="Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Views\Notifications\Create.cshtml" />
