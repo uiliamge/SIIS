@@ -216,9 +216,9 @@
     <Compile Include="Models\Responsavel.cs" />
     <Compile Include="Models\Secao.cs" />
     <Compile Include="Models\SiteDataContext.cs" />
+    <Compile Include="Negocio\ExtratoNeg.cs" />
     <Compile Include="Negocio\SecaoNeg.cs" />
     <Compile Include="Negocio\ComposicaoNeg.cs" />
-    <Compile Include="Negocio\ExtratoNeg.cs" />
     <Compile Include="Negocio\ProfissionalNeg.cs" />
     <Compile Include="Negocio\PacienteNeg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

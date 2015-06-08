@@ -63,17 +63,18 @@
                     <span class="glyphicon glyphicon-plus"></span> Nova Composição
                 </button>
             </div>
-        </div>        
-        <div class="row">
-            <div class="form-group">
-                <button class="btn btn-success">Gravar</button>
-            </div>
         </div>
-        }
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <button class="btn btn-success">Gravar</button>
+        </div>
+    </div>
+}
 
-        @Html.Hidden("urlBuscarPaciente", Url.Action("BuscarPaciente", "Extrato"))
-        @Html.Hidden("urlAddTempDataComposicoes", Url.Action("AddTempDataComposicoes", "Extrato"))
-        @Html.Hidden("urlAddTempDataSecoes", Url.Action("AddTempDataSecoes", "Extrato"))
-        @Html.Hidden("urlRemoveTempDataComposicoes", Url.Action("RemoveTempDataComposicoes", "Extrato"))
-        @Html.Hidden("urlRemoveTempDataSecoes", Url.Action("RemoveTempDataSecoes", "Extrato"))
-        @Html.Hidden("urlVerificarSalvarExtrato", Url.Action("VerificarSalvar", "Extrato"))
+@Html.Hidden("urlBuscarPaciente", Url.Action("BuscarPaciente", "Extrato"))
+@Html.Hidden("urlAddTempDataComposicoes", Url.Action("AddTempDataComposicoes", "Extrato"))
+@Html.Hidden("urlAddTempDataSecoes", Url.Action("AddTempDataSecoes", "Extrato"))
+@Html.Hidden("urlRemoveTempDataComposicoes", Url.Action("RemoveTempDataComposicoes", "Extrato"))
+@Html.Hidden("urlRemoveTempDataSecoes", Url.Action("RemoveTempDataSecoes", "Extrato"))
+@Html.Hidden("urlVerificarSalvarExtrato", Url.Action("VerificarSalvar", "Extrato"))
