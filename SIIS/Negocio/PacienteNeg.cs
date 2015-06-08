@@ -8,7 +8,17 @@ namespace SIIS.Negocio
 {
     public class PacienteNeg : IDisposable
     {
-        readonly SiteDataContext _contexto = new SiteDataContext();
+        readonly SiteDataContext _contexto;
+
+        public PacienteNeg()
+        {
+            _contexto = new SiteDataContext();
+        }
+
+        public PacienteNeg(SiteDataContext contexto)
+        {
+            _contexto = contexto;
+        }
 
         public void Inserir(ApplicationUser user, RegisterPacienteViewModel model)
         {

@@ -28,7 +28,6 @@
                 theme = user.CssTheme ?? theme;
             }
         }
-
     }
     <link href="~/Content/jquery-ui-1.10.4.custom.css" rel="stylesheet">
     <script src="~/Scripts/jquery-1.10.2.js"></script>
@@ -39,7 +38,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/Scripts/util.js")
 </head>
-<body style="padding-top: 60px !important;">
+<body style="padding-top: 60px !important; overflow: auto;" id="bodyLayout">
     @RenderSection("topLevel", required: false)
     @*The structure for the navbar*@
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -100,3 +99,5 @@
 
     </div>
 </div>
+
+@Html.Hidden("urlAbrirExtrato", Url.Action("Preencher", "Extrato"))

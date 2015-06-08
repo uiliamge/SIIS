@@ -15,10 +15,9 @@
 
         if (Model.Id > 0)
         {
-            <div class="col-md-12">
-                <p class="text-info" style="margin: 0;">@Model.Nome (@textoIdade)</p>
-                <p class="text-info" style="margin: 0;">@Model.Cidade - @Model.Uf</p>
-                <p class="text-info" style="margin: 0;">@Model.Email</p>
+            <div class="col-md-12" style="">
+                <p class="text-muted" style="margin: 0;">@Model.Nome, @textoIdade, de @Model.Cidade - @Model.Uf</p>
+                <p class="text-muted" style="margin: 0;">E-mail: @Model.Email</p>
             </div>
         }
     }

@@ -1,0 +1,29 @@
+﻿@model SIIS.Models.Composicao
+
+@Html.HiddenFor(x => x.Id)
+@Html.HiddenFor(x => x.Indice)
+
+<div class="row boxComposicao" style="">
+    <label style="color: rgb(164, 231, 236)">Composição</label>
+    <hr style="margin-top: 5px;" />
+    <div class="form-group">
+        <div class="col-md-5">
+            <label class="control-label">Descrição da Composição</label>
+            @Html.TextAreaFor(x => x.Descricao, new
+           {
+               @placeholder = "Define se é um Exame ou uma Consulta, por exemplo.",
+               @class = "form-control"
+           })
+        </div>
+        <div class="col-md-7">
+            <div id="divPreencherSessoes_@Model.Indice">
+                @Html.EditorFor(x => x.Secoes)
+            </div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-sm btn-link" onclick="RemoveComposicao(@Model.Indice)">
+                <span class="glyphicon glyphicon-remove"></span> Remover esta Composição
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+﻿@model SIIS.Models.Responsavel
+
+
+<div class="row">
+    <div class="col-md-6 boxComposicao">
+        <label class="control-label">Últimos extratos lançados</label>
+        <table class="table table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-center">Código</th>
+                    <th class="text-center">Data</th>
+                    <th class="text-center">Paciente</th>
+                    <th class="text-center">Cidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var extrato in Model.Extratos)
+                {
+                    <tr onclick="AbrirExtrato(@extrato.Id);" style="cursor: pointer;">
+                        <td>@extrato.Id</td>
+                        <td>@extrato.DataReferencia.ToShortDateString()</td>
+                        <td>@extrato.Paciente.Nome (@extrato.Paciente.CpfCnpj)</td>
+                        <td>@extrato.Cidade - @extrato.Uf</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -6,62 +6,114 @@
 
     $("#Paciente_CpfCnpj").change(function () {
 
-        if ($("#TipoPermissao").val() == "QualquerProfissional") {
-            $("#divListaProfissionaisPermitidos").addClass("hidden");
-            $("#txtExplicativoQualquerProfissionalPodeAcessar").removeClass("hidden");
-        } else {
-            $("#divListaProfissionaisPermitidos").removeClass("hidden");
-            $("#txtExplicativoQualquerProfissionalPodeAcessar").addClass("hidden");
-        }
+        $("#divPreencherComposicoes").hide();
     });
 
-    $("#Cep").blur(function () {
-
-        var cep = this.value.replace(/\D/g, "");
-
-        $.ajax({
-            url: "http://api.postmon.com.br/v1/cep/" + cep,
-            type: "GET",
-            success: function (data) {
-
-                $("#Cidade").val(data.cidade);
-                $("#Uf option[value='" + data.estado_info.codigo_ibge + "']").attr("selected", true);
-                $("#Uf").val(data.estado);
-                $("#Bairro").val(data.bairro);
-                $("#Endereco").val(data.logradouro);
-
-                $("#validationCep").hide();
-            },
-            error: function (data) {
-
-                $("#validationCep").text("Este CEP não foi localizado. Informe um CEP válido.");
-                $("#validationCep").show();
-            }
-        });
-    });
-
-    $("#Cidade,#Uf,#Bairro,#Endereco").focus(function () {
-
-        $("#NumeroEndereco").focus();
-    });
+    $("#Paciente_CpfCnpj").focus();
 });
 
-function verificarCpf() {
-    debugger;
+function Submit() {
+
+    waitingDialog.show('Gravando o Extrato', { dialogSize: 'sm', progressType: 'success' });
+
+    var extrato = $("#formPreencherExtrato").serialize();
+
     $.ajax({
-        url: $("#urlBuscarPaciente").val(),
         type: "POST",
-        data: { cpf: $("#Paciente_CpfCnpj").val() },
+        url: formPreencherExtrato.action,
+        data: $("#formPreencherExtrato").serialize(),
+        datatype: "html",
+        success: function (data) {
+            $("#bodyLayout").html(data);
+            waitingDialog.hide();
+
+            setTimeout(function () {
+                $("#Composicoes_0__Descricao").focus();
+            }, 200);
+        }
+    });
+};
+
+function verificarCpf() {
+
+    waitingDialog.show('Verificando CPF e gravando', { dialogSize: 'sm', progressType: 'success' });
+
+    var extrato = $("#formPreencherExtrato").serialize();
+
+    $.ajax({
+        type: "POST",
+        url: $("#urlVerificarSalvarExtrato").val(),
+        data: $("#formPreencherExtrato").serialize(),
+        datatype: "html",
+        success: function (data) {
+            $("#bodyLayout").html(data);
+            waitingDialog.hide();
+
+            setTimeout(function () {
+                $("#Composicoes_0__Descricao").focus();
+            }, 200);
+        }
+    });
+};
+
+function AddComposicao() {
+
+    waitingDialog.show('Gravando e adicionando uma nova composição', { dialogSize: 'sm', progressType: 'success' });
+
+    $.ajax({
+        type: "POST",
+        url: formPreencherExtrato.action,
+        data: $("#formPreencherExtrato").serialize() + "&addComposicao=true",
+        dataType: "html",
+        success: function (data) {
+            $("#bodyLayout").html(data);
+            waitingDialog.hide();
+
+            setTimeout(function () {
+                $("#Composicoes_0__Descricao").focus();
+            }, 200);
+        }
+    });
+};
+function RemoveComposicao(indice) {
+
+    $.ajax({
+        url: $("#urlRemoveTempDataComposicoes").val(),
+        type: "POST",
+        data: { indice: indice },
         success: function (data) {
             var result = data;
             if (!result.Erro) {
-                $("#divInformacoesPaciente").html(data);
+                $("#divPreencherComposicoes").html(data);
             }
-        },
-        complete: function (result) {
-            debugger;
-            //$("#PermissaoNumeroConselho").val("");
-            //$("#PermissaoNumeroConselho").focus();
+        }
+    });
+};
+function AddSecao(indiceComposicao) {
+
+    $.ajax({
+        url: $("#urlAddTempDataSecoes").val(),
+        type: "POST",
+        data: { indiceComposicao: indiceComposicao },
+        success: function (data) {
+            var result = data;
+            if (!result.Erro) {
+                $("#divPreencherSecoes_" + indiceComposicao).html(data);
+            }
+        }
+    });
+};
+function RemoveSecao(indiceSecao, indiceComposicao) {
+
+    $.ajax({
+        url: $("#urlRemoveTempDataSecoes").val(),
+        type: "POST",
+        data: { indice: indiceSecao, indiceComposicao: indiceComposicao },
+        success: function (data) {
+            var result = data;
+            if (!result.Erro) {
+                $("#divPreencherSecoes_" + indiceComposicao).html(data);
+            }
         }
     });
 };

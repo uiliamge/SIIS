@@ -181,6 +181,10 @@
     <Compile Include="Migrations\201506051717179_IndiceEmComposicaoESecao.Designer.cs">
       <DependentUpon>201506051717179_IndiceEmComposicaoESecao.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506062354337_indiceDaComposicaoNaSecao.cs" />
+    <Compile Include="Migrations\201506062354337_indiceDaComposicaoNaSecao.Designer.cs">
+      <DependentUpon>201506062354337_indiceDaComposicaoNaSecao.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
@@ -212,6 +216,9 @@
     <Compile Include="Models\Responsavel.cs" />
     <Compile Include="Models\Secao.cs" />
     <Compile Include="Models\SiteDataContext.cs" />
+    <Compile Include="Negocio\SecaoNeg.cs" />
+    <Compile Include="Negocio\ComposicaoNeg.cs" />
+    <Compile Include="Negocio\ExtratoNeg.cs" />
     <Compile Include="Negocio\ProfissionalNeg.cs" />
     <Compile Include="Negocio\PacienteNeg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -252,6 +259,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Extrato\Extrato.js" />
+    <Content Include="Scripts\Home\Home.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -326,6 +334,9 @@
     <Content Include="Views\Extrato\_PreencherComposicoes.cshtml" />
     <Content Include="Views\Extrato\_PreencherComposicoesSecoes.cshtml" />
     <Content Include="Views\Extrato\_DadosCadastraisPaciente.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Composicao.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Secao.cshtml" />
+    <Content Include="Views\Home\_IndexProfissional.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -346,6 +357,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506051717179_IndiceEmComposicaoESecao.resx">
       <DependentUpon>201506051717179_IndiceEmComposicaoESecao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506062354337_indiceDaComposicaoNaSecao.resx">
+      <DependentUpon>201506062354337_indiceDaComposicaoNaSecao.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>

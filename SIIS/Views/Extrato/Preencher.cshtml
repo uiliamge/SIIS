@@ -1,7 +1,7 @@
 ﻿@model SIIS.Models.Extrato
 @{
     ViewBag.Title = "Preencher";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Scripts.Render("~/Scripts/Extrato/Extrato.js")
@@ -9,17 +9,28 @@
 <h2>Extrato de Prontuário</h2>
 @using (Html.BeginForm("Preencher", "Extrato", FormMethod.Post, new { @id = "formPreencherExtrato" }))
 {
+    @Html.HiddenFor(x => x.Responsavel.Id)
+    @Html.HiddenFor(x => x.Responsavel.UserId)
+    @Html.HiddenFor(x => x.Responsavel.Uf)
+    @Html.HiddenFor(x => x.Responsavel.Cidade)
+    @Html.HiddenFor(x => x.Uf)
+    @Html.HiddenFor(x => x.Cidade)
+
     @Html.ValidationSummary()
     <h4>Preenchendo um Extrato de Prontuário</h4>
     <hr />
     <div class="row">
         <div class="form-group">
-            <div class="col-md-3">
+            <div class="col-md-1">
+                @Html.LabelFor(m => m.Id, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Id, new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="col-md-2">
                 @Html.LabelFor(m => m.DataReferencia, new { @class = "control-label" })
                 @Html.TextBoxFor(m => m.DataReferencia, new { @class = "data form-control" })
                 @Html.ValidationMessageFor(m => m.DataReferencia, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="control-label">CPF do Paciente</label>
                 @Html.TextBoxFor(m => m.Paciente.CpfCnpj, new { @class = "cpf form-control" })
                 @Html.ValidationMessageFor(m => m.Paciente.CpfCnpj, "", new { @class = "text-danger" })
@@ -30,18 +41,39 @@
                 </button>
             </div>
             <br />
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div id="divInformacoesPaciente">
                     @Html.Partial("_DadosCadastraisPaciente", Model.Paciente)
                 </div>
             </div>
         </div>
+    </div>
+    <br />
+    <div class="row">
         <div class="form-group">
-            <div id="divPreencherComposicoes" style="">
-                @Html.Partial("_PreencherComposicoes", Model.Composicoes)
+            <div id="divPreencherComposicoes">
+                @Html.EditorFor(x => x.Composicoes)
             </div>
         </div>
     </div>
-}
+    <div class="row">
+        <div class="form-group">
+            <div id="" class="boxComposicao">
+                <button type="button" class="btn btn-sm btn-link" onclick="AddComposicao()">
+                    <span class="glyphicon glyphicon-plus"></span> Nova Composição
+                </button>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="form-group">
+                <button class="btn btn-success">Gravar</button>
+            </div>
+        </div>
+        }
 
-@Html.Hidden("urlBuscarPaciente", Url.Action("BuscarPaciente", "Extrato"))
+        @Html.Hidden("urlBuscarPaciente", Url.Action("BuscarPaciente", "Extrato"))
+        @Html.Hidden("urlAddTempDataComposicoes", Url.Action("AddTempDataComposicoes", "Extrato"))
+        @Html.Hidden("urlAddTempDataSecoes", Url.Action("AddTempDataSecoes", "Extrato"))
+        @Html.Hidden("urlRemoveTempDataComposicoes", Url.Action("RemoveTempDataComposicoes", "Extrato"))
+        @Html.Hidden("urlRemoveTempDataSecoes", Url.Action("RemoveTempDataSecoes", "Extrato"))
+        @Html.Hidden("urlVerificarSalvarExtrato", Url.Action("VerificarSalvar", "Extrato"))

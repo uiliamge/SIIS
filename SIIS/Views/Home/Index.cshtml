@@ -1,48 +1,69 @@
-﻿@{
+﻿@using System.Security.Principal
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using SIIS.Models
+@{
     ViewBag.Title = "Home Page";
 
 }
+@Scripts.Render("~/Scripts/Home/Home.js")
 
-<div class="jumbotron">
+@if (User.Identity.IsAuthenticated)
+{
+
+    //var userStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
+    //var manager = new UserManager<ApplicationUser>(userStore);
+    //var user = manager.FindById(User.Identity.GetUserId());
+
+    var responsavel = Responsavel.GetByUserId(User.Identity.GetUserId());
+    if (responsavel != null)
+    {
+        @Html.Partial("_IndexProfissional", responsavel)
+    }
+}
+else
+{
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-12">
+                <img id="imgBemVindo" style="margin-right: 15px; background-color: #fff; border-radius: 6px;"
+                     class="img-responsive pull-left img-thumbnail" src="~/Content/imagens/logo_transparente.png" />
+                <p id="txtBemVindo" class="lead" style=" margin-top: 50px;">Bem-Vindo ao Sistema de Integração de Informações de Saúde</p>
+            </div>
+        </div>
+
+    </div>
     <div class="row">
-        <div class="col-md-12">
-            <img id="imgBemVindo" style="margin-right: 15px; background-color: #fff; border-radius: 6px;"
-                 class="img-responsive pull-left img-thumbnail" src="~/Content/imagens/logo_transparente.png" />
-            <p id="txtBemVindo" class="lead" style=" margin-top: 50px;">Bem-Vindo ao Sistema de Integração de Informações de Saúde</p>
+        <div class="col-md-6">
+            <h2 style="font-family: 'Cabin',Arial,sans-serif;">Para que serve o SIIS</h2>
+            <p style="text-align: justify">
+                O SIIS é um portal que serve para integrar informações da saúde pública possibilitando a posterior
+                consulta por profissionais de saúde, primando sempre pela segurança das informações.
+            </p>
+            <p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#modalPdf">Leia mais &raquo;</a></p>
+        </div>
+        <div class="col-md-6">
+            <h2 style="font-family: 'Cabin',Arial,sans-serif;">Porque utilizar o Portal SIIS</h2>
+            <p style="text-align: justify">
+                Muitos consultórios médicos utilizam sistemas de prontuário eletrônico.
+                Existem também os que utilizam planilhas eletrônicas ou formulários em papel.
+                Do ponto de vista global, toda esta informação acaba ficando fragmentada por não estar centralizada em um mesmo banco de dados.
+            </p>
+            <p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#modalPdf">Leia mais &raquo;</a></p>
         </div>
     </div>
 
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <h2 style="font-family: 'Cabin',Arial,sans-serif;">Para que serve o SIIS</h2>
-        <p style="text-align: justify">
-            O SIIS é um portal que serve para integrar informações da saúde pública possibilitando a posterior
-            consulta por profissionais de saúde, primando sempre pela segurança das informações.
-        </p>
-        <p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#modalPdf">Leia mais &raquo;</a></p>
-    </div>
-    <div class="col-md-6">
-        <h2 style="font-family: 'Cabin',Arial,sans-serif;">Porque utilizar o Portal SIIS</h2>
-        <p style="text-align: justify">
-            Muitos consultórios médicos utilizam sistemas de prontuário eletrônico.
-            Existem também os que utilizam planilhas eletrônicas ou formulários em papel.
-            Do ponto de vista global, toda esta informação acaba ficando fragmentada por não estar centralizada em um mesmo banco de dados.
-        </p>
-        <p><a class="btn btn-default" href="#" data-toggle="modal" data-target="#modalPdf">Leia mais &raquo;</a></p>
-    </div>
-</div>
+    <script type="text/javascript">
+        $(function () {
 
-<script type="text/javascript">
-    $(function () {
+            if (window.innerWidth < 400) {
+                $("#imgBemVindo").width("50px");
+                $("#txtBemVindo").attr("style", "margin-top:0px;font-size:11px;");
+            } else {
+                $("#imgBemVindo").width("146px");
+                $("#txtBemVindo").attr("style", "font-size:21px;margin-top:50px;");
+            }
+        });
 
-        if (window.innerWidth < 400) {
-            $("#imgBemVindo").width("50px");
-            $("#txtBemVindo").attr("style", "margin-top:0px;font-size:11px;");
-        } else {
-            $("#imgBemVindo").width("146px");
-            $("#txtBemVindo").attr("style", "font-size:21px;margin-top:50px;");
-        }
-    });
-
-</script>
+    </script>
+}

@@ -1,13 +1,35 @@
-﻿
-@using SIIS.Models
+﻿@using SIIS.Models
 @model IEnumerable<Composicao>
 
 @foreach (Composicao composicao in Model)
 {
-    <div class="form-group">
-        <div class="col-md-4">
-            <label class="control-label">Composição</label>
-            @Html.TextArea("composicao_Descricao", composicao.Descricao, new { @class = "form-control" })
+    <div class="row boxComposicao" style="">
+        <label style="color: rgb(164, 231, 236)">Composição</label>
+        <hr style="margin-top: 5px;" />
+        <div class="form-group">
+            <div class="col-md-5">
+                <label class="control-label">Descrição da Composição</label>
+                @Html.TextArea("composicao_Descricao", composicao.Descricao, new
+           {
+               @placeholder = "Define se é um Exame ou uma Consulta, por exemplo.",
+               @class = "form-control"
+           })
+            </div>
+            <div class="col-md-7">
+                <div id="divPreencherSessoes_@composicao.Indice">
+                    @Html.Partial("_PreencherComposicoesSecoes", composicao.Secoes)
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-sm btn-link" onclick="RemoveComposicao(@composicao.Indice)">
+                    <span class="glyphicon glyphicon-remove"></span> Remover esta Composição
+                </button>
+            </div>
         </div>
     </div>
 }
+<div class="row">
+    <button type="button" class="btn btn-sm btn-link" onclick="AddComposicao()">
+        <span class="glyphicon glyphicon-plus"></span> Nova Composição
+    </button>
+</div>

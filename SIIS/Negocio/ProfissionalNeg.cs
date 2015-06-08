@@ -7,7 +7,16 @@ namespace SIIS.Negocio
 {
     public class ResponsavelNeg : IDisposable
     {
-        readonly SiteDataContext _contexto = new SiteDataContext();
+        readonly SiteDataContext _contexto;
+
+        public ResponsavelNeg()
+        {
+            _contexto = new SiteDataContext();
+        }
+        public ResponsavelNeg(SiteDataContext contexto)
+        {
+            _contexto = contexto;
+        }
 
         public void Inserir(ApplicationUser user, RegisterProfissionalViewModel model)
         {
@@ -15,7 +24,7 @@ namespace SIIS.Negocio
             {
                 Nome = user.NomeCompleto,
                 Email = user.Email,
-                CpfCnpj = model.CpfCnpj,                
+                CpfCnpj = model.CpfCnpj,
                 DataHora = DateTime.Now,
                 UserId = user.Id,
                 Cep = model.Cep,
@@ -25,7 +34,7 @@ namespace SIIS.Negocio
                 Bairro = model.Bairro,
                 Complemento = model.Complemento,
                 Uf = model.Uf,
-                Cidade = model.Cidade,                
+                Cidade = model.Cidade,
                 Ip = user.Ip,
 
                 NumeroConselhoRegional = model.NumeroConselho,
@@ -45,6 +54,16 @@ namespace SIIS.Negocio
                 _contexto.Entry(old).CurrentValues.SetValues(responsavel);
                 _contexto.Entry(old).State = EntityState.Modified;
             }
+        }
+
+        public Responsavel BuscarPorUserId(string userId)
+        {
+            return _contexto.Responsaveis.FirstOrDefault(x => x.UserId == userId);
+        }
+
+        public Responsavel Buscar(int id)
+        {
+            return _contexto.Responsaveis.FirstOrDefault(x => x.Id == id);
         }
 
         public void Dispose()

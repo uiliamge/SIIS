@@ -46,3 +46,17 @@ fieldset {
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Cabin', Arial, sans-serif;
 }
+
+.boxComposicao {
+    background-color: #097D86;
+    border-radius: 3px;
+    padding: 10px 10px 0 10px;
+    margin-bottom: 15px;
+}
+
+.boxSecao {
+    background-color: #086b72;
+    border-radius: 3px;
+    padding: 10px 10px 0 10px;
+    margin-top: 10px;
+}
