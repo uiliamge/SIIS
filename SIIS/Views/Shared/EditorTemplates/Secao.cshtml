@@ -1,8 +1,5 @@
 ﻿@model SIIS.Models.Secao
 
-@{
-    int indiceComposicao = Model.IndiceComposicao;
-}
 @Html.HiddenFor(x => x.Id)
 @Html.HiddenFor(x => x.Indice)
 
@@ -15,15 +12,9 @@
             @Html.TextAreaFor(x => x.Nome, new { @placeholder = "Reflete o fluxo de informação obtido durante um encontro médico.", @class = "form-control" })
         </div>
         <div>
-            <button type="button" class="btn btn-sm btn-link" onclick="RemoveSecao(@Model.Indice, @Model.IndiceComposicao)">
+            <button type="button" class="btn btn-sm btn-link" onclick="RemoveSecao('@Model.Id')">
                 <span class="glyphicon glyphicon-remove"></span> Remover esta Seção
             </button>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <button type="button" class="btn btn-sm btn-link" onclick="AddSecao(@indiceComposicao)">
-        <span class="glyphicon glyphicon-plus"></span> Nova Seção
-    </button>
 </div>

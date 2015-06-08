@@ -162,7 +162,6 @@ function apenasNumero(obj) {
     $(obj).val(v);
 }
 
-
 var waitingDialog = (function ($) {
 
     // Creating modal dialog's DOM
@@ -170,7 +169,7 @@ var waitingDialog = (function ($) {
 		'<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
 		'<div class="modal-dialog modal-m">' +
 		'<div class="modal-content">' +
-			'<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
+			'<div class="modal-header"><h5 style="margin:0; text-align: center;"></h5></div>' +
 			'<div class="modal-body">' +
 				'<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
 			'</div>' +
@@ -202,13 +201,49 @@ var waitingDialog = (function ($) {
             if (settings.progressType) {
                 $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
             }
-            $dialog.find('h3').text(message);
+            $dialog.find('h5').text(message);
             // Opening dialog
             $dialog.modal();
         },
         /**
 		 * Closes dialog
 		 */
+        hide: function () {
+            $dialog.modal('hide');
+        }
+    }
+
+})(jQuery);
+
+
+var saibaMaisDialog = (function ($) {
+
+    // Creating modal dialog's DOM
+    var $dialog = $(
+		'<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding:0; overflow-y:visible;">' +
+		'<div class="modal-dialog modal-lg" style=" height: 95% !important;">' +
+		'<div class="modal-content" style=" height: 95% !important;">' +
+			'<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Mais sobre o Projeto SIIS</h4></div>' +
+			'<div class="modal-body" style=" height: 85% !important; padding: 5px;">' +
+				'<iframe style="width: 100%; height: 100%;" src="#"></iframe>' +
+                '<p class="text-center"><a target="_blank" href="#">Abrir este documento em uma nova guia.</a></p>' +
+			'</div>' +
+		'</div></div></div>');
+
+    return {
+        /**
+		 * Opens our dialog
+		 * @param message Custom message
+		 * @param options Custom options:
+		 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+		 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+		 */
+        show: function (caminhoArquivo) {
+
+            $dialog.find('iframe').attr("src", caminhoArquivo + "?#zoom=25");
+            $dialog.find('a').attr("href", caminhoArquivo);
+            $dialog.modal();
+        },        
         hide: function () {
             $dialog.modal('hide');
         }

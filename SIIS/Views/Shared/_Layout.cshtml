@@ -79,25 +79,4 @@
 </body>
 </html>
 
-<div id="modalPdf" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style=" height: 95% !important;">
-
-        <!-- Modal content-->
-        <div class="modal-content" style=" height: 95% !important;">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Mais sobre o Projeto SIIS</h4>
-            </div>
-            <div class="modal-body" style=" height: 85% !important; padding: 5px;">
-                <iframe style="width: 100%; height: 100%;" src="~/Content/Pdf/Banner_SIIS.pdf?#zoom=25"></iframe>
-                <p class="text-center"><a target="_blank" href="~/Content/Pdf/Banner_SIIS.pdf">Abrir este documento em uma nova guia.</a></p>
-            </div>
-            @*<div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-            </div>*@
-        </div>
-
-    </div>
-</div>
-
 @Html.Hidden("urlAbrirExtrato", Url.Action("Preencher", "Extrato"))

@@ -10,19 +10,27 @@
         <div class="col-md-5">
             <label class="control-label">Descrição da Composição</label>
             @Html.TextAreaFor(x => x.Descricao, new
-           {
-               @placeholder = "Define se é um Exame ou uma Consulta, por exemplo.",
-               @class = "form-control"
-           })
+            {
+                @placeholder = "Define se é um Exame ou uma Consulta, por exemplo.",
+                @class = "form-control"
+            })
         </div>
         <div class="col-md-7">
             <div id="divPreencherSessoes_@Model.Indice">
                 @Html.EditorFor(x => x.Secoes)
             </div>
         </div>
-        <div>
-            <button type="button" class="btn btn-sm btn-link" onclick="RemoveComposicao(@Model.Indice)">
-                <span class="glyphicon glyphicon-remove"></span> Remover esta Composição
+    </div>
+    <div class="form-group">
+        <div class="col-md-5">
+            <button type="button" class="btn btn-sm btn-link" onclick="RemoveComposicao('@Model.Id')">
+                <span class=" glyphicon glyphicon-remove">
+                </span> Remover esta Composição
+            </button>
+        </div>
+        <div class="col-md-7 boxSecao" style="margin-bottom: 10px; padding-top: 0;">
+            <button type="button" class="btn btn-sm btn-link" onclick="AddSecao('@Model.Id')">
+                <span class="glyphicon glyphicon-plus"></span> Nova Seção
             </button>
         </div>
     </div>

@@ -74,7 +74,6 @@ namespace SIIS.Controllers
 
                 extrato = new Extrato
                 {
-                    Paciente = new Paciente(),
                     DataReferencia = DateTime.Now,
                     Responsavel = responsavel,
                     IndImportado = 0,
@@ -94,10 +93,11 @@ namespace SIIS.Controllers
 
         [HttpPost]
         public ActionResult Preencher(Extrato extrato, bool? addComposicao, bool? addSecao,
-            int? composicaoParaDeletar, int? secaoParaDeletar)
+            int? composicaoParaDeletar, int? secaoParaDeletar, int? composicaoDaSecao)
         {
             try
             {
+                //Nova composição
                 if (addComposicao == true)
                 {
                     var novaComposicao = new Composicao
@@ -107,38 +107,49 @@ namespace SIIS.Controllers
                     novaComposicao.Secoes.Add(new Secao { Indice = 0 });
                     extrato.Composicoes.Add(novaComposicao);
                 }
-
-                SalvarExtrato(extrato);
-                if(addComposicao != true && addSecao != true)
-                    Success("Extrato salvo com sucesso.", true);
-            }
-            catch (DbEntityValidationException e)
-            {
-                var dbEntityValidationResults = e.EntityValidationErrors as List<DbEntityValidationResult>;
-                if (dbEntityValidationResults != null)
-                    foreach (var erro in dbEntityValidationResults)
+                //Nova seção
+                if (addSecao == true)
+                {
+                    var composicao = extrato.Composicoes.First(x => x.Id == composicaoDaSecao);
+                    extrato.Composicoes.First(x => x.Id == composicaoDaSecao).Secoes.Add(new Secao
                     {
-                        Danger(String.Join("\n", erro.ValidationErrors.Select(x => x.ErrorMessage)), true);
+                        Indice = composicao.Secoes.OrderByDescending(x => x.Indice).Select(x => x.Indice).First() + 1
+                    });
+                }
+                //Deletar composição
+                if (composicaoParaDeletar != null)
+                {
+                    if(extrato.Composicoes.Count == 1)
+                        throw new InvalidOperationException("O Extrato deve possuir ao menos uma Composição.");
+
+                    extrato.Composicoes.Remove(extrato.Composicoes.FirstOrDefault(x => x.Id == composicaoParaDeletar));
+                }
+
+                //Deletar seção
+                if (secaoParaDeletar != null)
+                {
+                    Secao secaoRemove = new Secao();
+                    foreach (var composicao in extrato.Composicoes)
+                    {
+                        secaoRemove = composicao.Secoes.FirstOrDefault(secao => secao.Id == secaoParaDeletar);
+                        secaoRemove.Composicao = composicao;
                     }
-            }
-            catch (DbUpdateException e)
-            {
-                Danger(e.InnerException.ToString(), true);
-            }
-            catch (Exception e)
-            {
-                Danger(e.Message, true);
-            }
+                    if (extrato.Composicoes.FirstOrDefault(x => x.Id == secaoRemove.Composicao.Id).Secoes.Count == 1)
+                        throw new InvalidOperationException("A Composição deve possuir ao menos uma Seção.");
 
-            return RedirectToAction("Preencher", new { id = extrato.Id });
-        }
+                    extrato.Composicoes.FirstOrDefault(x => x.Id == secaoRemove.Composicao.Id)
+                        .Secoes.Remove(secaoRemove);
+                }
 
-        [HttpPost]
-        public ActionResult VerificarSalvar(Extrato extrato)
-        {
-            try
-            {
                 SalvarExtrato(extrato);
+                if (addComposicao != true && addSecao != true && composicaoParaDeletar != null && secaoParaDeletar != null)
+                    Success("Extrato salvo com sucesso.", true);
+                else
+                    Success("Extrato alterado com sucesso.", true);
+            }
+            catch (InvalidOperationException e)
+            {
+                Warning(e.Message, true);
             }
             catch (DbEntityValidationException e)
             {
@@ -184,6 +195,34 @@ namespace SIIS.Controllers
         }
 
         [HttpPost]
+        public ActionResult VerificarSalvar(Extrato extrato)
+        {
+            try
+            {
+                SalvarExtrato(extrato);
+            }
+            catch (DbEntityValidationException e)
+            {
+                var dbEntityValidationResults = e.EntityValidationErrors as List<DbEntityValidationResult>;
+                if (dbEntityValidationResults != null)
+                    foreach (var erro in dbEntityValidationResults)
+                    {
+                        Danger(String.Join("\n", erro.ValidationErrors.Select(x => x.ErrorMessage)), true);
+                    }
+            }
+            catch (DbUpdateException e)
+            {
+                Danger(e.InnerException.ToString(), true);
+            }
+            catch (Exception e)
+            {
+                Danger(e.Message, true);
+            }
+
+            return RedirectToAction("Preencher", new { id = extrato.Id });
+        }
+
+        [HttpPost]
         public ActionResult BuscarPaciente(string cpf)
         {
             Paciente paciente = new Paciente();
@@ -202,84 +241,5 @@ namespace SIIS.Controllers
             }
             return PartialView("_DadosCadastraisPaciente", new Paciente());
         }
-
-        #region TempDatas
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult AddTempDataComposicoes(Composicao composicaoAnte)
-        {
-            var composicoesAtuais = TempData["ComposicoesPreenchimentoExtrato"] as List<Composicao> ??
-                                   new List<Composicao>();
-
-            var nova = new Composicao
-            {
-                Indice = composicoesAtuais.OrderByDescending(x => x.Indice).Select(x => x.Indice).First() + 1,
-                Descricao = ""
-            };
-            nova.Secoes.Add(new Secao
-            {
-                Indice = 0,
-                IndiceComposicao = nova.Indice
-            });
-
-            composicoesAtuais.Add(nova);
-
-            TempData["ComposicoesPreenchimentoExtrato"] = composicoesAtuais;
-
-            return PartialView("_PreencherComposicoes", composicoesAtuais);
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult RemoveTempDataComposicoes(int indice)
-        {
-            var composicoesAtuais = TempData["ComposicoesPreenchimentoExtrato"] as List<Composicao> ??
-                                   new List<Composicao>();
-
-            var composicoesAtualizadas = composicoesAtuais.Where(x => x.Indice != indice).ToList();
-
-            TempData["ComposicoesPreenchimentoExtrato"] = composicoesAtualizadas;
-
-            return PartialView("_PreencherComposicoes", composicoesAtualizadas);
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult AddTempDataSecoes(int indiceComposicao)
-        {
-            var secoesAtuais = TempData["SecoesPreenchimentoExtrato"] as List<Secao> ??
-                                   new List<Secao>();
-
-            int ultimoIndice = secoesAtuais.OrderByDescending(x => x.Indice).Select(x => x.Indice).First();
-            var nova = new Secao
-            {
-                Indice = ultimoIndice + 1,
-                IndiceComposicao = indiceComposicao,
-                Nome = ""
-            };
-
-            secoesAtuais.Add(nova);
-
-            TempData["SecoesPreenchimentoExtrato"] = secoesAtuais;
-
-            return PartialView("_PreencherComposicoesSecoes", secoesAtuais.Where(x => x.IndiceComposicao == indiceComposicao));
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult RemoveTempDataSecoes(int indice, int indiceComposicao)
-        {
-            var secoesAtuais = TempData["SecoesPreenchimentoExtrato"] as List<Secao> ??
-                                   new List<Secao>();
-
-            Secao secaoParaExcluir = secoesAtuais.First(x => x.Indice == indice && x.IndiceComposicao == indiceComposicao);
-            secoesAtuais.Remove(secaoParaExcluir);
-
-            TempData["SecoesPreenchimentoExtrato"] = secoesAtuais;
-
-            return PartialView("_PreencherComposicoesSecoes", secoesAtuais);
-        }
-
-        #endregion
     }
 }

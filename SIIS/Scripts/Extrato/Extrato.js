@@ -75,45 +75,60 @@ function AddComposicao() {
         }
     });
 };
-function RemoveComposicao(indice) {
+function RemoveComposicao(id) {
+
+    waitingDialog.show('Gravando e removendo composição', { dialogSize: 'sm', progressType: 'success' });
 
     $.ajax({
-        url: $("#urlRemoveTempDataComposicoes").val(),
         type: "POST",
-        data: { indice: indice },
+        url: formPreencherExtrato.action,
+        data: $("#formPreencherExtrato").serialize() + "&composicaoParaDeletar=" + id,
+        dataType: "html",
         success: function (data) {
-            var result = data;
-            if (!result.Erro) {
-                $("#divPreencherComposicoes").html(data);
-            }
+            $("#bodyLayout").html(data);
+            waitingDialog.hide();
+
+            setTimeout(function () {
+                $("#Composicoes_0__Descricao").focus();
+            }, 200);
         }
     });
 };
-function AddSecao(indiceComposicao) {
+function AddSecao(idComposicao) {
+
+    waitingDialog.show('Gravando e adicionando uma nova seção', { dialogSize: 'sm', progressType: 'success' });
 
     $.ajax({
-        url: $("#urlAddTempDataSecoes").val(),
         type: "POST",
-        data: { indiceComposicao: indiceComposicao },
+        url: formPreencherExtrato.action,
+        data: $("#formPreencherExtrato").serialize() + "&addSecao=true&composicaoDaSecao=" + idComposicao,
+        dataType: "html",
         success: function (data) {
-            var result = data;
-            if (!result.Erro) {
-                $("#divPreencherSecoes_" + indiceComposicao).html(data);
-            }
+            $("#bodyLayout").html(data);
+            waitingDialog.hide();
+
+            setTimeout(function () {
+                $("#Composicoes_0__Descricao").focus();
+            }, 200);
         }
     });
 };
-function RemoveSecao(indiceSecao, indiceComposicao) {
+function RemoveSecao(id) {
+
+    waitingDialog.show('Gravando e removendo seção', { dialogSize: 'sm', progressType: 'success' });
 
     $.ajax({
-        url: $("#urlRemoveTempDataSecoes").val(),
         type: "POST",
-        data: { indice: indiceSecao, indiceComposicao: indiceComposicao },
+        url: formPreencherExtrato.action,
+        data: $("#formPreencherExtrato").serialize() + "&secaoParaDeletar=" + id,
+        dataType: "html",
         success: function (data) {
-            var result = data;
-            if (!result.Erro) {
-                $("#divPreencherSecoes_" + indiceComposicao).html(data);
-            }
+            $("#bodyLayout").html(data);
+            waitingDialog.hide();
+
+            setTimeout(function () {
+                $("#Composicoes_0__Descricao").focus();
+            }, 200);
         }
     });
 };

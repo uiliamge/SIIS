@@ -16,10 +16,14 @@
             <tbody>
                 @foreach (var extrato in Model.Extratos)
                 {
+                    var textoPaciente = extrato.Paciente != null
+                        ? extrato.Paciente.Nome + "(" + extrato.Paciente.CpfCnpj + ")"
+                        : extrato.CpfPaciente;
+
                     <tr onclick="AbrirExtrato(@extrato.Id);" style="cursor: pointer;">
                         <td>@extrato.Id</td>
                         <td>@extrato.DataReferencia.ToShortDateString()</td>
-                        <td>@extrato.Paciente.Nome (@extrato.Paciente.CpfCnpj)</td>
+                        <td>@textoPaciente</td>                        
                         <td>@extrato.Cidade - @extrato.Uf</td>
                     </tr>
                 }

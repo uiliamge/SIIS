@@ -1,7 +1,6 @@
 ﻿@model SIIS.Models.Extrato
 @{
     ViewBag.Title = "Preencher";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Scripts.Render("~/Scripts/Extrato/Extrato.js")
@@ -32,8 +31,8 @@
             </div>
             <div class="col-md-2">
                 <label class="control-label">CPF do Paciente</label>
-                @Html.TextBoxFor(m => m.Paciente.CpfCnpj, new { @class = "cpf form-control" })
-                @Html.ValidationMessageFor(m => m.Paciente.CpfCnpj, "", new { @class = "text-danger" })
+                @Html.TextBoxFor(m => m.CpfPaciente, new { @class = "cpf form-control" })
+                @Html.ValidationMessageFor(m => m.CpfPaciente, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
                 <button type="button" id="btnVerificarCpf" class="btn btn-default" style="margin-top: 25px;">
@@ -43,7 +42,20 @@
             <br />
             <div class="col-md-5">
                 <div id="divInformacoesPaciente">
-                    @Html.Partial("_DadosCadastraisPaciente", Model.Paciente)
+                    @if (Model.Id > 0)
+                    {
+                        if (Model.Paciente == null || Model.Paciente.Id == 0)
+                        {
+                            <div class="col-md-12" style="">
+                                <p class="text-muted" style="margin: 0;">O Paciente com este CPF ainda não se cadastrou no SIIS.</p>
+                                <p class="text-muted" style="margin: 0;">Prossiga para registrar o seu atendimento, mas o extrato só estará disponível à comunidade médica após o seu cadastro.</p>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.Partial("_DadosCadastraisPaciente", Model.Paciente)
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -58,7 +70,7 @@
     </div>
     <div class="row">
         <div class="form-group">
-            <div id="" class="boxComposicao">
+            <div id="" class="row boxComposicao" style="margin-bottom: 10px; padding-top: 0;">
                 <button type="button" class="btn btn-sm btn-link" onclick="AddComposicao()">
                     <span class="glyphicon glyphicon-plus"></span> Nova Composição
                 </button>
@@ -67,6 +79,8 @@
     </div>
     <div class="row">
         <div class="form-group">
+            <a href="@Url.Action("Index")" class="btn btn-default"><span class="glyphicon glyphicon-backward"></span> Voltar</a>
+            <a href="@Url.Action("Preencher")" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Novo Extrato</a>
             <button class="btn btn-success">Gravar</button>
         </div>
     </div>

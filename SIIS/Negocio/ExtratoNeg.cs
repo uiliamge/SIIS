@@ -21,7 +21,8 @@ namespace SIIS.Negocio
             extrato.Cidade = extrato.Responsavel.Cidade;
             extrato.Uf = extrato.Responsavel.Uf;
 
-            extrato.Paciente = pacienteNeg.BuscarPorCpf(extrato.Paciente.CpfCnpj);
+            extrato.Paciente = pacienteNeg.BuscarPorCpf(extrato.CpfPaciente);
+
             extrato.Responsavel = responsavelNeg.Buscar(extrato.Responsavel.Id);
 
             _contexto.Extratos.Add(extrato);
@@ -30,17 +31,25 @@ namespace SIIS.Negocio
         public void Editar(Extrato extrato)
         {
             ComposicaoNeg composicaoNeg = new ComposicaoNeg(_contexto);
-            composicaoNeg.Editar(extrato.Composicoes.Where(x => x.Id > 0));
+            PacienteNeg pacienteNeg = new PacienteNeg(_contexto);
 
-            var novaComposicao = extrato.Composicoes.First(x => x.Id == 0);
-            novaComposicao.Extrato = _contexto.Extratos.Single(x => x.Id == extrato.Id);
-            _contexto.Composicoes.Add(novaComposicao);
+            composicaoNeg.Editar(extrato.Composicoes.Where(x => x.Id > 0), extrato.Id);
+
+            var novaComposicao = extrato.Composicoes.FirstOrDefault(x => x.Id == 0);
+            if (novaComposicao != null)
+            {
+                novaComposicao.Extrato = _contexto.Extratos.Single(x => x.Id == extrato.Id);
+                _contexto.Composicoes.Add(novaComposicao);
+            }
 
             extrato.DataHora = DateTime.Now;
             var old = _contexto.Extratos.FirstOrDefault(x => x.Id == extrato.Id);
 
             if (old != null)
             {
+                if (old.CpfPaciente != extrato.CpfPaciente)
+                    extrato.Paciente = pacienteNeg.BuscarPorCpf(extrato.CpfPaciente);
+
                 _contexto.Entry(old).CurrentValues.SetValues(extrato);
                 _contexto.Entry(old).State = EntityState.Modified;
             }
@@ -48,7 +57,7 @@ namespace SIIS.Negocio
 
         public Extrato Buscar(int id)
         {
-            return _contexto.Extratos.FirstOrDefault(x => x.Id == id);
+            return _contexto.Extratos.Include(x => x.Composicoes).FirstOrDefault(x => x.Id == id);
         }
 
         public void Dispose()

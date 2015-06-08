@@ -20,18 +20,33 @@ namespace SIIS.Negocio
             _contexto = contexto;
         }
 
-        public void Editar(IEnumerable<Composicao> composicoes)
-        {
-            foreach (var composicao in composicoes)
+        public void Editar(IEnumerable<Composicao> composicoes, int idExtrato)
+        {            
+            //Composições para excluir
+            foreach (var composicaoAtual in _contexto.Composicoes.Where(x => x.Extrato.Id == idExtrato).ToList())
             {
-                Editar(composicao);                
+                if (!composicoes.Select(x => x.Id).Contains(composicaoAtual.Id))
+                {
+                    _contexto.Secoes.RemoveRange(_contexto.Secoes.Where(x => x.Composicao.Id == composicaoAtual.Id));
+                    _contexto.Composicoes.Remove(composicaoAtual);
+                }
             }
+
+            foreach (var composicao in composicoes)
+                Editar(composicao);                
         }
 
         public void Editar(Composicao composicao)
         {
             SecaoNeg secaoNeg = new SecaoNeg(_contexto);
-            secaoNeg.Editar(composicao.Secoes);
+            secaoNeg.Editar(composicao.Secoes, composicao.Id);
+
+            var novaSecao = composicao.Secoes.FirstOrDefault(x => x.Id == 0);
+            if (novaSecao != null)
+            {
+                novaSecao.Composicao = _contexto.Composicoes.Single(x => x.Id == composicao.Id);
+                _contexto.Secoes.Add(novaSecao);
+            }
 
             var old = _contexto.Composicoes.FirstOrDefault(x => x.Id == composicao.Id);
 
