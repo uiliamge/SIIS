@@ -10,15 +10,10 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-
-    //var userStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
-    //var manager = new UserManager<ApplicationUser>(userStore);
-    //var user = manager.FindById(User.Identity.GetUserId());
-
     var responsavel = Responsavel.GetByUserId(User.Identity.GetUserId());
     if (responsavel != null)
     {
-        @Html.Partial("_IndexProfissional", responsavel)
+        @Html.Partial("_IndexResponsavel", responsavel)
     }
 }
 else

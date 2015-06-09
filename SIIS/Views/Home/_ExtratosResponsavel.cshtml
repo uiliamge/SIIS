@@ -1,31 +1,58 @@
-﻿@model IEnumerable<SIIS.Models.Extrato>
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using SIIS.Models;
+@model IPagedList<Extrato>
 
-<div class="row">
-    <div class="col-md-8">        
-        <table class="table table-bordered table-responsive">
-            <thead>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-bordered table-responsive">
+                <thead>
                 <tr>
-                    <th class="text-center">Código</th>
-                    <th class="text-center">Data</th>
-                    <th class="text-center">Paciente</th>
-                    <th class="text-center">Cidade</th>
+                    <th onclick=" OrdenarExtratosResponsavel('Id'); " style="cursor: pointer;" class="text-center">Código</th>
+                    <th onclick=" OrdenarExtratosResponsavel('DataReferencia'); " style="cursor: pointer;" class="text-center">Data</th>
+                    <th onclick=" OrdenarExtratosResponsavel('CpfPaciente'); " style="cursor: pointer;" class="text-center">Paciente</th>
+                    <th onclick=" OrdenarExtratosResponsavel('Cidade'); " style="cursor: pointer;" class="text-center">Cidade</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach (var extrato in Model)
                 {
                     var textoPaciente = extrato.Paciente != null
                         ? extrato.Paciente.Nome + "(" + extrato.Paciente.CpfCnpj + ")"
                         : extrato.CpfPaciente;
 
-                    <tr onclick="AbrirExtrato(@extrato.Id);" style="cursor: pointer;">
+                    <tr onclick="AbrirExtrato('@extrato.Id');" style="cursor: pointer;">
                         <td style="text-align: right;">@extrato.Id</td>
                         <td style="text-align: center;">@extrato.DataReferencia.ToShortDateString()</td>
                         <td style="text-align: left;">@textoPaciente</td>
                         <td style="text-align: right;">@extrato.Cidade - @extrato.Uf</td>
                     </tr>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+            
+            @if (Model.HasNextPage || Model.HasPreviousPage)
+{
+    <div style="text-align: center" class="pagedList" data-al-target="#consultantSearchResults">
+        @Html.PagedListPager(Model, page => Url.Action("FiltrarExtratosResponsavel", new
+                    {
+                        page = page,
+                        idResponsavel = Model.First().Responsavel.Id,
+                        codigo = "",
+                        cpf = "",
+                        datainicio = "",
+                        dataFim = "",
+                        nome = "",
+                        cidade = "",
+                        orderBy = "Id"
+                    }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+                    {
+                        HttpMethod = "GET",
+                        UpdateTargetId = "divExtratosResponsavel"
+                    }))
     </div>
-</div>
+}
+        </div>
+    </div>
+
+@* http://stackoverflow.com/questions/17075670/paging-not-working-asynchronously *@

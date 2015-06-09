@@ -4,6 +4,8 @@ using System.Data.Entity;
 using System.Linq;
 using SIIS.Models;
 using System.Collections;
+using System.Linq.Expressions;
+using PagedList;
 
 namespace SIIS.Negocio
 {
@@ -58,6 +60,47 @@ namespace SIIS.Negocio
         public Extrato Buscar(int id)
         {
             return _contexto.Extratos.Include(x => x.Composicoes).FirstOrDefault(x => x.Id == id);
+        }
+
+        public IPagedList<Extrato> Listar(int idResponsavel, string codigo, string cpf, string datainicio,
+            string dataFim, string nome, string cidade, string orderBy, int? pagina)
+        {
+            #region expressões
+            DateTime dataInicial = new DateTime(1900, 1, 1);
+            DateTime dataFinal = new DateTime(9999, 1, 1);
+
+            if (!string.IsNullOrEmpty(datainicio))
+                dataInicial = Convert.ToDateTime(datainicio);
+            if (!string.IsNullOrEmpty(dataFim))
+                dataFinal = Convert.ToDateTime(dataFim);
+
+            Expression<Func<Extrato, bool>> expressaoCodigo = x =>
+                (string.IsNullOrEmpty(codigo) || x.Id.ToString().Contains(codigo));
+
+            Expression<Func<Extrato, bool>> expressaoCpf = x =>
+                (string.IsNullOrEmpty(cpf) || x.CpfPaciente.Contains(cpf));
+
+            Expression<Func<Extrato, bool>> expressaoDatas = x =>
+                x.DataReferencia >= dataInicial && x.DataReferencia <= dataFinal;
+
+            Expression<Func<Extrato, bool>> expressaoNome = x =>
+                (string.IsNullOrEmpty(nome) || x.Paciente == null || x.Paciente.Nome.Contains(nome));
+
+            Expression<Func<Extrato, bool>> expressaoCidade = x =>
+                (string.IsNullOrEmpty(cidade) || x.Cidade.Contains(cidade));
+
+            #endregion
+
+            var lista = _contexto.Extratos.Include(x => x.Composicoes)
+                .Where(x => x.Responsavel.Id == idResponsavel)
+                .Where(expressaoCodigo)
+                .Where(expressaoCpf)
+                .Where(expressaoDatas)
+                .Where(expressaoNome)
+                .Where(expressaoCidade);
+
+            IPagedList<Extrato> listaPaginada = lista.OrderBy(x => orderBy).ToPagedList(pagina ?? 1, 2);
+            return listaPaginada;
         }
 
         public void Dispose()

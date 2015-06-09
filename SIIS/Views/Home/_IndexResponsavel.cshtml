@@ -31,12 +31,15 @@
             <div class="col-sm-4">
                 @Html.TextBox("FiltroCidade", null, new { @class = "form-control", @placeholder = "Cidade", @maxlength = "100" })
             </div>
-            <div class="col-sm-3 pull-right">
-                <button class="btn btn-success">Filtrar</button>
+            <div class="col-sm-5 pull-right">
+                <button onclick="LimparFiltroExtratosProfissional('@Model.Id')" class=" btn btn-default">Limpar Filtro</button>
+                <button onclick="FiltrarExtratosProfissional('@Model.Id')" class="btn btn-success">Filtrar</button>
             </div>
         </div>
     </div>
 </div>
 <div id="divExtratosResponsavel">
-    @Html.Partial("_ExtratosResponsavel", Model.Extratos)
+    @*@Html.Partial("_ExtratosResponsavel", Model.Extratos)*@
 </div>
+
+@Html.Hidden("urlFiltrarExtratosResponsavel", Url.Action("FiltrarExtratosResponsavel"))
