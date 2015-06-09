@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SIIS.Models.Extrato>
+
+<div class="row">
+    <div class="col-md-8">        
+        <table class="table table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-center">Código</th>
+                    <th class="text-center">Data</th>
+                    <th class="text-center">Paciente</th>
+                    <th class="text-center">Cidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var extrato in Model)
+                {
+                    var textoPaciente = extrato.Paciente != null
+                        ? extrato.Paciente.Nome + "(" + extrato.Paciente.CpfCnpj + ")"
+                        : extrato.CpfPaciente;
+
+                    <tr onclick="AbrirExtrato(@extrato.Id);" style="cursor: pointer;">
+                        <td style="text-align: right;">@extrato.Id</td>
+                        <td style="text-align: center;">@extrato.DataReferencia.ToShortDateString()</td>
+                        <td style="text-align: left;">@textoPaciente</td>
+                        <td style="text-align: right;">@extrato.Cidade - @extrato.Uf</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
