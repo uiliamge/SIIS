@@ -45,5 +45,58 @@ namespace SIIS.Controllers
 
             return PartialView("_ExtratosResponsavel", extratos);
         }
+
+        public ActionResult ListarExtratosPaciente(int idPaciente, string codigo, string responsavel,
+            string datainicio, string dataFim, string cidade, string plano, string orderBy, int? page)
+        {
+            IPagedList<Extrato> extratos;
+
+            var tipoOrderAnterior = TempData["tipoOrderByAnterior"] as string;
+            var orderByAnterior = TempData["orderByAnterior"] as string;
+
+            var tipoOrderBy = orderBy == orderByAnterior
+                ? (tipoOrderAnterior == "asc" ? "desc" : "asc")
+                : "asc";
+
+            TempData["tipoOrderByAnterior"] = tipoOrderBy;
+            TempData["orderByAnterior"] = orderBy;
+
+            using (ExtratoNeg extratoNeg = new ExtratoNeg())
+            {
+                extratos = extratoNeg.ListarPorPaciente(idPaciente, codigo, responsavel, datainicio, dataFim, cidade, plano, orderBy, tipoOrderBy, page);
+            }
+
+            return PartialView("_ExtratosPaciente", extratos);
+        }
+
+        public ActionResult ListarExtratosPorAprovacao(int idPaciente, string orderBy, int? page)
+        {
+            IPagedList<Extrato> extratos;
+
+            var tipoOrderAnterior = TempData["tipoOrderByAnterior"] as string;
+            var orderByAnterior = TempData["orderByAnterior"] as string;
+
+            var tipoOrderBy = orderBy == orderByAnterior
+                ? (tipoOrderAnterior == "asc" ? "desc" : "asc")
+                : "asc";
+
+            TempData["tipoOrderByAnterior"] = tipoOrderBy;
+            TempData["orderByAnterior"] = orderBy;
+
+            using (ExtratoNeg extratoNeg = new ExtratoNeg())
+            {
+                extratos = extratoNeg.ListarPorAprovacao(idPaciente, orderBy, tipoOrderBy, page);
+            }
+
+            return PartialView("_ExtratosPorAprovacao", extratos);
+        }
+
+        public void AprovarExtrato(int id)
+        {
+            using (ExtratoNeg extratoNeg = new ExtratoNeg())
+            {
+                extratoNeg.Aprovar(id);
+            }
+        }
     }
 }

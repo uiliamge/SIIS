@@ -54,18 +54,27 @@ namespace SIIS.Controllers
         }
 
         [HttpPost]
-        public ActionResult Importar(FormCollection collection)
+        public ActionResult Importar(HttpPostedFileBase file)
         {
+            var extrato = new Extrato();
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                using (ExtratoNeg extratoNeg = new ExtratoNeg())
+                {
+                    extrato.Ip = Request.UserHostAddress;
+                    extratoNeg.Importar(extrato, file);
+                }                
+                Success("Extrato importado com sucesso.", true);
             }
-            catch
+            catch (InvalidOperationException e)
             {
-                return View();
+                Warning(e.Message, true);
             }
+            catch(Exception e)
+            {
+                Danger(e.Message, true);
+            }
+            return RedirectToAction("Preencher", new { id = extrato.Id });
         }
 
         [HttpGet]
@@ -102,7 +111,7 @@ namespace SIIS.Controllers
             int? composicaoParaDeletar, int? secaoParaDeletar, int? composicaoDaSecao)
         {
             try
-            {
+            {                
                 //Nova composição
                 if (addComposicao == true)
                 {
@@ -140,11 +149,12 @@ namespace SIIS.Controllers
                         secaoRemove = composicao.Secoes.FirstOrDefault(secao => secao.Id == secaoParaDeletar);
                         secaoRemove.Composicao = composicao;
                     }
-                    if (extrato.Composicoes.FirstOrDefault(x => x.Id == secaoRemove.Composicao.Id).Secoes.Count == 1)
+                    var firstOrDefault = extrato.Composicoes.FirstOrDefault(x => x.Id == secaoRemove.Composicao.Id);
+                    if (firstOrDefault != null && firstOrDefault.Secoes.Count == 1)
                         throw new InvalidOperationException("A Composição deve possuir ao menos uma Seção.");
 
-                    extrato.Composicoes.FirstOrDefault(x => x.Id == secaoRemove.Composicao.Id)
-                        .Secoes.Remove(secaoRemove);
+                    Composicao first = extrato.Composicoes.FirstOrDefault(x => x.Id == secaoRemove.Composicao.Id);
+                    if (first != null) first.Secoes.Remove(secaoRemove);
                 }
 
                 SalvarExtrato(extrato);
@@ -180,6 +190,29 @@ namespace SIIS.Controllers
 
         private void SalvarExtrato(Extrato extrato)
         {
+            ////Valida permissão do Paciente
+            //using (PacienteNeg pacienteNeg = new PacienteNeg())
+            //{
+            //    Paciente paciente = pacienteNeg.BuscarPorCpf(extrato.CpfPaciente);
+            //    if (paciente != null)
+            //    {
+            //        switch (paciente.TipoPermissao)
+            //        {
+            //            case TipoPermissaoEnum.EscolherQuemPodeAcessar:
+            //                {
+            //                    if (!paciente.PermissoesResponsavelPaciente.Select(x => x.NumeroConselho)
+            //                    .Contains(extrato.Responsavel.NumeroConselhoRegional))
+            //                    {
+            //                        throw new InvalidOperationException(
+            //                            "Não é possível preencher esse extrato porque o Paciente estabeleceu restrições.");
+            //                    }
+            //                }
+            //                break;
+            //            case TipoPermissaoEnum.Perguntarme: extrato.ExibicaoPermitida = false; break;
+            //            case TipoPermissaoEnum.QualquerProfissional: extrato.ExibicaoPermitida = true; break;
+            //        }
+            //    }
+            //}
             using (ExtratoNeg extratoNeg = new ExtratoNeg())
             {
                 extrato.Ip = Request.UserHostAddress;
@@ -206,6 +239,10 @@ namespace SIIS.Controllers
             try
             {
                 SalvarExtrato(extrato);
+            }
+            catch (InvalidOperationException e)
+            {
+                Warning(e.Message, true);
             }
             catch (DbEntityValidationException e)
             {
@@ -275,14 +312,14 @@ namespace SIIS.Controllers
         }
 
         public ActionResult AbrirModalExtrato(int id)
-        {            
+        {
             var extrato = new Extrato();
             try
             {
                 using (ExtratoNeg extratoNeg = new ExtratoNeg())
                 {
                     extrato = extratoNeg.Buscar(id);
-                }                
+                }
             }
             catch (Exception e)
             {

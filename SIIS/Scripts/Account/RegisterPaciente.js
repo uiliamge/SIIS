@@ -2,12 +2,26 @@
 
     $("#TipoPermissao").change(function () {
 
-        if ($("#TipoPermissao").val() == "QualquerProfissional") {
-            $("#divListaProfissionaisPermitidos").addClass("hidden");
-            $("#txtExplicativoQualquerProfissionalPodeAcessar").removeClass("hidden");
-        } else {
-            $("#divListaProfissionaisPermitidos").removeClass("hidden");
-            $("#txtExplicativoQualquerProfissionalPodeAcessar").addClass("hidden");
+        switch ($("#TipoPermissao").val()) {
+            case "QualquerProfissional":
+                {
+                    $("#divListaProfissionaisPermitidos").addClass("hidden");
+                    $("#txtExplicativoQualquerProfissionalPodeAcessar").removeClass("hidden");
+                    $("#txtExplicativoPergunteMe").hide(); break;
+                }
+            case "EscolherQuemPodeAcessar":
+                {
+                    $("#divListaProfissionaisPermitidos").removeClass("hidden");
+                    $("#txtExplicativoQualquerProfissionalPodeAcessar").addClass("hidden");
+                    break;
+                }
+            case "Perguntarme":
+                {
+                    $("#txtExplicativoPergunteMe").show();
+                    $("#divListaProfissionaisPermitidos").addClass("hidden");
+                    $("#txtExplicativoQualquerProfissionalPodeAcessar").addClass("hidden");
+                    break;
+                }
         }
     });
 
@@ -19,7 +33,7 @@
             url: "http://api.postmon.com.br/v1/cep/" + cep,
             type: 'GET',
             success: function (data) {
-                
+
                 $("#Cidade").val(data.cidade);
                 $("#Uf option[value='" + data.estado_info.codigo_ibge + "']").attr("selected", true);
                 $("#Uf").val(data.estado);
@@ -37,13 +51,13 @@
     });
 
     $("#Cidade,#Uf,#Bairro,#Endereco").focus(function () {
-        
+
         $("#NumeroEndereco").focus();
     });
 });
 
 function addProfissionalSelecionado() {
-    
+
     var numero = $("#PermissaoNumeroConselho").val();
     var sigla = $("#SiglaConselhoRegional").val();
     var uf = $("#UfConselhoRegional").val();

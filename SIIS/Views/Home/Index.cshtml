@@ -1,6 +1,4 @@
-﻿@using System.Security.Principal
-@using Microsoft.AspNet.Identity
-@using Microsoft.AspNet.Identity.EntityFramework
+﻿@using Microsoft.AspNet.Identity
 @using SIIS.Models
 @{
     ViewBag.Title = "Home Page";
@@ -14,6 +12,14 @@
     if (responsavel != null)
     {
         @Html.Partial("_IndexResponsavel", responsavel)
+    }
+    else
+    {
+        var paciente = Paciente.GetByUserId(User.Identity.GetUserId());
+        if (paciente != null)
+        {
+            @Html.Partial("_IndexPaciente", paciente)
+        }
     }
 }
 else
@@ -35,8 +41,10 @@ else
                 O SIIS é um portal que serve para integrar informações da saúde pública possibilitando a posterior
                 consulta por profissionais de saúde, primando sempre pela segurança das informações.
             </p>
-            <p><a class="btn btn-default" href="#" data-toggle="modal" 
-                  onclick="saibaMaisDialog.show('@Url.Content("~/Content/Pdf/Banner_SIIS.pdf")')">Leia mais &raquo;</a></p>
+            <p>
+                <a class="btn btn-default" href="#" data-toggle="modal"
+                   onclick="saibaMaisDialog.show('@Url.Content("~/Content/Pdf/Banner_SIIS.pdf")')">Leia mais &raquo;</a>
+            </p>
         </div>
         <div class="col-md-6">
             <h2 style="font-family: 'Cabin',Arial,sans-serif;">Porque utilizar o Portal SIIS</h2>
@@ -45,8 +53,10 @@ else
                 Existem também os que utilizam planilhas eletrônicas ou formulários em papel.
                 Do ponto de vista global, toda esta informação acaba ficando fragmentada por não estar centralizada em um mesmo banco de dados.
             </p>
-            <p><a class="btn btn-default" href="#" data-toggle="modal" 
-                  onclick="saibaMaisDialog.show('@Url.Content("~/Content/Pdf/Banner_SIIS.pdf")');">Leia mais &raquo;</a></p>
+            <p>
+                <a class="btn btn-default" href="#" data-toggle="modal"
+                   onclick="saibaMaisDialog.show('@Url.Content("~/Content/Pdf/Banner_SIIS.pdf")');">Leia mais &raquo;</a>
+            </p>
         </div>
     </div>
 

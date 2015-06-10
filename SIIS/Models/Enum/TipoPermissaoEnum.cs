@@ -7,6 +7,8 @@ namespace SIIS.Models
         [Description("Qualquer Profissional")]
         QualquerProfissional = 1,
         [Description("Escolher quem pode acessar")]
-        EscolherQuemPodeAcessar = 2
+        EscolherQuemPodeAcessar = 2,
+        [Description("Perguntar-me antes")]
+        Perguntarme = 3
     }
 }

@@ -18,6 +18,7 @@ function AbrirExtrato(idExtrato) {
     });
 };
 
+//Profissional
 function FiltrarExtratosProfissional(idResponsavel) {
 
     waitingDialog.show('Consultando os seus extratos e filtrando', { dialogSize: 'sm', progressType: 'success' });
@@ -82,3 +83,119 @@ function LimparFiltroExtratosProfissional(idProfissional) {
 
     FiltrarExtratosProfissional(idProfissional);
 }
+
+//Paciente
+function FiltrarExtratosPaciente(idPaciente) {
+
+    waitingDialog.show('Consultando os seus extratos e filtrando', { dialogSize: 'sm', progressType: 'success' });
+
+    $.ajax({
+        type: "POST",
+        url: $("#urlListarExtratosPaciente").val(),
+        data: {
+            idPaciente: idPaciente,
+            codigo: $("#FiltroCodigo").val(),
+            responsavel: $("#FiltroResponsavel").val(),
+            dataInicio: $("#FiltroDataInicio").val(),
+            dataFim: $("#FiltroDataFim").val(),
+            cidade: $("#FiltroCidade").val(),
+            plano: $("#FiltroPlano").val(),
+            page: 1
+        },
+        datatype: "html",
+        success: function (data) {
+            $("#divExtratosPaciente").html(data);
+            waitingDialog.hide();
+        }
+    });
+};
+
+function OrdenarExtratosPaciente(idPaciente, page, orderBy) {
+    waitingDialog.show('Ordernando os Extratos', { dialogSize: 'sm', progressType: 'success' });
+
+    $.ajax({
+        type: "POST",
+        url: $("#urlListarExtratosPaciente").val(),
+        data: {
+            idPaciente: idPaciente,
+            codigo: $("#FiltroCodigo").val(),
+            responsavel: $("#FiltroResponsavel").val(),
+            dataInicio: $("#FiltroDataInicio").val(),
+            dataFim: $("#FiltroDataFim").val(),
+            cidade: $("#FiltroCidade").val(),
+            plano: $("#FiltroPlano").val(),
+            page: page,
+            orderBy: orderBy
+        },
+        datatype: "html",
+        success: function (data) {
+            $("#divExtratosPaciente").html(data);
+            waitingDialog.hide();
+        }
+    });
+}
+
+function LimparFiltroExtratosPaciente(idPaciente) {
+
+    $("#FiltroCodigo").val("");
+    $("#FiltroResponsavel").val("");
+    $("#FiltroDataInicio").val("");
+    $("#FiltroDataFim").val("");
+    $("#FiltroCidade").val("");
+    $("#FiltroPlano").val("");
+
+    FiltrarExtratosPaciente(idPaciente);
+}
+
+function ListarExtratosPorAprovacao(idPaciente) {
+
+    waitingDialog.show('Listando os extratos por aprovação', { dialogSize: 'sm', progressType: 'success' });
+
+    $.ajax({
+        type: "POST",
+        url: $("#urlListarExtratosPorAprovacao").val(),
+        data: {
+            idPaciente: idPaciente,            
+            page: 1
+        },
+        datatype: "html",
+        success: function (data) {
+            $("#divExtratosPorAprovacao").html(data);
+            waitingDialog.hide();
+        }
+    });
+};
+
+function OrdenarExtratosPorAprovacao(idPaciente, page, orderBy) {
+    waitingDialog.show('Ordernando os Extratos por Aprovação', { dialogSize: 'sm', progressType: 'success' });
+
+    $.ajax({
+        type: "POST",
+        url: $("#urlListarExtratosPorAprovacao").val(),
+        data: {
+            idPaciente: idPaciente,
+            page: page,
+            orderBy: orderBy
+        },
+        datatype: "html",
+        success: function (data) {
+            $("#divExtratosPorAprovacao").html(data);
+            waitingDialog.hide();
+        }
+    });
+}
+
+function AprovarExtrato(id) {
+
+    waitingDialog.show('Aprovando extrato', { dialogSize: 'sm', progressType: 'success' });
+
+    $.ajax({
+        type: "POST",
+        url: $("#urlAprovarExtrato").val(),
+        data: { id: id },
+        datatype: "html",
+        success: function (data) {
+            ListarExtratosPorAprovacao($("#IdDoPaciente").val());
+        }
+    });
+};

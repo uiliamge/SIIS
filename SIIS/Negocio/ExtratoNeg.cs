@@ -5,8 +5,10 @@ using System.Linq;
 using SIIS.Models;
 using System.Collections;
 using System.Linq.Expressions;
+using System.Web;
 using System.Web.Mvc;
 using PagedList;
+using System.IO;
 
 namespace SIIS.Negocio
 {
@@ -25,6 +27,8 @@ namespace SIIS.Negocio
             extrato.Uf = extrato.Responsavel.Uf;
 
             extrato.Paciente = pacienteNeg.BuscarPorCpf(extrato.CpfPaciente);
+            if (extrato.Paciente != null)
+                extrato.ExibicaoPermitida = extrato.Paciente.TipoPermissao != TipoPermissaoEnum.Perguntarme;
 
             extrato.Responsavel = responsavelNeg.Buscar(extrato.Responsavel.Id);
 
@@ -52,6 +56,39 @@ namespace SIIS.Negocio
             {
                 if (old.CpfPaciente != extrato.CpfPaciente)
                     extrato.Paciente = pacienteNeg.BuscarPorCpf(extrato.CpfPaciente);
+
+                _contexto.Entry(old).CurrentValues.SetValues(extrato);
+                _contexto.Entry(old).State = EntityState.Modified;
+            }
+        }
+
+        public void Importar(Extrato novoExtrato, HttpPostedFileBase arquivo)
+        {
+            int counter = 0;
+            string linha;
+
+            novoExtrato.IndImportado = 1;
+            novoExtrato.Responsavel = Responsavel.GetByUserId(ApplicationUser.UsuarioLogado.Id);
+            
+            // Read the file and display it line by line.
+            //var reader = new StreamReader(@"c:\test.txt");
+            var reader = new StreamReader(arquivo.InputStream);
+            while ((linha = reader.ReadLine()) != null)
+            {
+                System.Console.WriteLine(linha);
+                counter++;
+            }
+
+            reader.Close();
+        }
+
+        public void Aprovar(int id)
+        {
+            var old = _contexto.Extratos.FirstOrDefault(x => x.Id == id);
+            if (old != null)
+            {
+                var extrato = old;
+                extrato.ExibicaoPermitida = true;
 
                 _contexto.Entry(old).CurrentValues.SetValues(extrato);
                 _contexto.Entry(old).State = EntityState.Modified;
@@ -125,6 +162,90 @@ namespace SIIS.Negocio
             return listaPaginada;
         }
 
+        #region Para o Paciente
+        public IPagedList<Extrato> ListarPorPaciente(int idPaciente, string codigo, string responsavel, string datainicio,
+            string dataFim, string cidade, string plano, string orderBy, string tipoOrderBy, int? pagina)
+        {
+            #region expressões
+            DateTime dataInicial = new DateTime(1900, 1, 1);
+            DateTime dataFinal = new DateTime(9999, 1, 1);
+
+            if (!string.IsNullOrEmpty(datainicio))
+                dataInicial = Convert.ToDateTime(datainicio);
+            if (!string.IsNullOrEmpty(dataFim))
+                dataFinal = Convert.ToDateTime(dataFim);
+
+            Expression<Func<Extrato, bool>> expressaoCodigo = x =>
+                (string.IsNullOrEmpty(codigo) || x.Id.ToString().Contains(codigo));
+
+            Expression<Func<Extrato, bool>> expressaoResponsavel = x =>
+                (string.IsNullOrEmpty(responsavel) || x.Responsavel.Nome.Contains(responsavel));
+
+            Expression<Func<Extrato, bool>> expressaoDatas = x =>
+                x.DataReferencia >= dataInicial && x.DataReferencia <= dataFinal;
+
+            Expression<Func<Extrato, bool>> expressaoCidade = x =>
+                (string.IsNullOrEmpty(cidade) || x.Cidade.Contains(cidade));
+
+            Expression<Func<Extrato, bool>> expressaoPlano = x =>
+                (string.IsNullOrEmpty(plano) || x.PlanoSaude.ToLower().Contains(plano.ToLower()));
+
+            #endregion
+
+            var lista = _contexto.Extratos.Include(x => x.Composicoes)
+                .Where(x => x.Paciente == null && x.CpfPaciente == ApplicationUser.UsuarioLogado.Cpf)
+                .Where(x => x.Paciente != null && x.Paciente.Id == idPaciente)
+                .Where(expressaoResponsavel)
+                .Where(expressaoCodigo)
+                .Where(expressaoDatas)
+                .Where(expressaoCidade)
+                .Where(expressaoPlano);
+
+            #region orderBy
+
+            switch (orderBy)
+            {
+                case "Id": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.Id) : lista.OrderByDescending(x => x.Id); break;
+                case "DataReferencia": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.DataReferencia) : lista.OrderByDescending(x => x.DataReferencia); break;
+                case "Responsavel.Nome": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.Responsavel.Nome) : lista.OrderByDescending(x => x.Responsavel.Nome); break;
+                case "PlanoSaude": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.PlanoSaude) : lista.OrderByDescending(x => x.PlanoSaude); break;
+                case "Cidade": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.Cidade) : lista.OrderByDescending(x => x.Cidade); break;
+                default: lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.Id) : lista.OrderByDescending(x => x.Id); break;
+            }
+            #endregion
+
+            IPagedList<Extrato> listaPaginada = lista.ToPagedList(pagina ?? 1, 8);
+            return listaPaginada;
+        }
+
+        public IPagedList<Extrato> ListarPorAprovacao(int idPaciente, string orderBy, string tipoOrderBy, int? pagina)
+        {
+            var lista = _contexto.Extratos.Include(x => x.Composicoes)
+                .Where(x => !x.ExibicaoPermitida)
+                .Where(x => x.Paciente == null && x.CpfPaciente == ApplicationUser.UsuarioLogado.Cpf)
+                .Where(x => x.Paciente != null && x.Paciente.Id == idPaciente);
+
+            #region orderBy
+
+            switch (orderBy)
+            {
+                case "Id": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.Id) : lista.OrderByDescending(x => x.Id); break;
+                case "DataReferencia": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.DataReferencia) : lista.OrderByDescending(x => x.DataReferencia); break;
+                case "Responsavel.Nome": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.Responsavel.Nome) : lista.OrderByDescending(x => x.Responsavel.Nome); break;
+                case "PlanoSaude": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.PlanoSaude) : lista.OrderByDescending(x => x.PlanoSaude); break;
+                case "Cidade": lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.Cidade) : lista.OrderByDescending(x => x.Cidade); break;
+                default: lista = tipoOrderBy == "asc" ? lista.OrderBy(x => x.Id) : lista.OrderByDescending(x => x.Id); break;
+            }
+            #endregion
+
+            IPagedList<Extrato> listaPaginada = lista.ToPagedList(pagina ?? 1, 8);
+            return listaPaginada;
+        }
+        #endregion
+
+        /// <summary>
+        /// Listagem compartilhada. Lista somente com CPFs cadastrados.
+        /// </summary>
         public IPagedList<Extrato> Listar(string codigo, string cpf, string datainicio, string dataFim, string cidade,
             string responsavel, string orderBy, string tipoOrderBy, int? pagina)
         {
@@ -154,12 +275,19 @@ namespace SIIS.Negocio
 
             #endregion
 
+            var usuario = ApplicationUser.UsuarioLogado;
+
             var lista = _contexto.Extratos.Include(x => x.Composicoes)
+                .Where(x => x.ExibicaoPermitida)
                 .Where(expressaoCodigo)
                 .Where(expressaoCpf)
                 .Where(expressaoDatas)
                 .Where(expressaoCidade)
-                .Where(expressaoResponsavel);
+                .Where(expressaoResponsavel)
+                .Where(x => x.Paciente != null)
+                .Where(x => x.Paciente.TipoPermissao != TipoPermissaoEnum.EscolherQuemPodeAcessar 
+                    || x.Paciente.PermissoesResponsavelPaciente.Select(p => p.NumeroConselho).Contains(usuario.NumeroConselho));
+                
 
             #region orderBy
 

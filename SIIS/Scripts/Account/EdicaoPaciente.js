@@ -87,7 +87,7 @@ function RemoveProfissionalSelecionado(numero, sigla, uf) {
         success: function (data) {
             var result = data;
             if (!result.Erro) {
-                $('#divListaProfissionaisPermitidos').html(data);
+                $('#divPermissoes').html(data);
             }
         }
     });

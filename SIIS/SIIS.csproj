@@ -207,6 +207,10 @@
     <Compile Include="Migrations\201506100625292_AjusteTamanhoTextoComposicaoSecao.Designer.cs">
       <DependentUpon>201506100625292_AjusteTamanhoTextoComposicaoSecao.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506101604219_PermissaoExibicaoExtrato.cs" />
+    <Compile Include="Migrations\201506101604219_PermissaoExibicaoExtrato.Designer.cs">
+      <DependentUpon>201506101604219_PermissaoExibicaoExtrato.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
@@ -366,6 +370,11 @@
     <Content Include="Views\Extrato\Consulta.cshtml" />
     <Content Include="Views\Extrato\_ExtratosConsulta.cshtml" />
     <Content Include="Views\Shared\_ConsultaExtratoModal.cshtml" />
+    <Content Include="Views\Home\_IndexPaciente.cshtml" />
+    <Content Include="Views\Home\_ExtratosPaciente.cshtml" />
+    <Content Include="Views\Home\_ExtratosPorAprovacao.cshtml" />
+    <Content Include="Views\Shared\_MenuPacientePartial.cshtml" />
+    <Content Include="Views\Extrato\Importar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -401,6 +410,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506100625292_AjusteTamanhoTextoComposicaoSecao.resx">
       <DependentUpon>201506100625292_AjusteTamanhoTextoComposicaoSecao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506101604219_PermissaoExibicaoExtrato.resx">
+      <DependentUpon>201506101604219_PermissaoExibicaoExtrato.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>

@@ -2,6 +2,12 @@
 @using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity.EntityFramework
 @using SIIS.Models
+
+@{
+    var userStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
+    var manager = new UserManager<ApplicationUser>(userStore);
+    ApplicationUser.UsuarioLogado = manager.FindById(User.Identity.GetUserId());
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,19 +19,15 @@
         var theme = "Amelia";
         if (User.Identity.IsAuthenticated)
         {
-            var userStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
-            var manager = new UserManager<ApplicationUser>(userStore);
-            var user = manager.FindById(User.Identity.GetUserId());
-
             //Desloga caso ficar armazenado em cache.
-            if (user == null)
+            if (ApplicationUser.UsuarioLogado == null)
             {
                 FormsAuthentication.SignOut();
                 HttpContext.Current.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
             }
             else
             {
-                theme = user.CssTheme ?? theme;
+                theme = ApplicationUser.UsuarioLogado.CssTheme ?? theme;
             }
         }
     }
@@ -57,7 +59,14 @@
             <div class="navbar-collapse collapse">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    @Html.Partial("_MenuPartial")
+                    if (ApplicationUser.UsuarioLogado != null && ApplicationUser.UsuarioLogado.TipoUsuario == TipoUsuarioEnum.Profissional)
+                    {
+                        @Html.Partial("_MenuPartial")
+                    }
+                    else
+                    {
+                        @Html.Partial("_MenuPacientePartial")
+                    }
                 }
 
                 @Html.Partial("_LoginPartial")

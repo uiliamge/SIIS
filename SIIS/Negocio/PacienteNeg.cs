@@ -59,7 +59,9 @@ namespace SIIS.Negocio
 
         public Paciente BuscarPorCpf(string cpf)
         {
-            return _contexto.Pacientes.FirstOrDefault(x => x.CpfCnpj == cpf);
+            return _contexto.Pacientes
+                .Include(x => x.PermissoesResponsavelPaciente)
+                .FirstOrDefault(x => x.CpfCnpj == cpf);
         }
 
         public void SalvarPermissoesPaciente(string userId, List<PermissaoPacienteViewModel> lstPermissaoPaciente)

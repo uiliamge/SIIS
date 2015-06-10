@@ -55,6 +55,8 @@ namespace SIIS.Models
 
         public virtual Responsavel Responsavel { get; set; }
 
+        public bool ExibicaoPermitida { get; set; }
+
         [Required]
         [StringLength(18)]
         [Display(Name = "CPF")]

@@ -1,0 +1,35 @@
+﻿@model SIIS.Models.Extrato
+@{
+    ViewBag.Title = "Importar";
+}
+
+@Scripts.Render("~/Scripts/Extrato/Extrato.js")
+
+<h2>Extrato de Prontuário</h2>
+@using (Html.BeginForm("Importar", "Extrato", FormMethod.Post, new { @id = "formImportarExtrato", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(x => x.Responsavel.Id)
+    @Html.HiddenFor(x => x.Responsavel.UserId)
+    @Html.HiddenFor(x => x.Responsavel.Uf)
+    @Html.HiddenFor(x => x.Responsavel.Cidade)
+    @Html.HiddenFor(x => x.Uf)
+    @Html.HiddenFor(x => x.Cidade)
+
+    @Html.ValidationSummary()
+    <h4>Importando um Extrato de Prontuário</h4>
+    <hr />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-6">
+                <label class="control-label">Selecione o arquivo a ser importado</label>
+                <input type="file" name="file"/>
+            </div>            
+        </div>
+    </div>    
+    <div class="row">
+        <div class="form-group">
+            <a href="@Url.Action("Index")" class="btn btn-default"><span class="glyphicon glyphicon-backward"></span> Voltar</a>                            
+            <button type="submit" class="btn btn-success">Gravar</button>            
+        </div>
+    </div>
+}

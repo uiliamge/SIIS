@@ -1,0 +1,89 @@
+﻿@using SIIS.Models
+@model SIIS.Models.Paciente
+
+@Html.Hidden("IdDoPaciente", Model.Id)
+<h3>Bem-vindo(a) @Model.Nome</h3>
+<div class="row boxComposicao" style="padding: 10px;">
+    <div class="col-md-6" style="padding-bottom: 10px;">
+        <div class="form-group">
+            
+            @if (Model.TipoPermissao == TipoPermissaoEnum.EscolherQuemPodeAcessar)
+            {
+                <p>
+                    Estes são os Profissionais permitidos por você. Para alterar seus dados, <a class="btn-link" href="@Url.Action("Manage", "Account")">clique aqui</a>.
+                </p>
+                <ul class="list-group" title="Profissionais de Saúde Permitidos">
+                    @foreach (var permissao in Model.PermissoesResponsavelPaciente)
+                    {
+                        var textoPermissao = permissao.NumeroConselho + " " +
+                                             permissao.SiglaConselhoRegional + "/" + permissao.UfConselhoRegional;
+                        <li class="list-group-item">@textoPermissao</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p><a class="btn-link" href="@Url.Action("Manage", "Account")">Clique aqui</a> se desejar alterar seus dados cadastrais.</p>
+            }
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div id="divExtratosPorAprovacao"></div>
+    </div>
+</div>
+<div class="row boxComposicao" style="padding: 10px;">
+    <h4>Consulte os seus Prontuários Lançados no SIIS</h4>
+    <div class="col-md-12" style="padding-bottom: 10px;">
+        <fieldset>
+            <legend style="font-size: 16px;">Filtros de Pesquisa</legend>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroCodigo", null, new { @class = "numero form-control", @placeholder = "Código" })
+                </div>
+                <div class="col-sm-1" style="width: 4.333333%;">
+                    <label style="margin-top: 10px; text-align: center;">&nbsp;</label>
+                </div>
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroResponsavel", null, new { @class = "form-control", @placeholder = "Nome do Responsável" })
+                </div>
+                <div class="col-sm-3">
+                    @Html.TextBox("FiltroPlano", null, new { @class = "form-control", @placeholder = "Plano de Saúde" })
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroDataInicio", null, new { @class = "data form-control", @placeholder = "Data Inicial" })
+                </div>
+                <div class="col-sm-1" style="width: 4.333333%;">
+                    <label style="margin-top: 10px; text-align: center;">até</label>
+                </div>
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroDataFim", null, new { @class = "data form-control", @placeholder = "Data Final" })
+                </div>
+                <div class="col-sm-3">
+                    @Html.TextBox("FiltroCidade", null, new { @class = "form-control", @placeholder = "Cidade", @maxlength = "100" })
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-6">
+                    <button onclick="limparfiltroextratospaciente('@Model.Id') " class=" btn btn-default">Limpar Filtro</button>
+                    <button onclick="FiltrarExtratosPaciente('@Model.Id') " class="btn btn-success">Consultar</button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div id="divExtratosPaciente">
+    </div>
+</div>
+@Html.Hidden("urlListarExtratosPaciente", Url.Action("ListarExtratosPaciente", "Home"))
+@Html.Hidden("urlListarExtratosPorAprovacao", Url.Action("ListarExtratosPorAprovacao", "Home"))
+@Html.Hidden("urlAprovarExtrato", Url.Action("AprovarExtrato", "Home"))
+
+<script type="text/javascript">
+    $(function() {
+        setTimeout(function() {
+            ListarExtratosPorAprovacao($("#IdDoPaciente").val());
+        }, 1000);
+    });
+</script>

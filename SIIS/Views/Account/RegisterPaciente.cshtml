@@ -103,6 +103,9 @@
             <p id="txtExplicativoQualquerProfissionalPodeAcessar" style="margin-bottom: 0px;">
                 Indica que qualquer Profissional de Saúde poderá consultar e adicionar dados ao seu histórico.
             </p>
+            <p id="txtExplicativoPergunteMe" style="margin-bottom: 0px; display: none;">
+                O seu registro de atendimento só estará disponível a comunidade médica após sua aprovação.
+            </p>
             @Html.ValidationMessageFor(m => m.TipoPermissao, "", new { @class = "text-danger" })
         </div>
     </div>
