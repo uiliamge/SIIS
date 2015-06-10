@@ -1,0 +1,51 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using SIIS.Models;
+@model IPagedList<Extrato>
+
+<div id="divTableExtratosConsulta">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-responsive" style="margin: 0;">
+                <thead>
+                    <tr>
+                        <th onclick="OrdenarConsultaExtratos('@Model.PageNumber', 'Id'); " style="cursor: pointer;" class="text-center">Código</th>
+                        <th onclick="OrdenarConsultaExtratos('@Model.PageNumber', 'DataReferencia'); " style="cursor: pointer;" class="text-center">Data</th>
+                        <th onclick="OrdenarConsultaExtratos('@Model.PageNumber', 'CpfPaciente'); " style="cursor: pointer;" class="text-center">Paciente</th>
+                        <th onclick="OrdenarConsultaExtratos('@Model.PageNumber', 'Responsavel.NumeroConselhoRegional'); " style="cursor: pointer;" class="text-center">Responsável</th>
+                        <th onclick="OrdenarConsultaExtratos('@Model.PageNumber', 'Cidade'); " style="cursor: pointer;" class="text-center">Cidade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var extrato in Model)
+                    {
+                        var textoPaciente = extrato.Paciente != null
+                            ? extrato.Paciente.Nome + " (" + extrato.Paciente.CpfCnpj + ")"
+                            : extrato.CpfPaciente;
+
+                        var textoResponsavel = extrato.Responsavel.NumeroConselhoRegional + " " + extrato.Responsavel.SiglaConselhoRegional + "/" +
+                                               extrato.Responsavel.UfConselhoRegional;
+
+                        <tr onclick="AbrirModalExtrato('@extrato.Id');" style="cursor: pointer;">
+                            <td style="text-align: right;">@extrato.Id</td>
+                            <td style="text-align: center;">@extrato.DataReferencia.ToShortDateString()</td>
+                            <td style="text-align: right;">@textoPaciente</td>
+                            <td style="text-align: left;">@textoResponsavel</td>
+                            <td style="text-align: right;">@extrato.Cidade - @extrato.Uf</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (Model.HasNextPage || Model.HasPreviousPage)
+            {
+                <div style="text-align: center" class="pagedList" data-al-target="#divTableExtratosConsulta">
+                    @Html.PagedListPager(Model, page => Url.Action("ListarExtratos", new
+                    {
+                        orderBy = "Id"
+                    }), PagedListRenderOptions.Classic)
+                </div>
+            }
+        </div>
+    </div>
+</div>

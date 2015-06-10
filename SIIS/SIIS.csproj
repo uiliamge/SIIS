@@ -195,6 +195,18 @@
     <Compile Include="Migrations\201506081837159_extratoEComposicao.Designer.cs">
       <DependentUpon>201506081837159_extratoEComposicao.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506100024395_PlanoDeSaudeEValorNoExtrato.cs" />
+    <Compile Include="Migrations\201506100024395_PlanoDeSaudeEValorNoExtrato.Designer.cs">
+      <DependentUpon>201506100024395_PlanoDeSaudeEValorNoExtrato.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506100046378_AjusteValorExtrato.cs" />
+    <Compile Include="Migrations\201506100046378_AjusteValorExtrato.Designer.cs">
+      <DependentUpon>201506100046378_AjusteValorExtrato.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506100625292_AjusteTamanhoTextoComposicaoSecao.cs" />
+    <Compile Include="Migrations\201506100625292_AjusteTamanhoTextoComposicaoSecao.Designer.cs">
+      <DependentUpon>201506100625292_AjusteTamanhoTextoComposicaoSecao.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
     <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
@@ -269,12 +281,14 @@
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Consulta\Consulta.js" />
     <Content Include="Scripts\Extrato\Extrato.js" />
     <Content Include="Scripts\Home\Home.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.custom.js" />
+    <Content Include="Scripts\jquery.autoNumeric.js" />
     <Content Include="Scripts\jquery.maskedinput.js" />
     <Content Include="Scripts\jquery.maskedinput.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -349,6 +363,9 @@
     <Content Include="Views\Shared\EditorTemplates\Secao.cshtml" />
     <Content Include="Views\Home\_IndexResponsavel.cshtml" />
     <Content Include="Views\Home\_ExtratosResponsavel.cshtml" />
+    <Content Include="Views\Extrato\Consulta.cshtml" />
+    <Content Include="Views\Extrato\_ExtratosConsulta.cshtml" />
+    <Content Include="Views\Shared\_ConsultaExtratoModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -375,6 +392,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506081837159_extratoEComposicao.resx">
       <DependentUpon>201506081837159_extratoEComposicao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506100024395_PlanoDeSaudeEValorNoExtrato.resx">
+      <DependentUpon>201506100024395_PlanoDeSaudeEValorNoExtrato.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506100046378_AjusteValorExtrato.resx">
+      <DependentUpon>201506100046378_AjusteValorExtrato.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506100625292_AjusteTamanhoTextoComposicaoSecao.resx">
+      <DependentUpon>201506100625292_AjusteTamanhoTextoComposicaoSecao.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
       <DependentUpon>201505302151575_Inicial.cs</DependentUpon>

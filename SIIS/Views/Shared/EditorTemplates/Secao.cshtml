@@ -9,7 +9,8 @@
     <div class="form-group">
         <div class="col-md-12">
             <label class="control-label">Procedimento</label>
-            @Html.TextAreaFor(x => x.Nome, new { @placeholder = "Reflete o fluxo de informação obtido durante um encontro médico.", @class = "form-control" })
+            @Html.TextAreaFor(x => x.Descricao, new { @placeholder = "Reflete o fluxo de informação obtido durante um encontro médico.",
+                                                 @class = "form-control", @maxlength = 2000 })
         </div>
         <div>
             <button type="button" class="btn btn-sm btn-link" onclick="RemoveSecao('@Model.Id')">

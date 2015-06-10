@@ -1,0 +1,63 @@
+﻿@using SIIS.Models
+@model SIIS.Models.Extrato
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="col-md-2">
+                @Html.LabelFor(m => m.DataReferencia, new { @class = "control-label" })
+                @Html.TextBox("txtData", Model.DataReferencia.ToShortDateString(), new { @class = "form-control", @disabled = true })
+            </div>
+            <div class="col-md-2">
+                <label class="control-label label-">CPF do Paciente</label>
+                @Html.TextBoxFor(m => m.CpfPaciente, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.CpfPaciente, "", new { @class = "text-danger", @disabled = true })
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">Local</label>
+                @Html.TextBox("txtLocal", Model.Cidade + "-" + Model.Uf, new { @class = "form-control", @disabled = true })
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">Responsavel</label>
+                @{
+                    var responsavel = Model.Responsavel.Nome + " (" + Model.Responsavel.NumeroConselhoRegional + " " +
+                                      Model.Responsavel.SiglaConselhoRegional + "/" + Model.Responsavel.UfConselhoRegional +
+                                      ")";
+                }
+                @Html.TextBox("txtResponsavel", responsavel, new { @class = "form-control", @disabled = true })
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="col-md-10">
+                @foreach (Composicao composicao in Model.Composicoes)
+                {
+                    <ul class="list-group">
+                        <li class="list-group-item">@composicao.Descricao</li>
+
+                        <li class="list-group-item">
+                            <ul class="list-group">
+                                @foreach (Secao secao in composicao.Secoes)
+                                {
+                                    <li class="list-group-item">@secao.Descricao</li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    #divModalExtrato .form-control {
+        height: 30px;
+        padding: 0 5px 0 5px;
+        background-color: #ffffff;
+    }
+</style>

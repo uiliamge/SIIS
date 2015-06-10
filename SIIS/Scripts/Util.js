@@ -1,4 +1,29 @@
 ﻿$(function () {
+
+    //captura click no link para executar async.
+    var getPage = function () {
+
+        waitingDialog.show('Paginando', { dialogSize: 'sm', progressType: 'success' });
+
+        var $a = $(this);
+        var options = {
+            url: $a.attr("href"),
+            data: $("form").serialize(),
+            type: "get"
+        };
+
+        $.ajax(options).done(function (data) {            
+            var target = $a.parents("div.pagedList").attr("data-AL-target");
+            $(target).replaceWith(data);
+
+            waitingDialog.hide();
+        });
+        return false;
+    };
+
+    $(".body-content").on("click", ".pagedList a", getPage);
+
+    atualizarMoedas();
     atualizarCpf();
     atualizarCnpj();
     atualizarCpfCnpj();
@@ -6,6 +31,7 @@
     atualizarCep();
     atualizarTelefone();
     atualizarDate();
+    
 });
 
 function atualizarCpf() {
@@ -37,6 +63,7 @@ function atualizarCpfCnpj() {
     });
 
 }
+
 function atualizarNumericos() {
     $(".numero").keydown(function (e) {
         var key = e.charCode || e.keyCode || 0;
@@ -133,12 +160,12 @@ function cnpj(obj) {
 }
 
 function telefone(obj) {
-    
+
     var v = $(obj).val();
     v = v.replace(/\D/g, "");             //Remove tudo o que não é dígito
     v = v.replace(/^(\d{2})(\d)/g, "($1) $2"); //Coloca parênteses em volta dos dois primeiros dígitos
     v = v.replace(/(\d)(\d{4})$/, "$1-$2");    //Coloca hífen entre o quarto e o quinto dígitos
-    $(obj).val(v);    
+    $(obj).val(v);
 }
 
 function cep(campo) {
@@ -160,6 +187,42 @@ function apenasNumero(obj) {
     //Remove tudo o que não é número
     var v = $(obj).val().replace(/\D/g, "");
     $(obj).val(v);
+}
+
+function atualizarMoedas() {
+    $(".moeda").each(function () {
+        var decimal = $(this).attr("decimal");
+        if (decimal != "undefined")
+            $(this).autoNumeric('init', { aSep: '.', aDec: ',', mDec: decimal, vMax: '999999999.99' });
+        else
+            $(this).autoNumeric('init', { aSep: '.', aDec: ',', vMax: '999999999.99' });
+
+    });
+
+    $(".moedaNegativa").each(function () {
+        var decimal = $(this).attr("decimal");
+        if (decimal != "undefined")
+            $(this).autoNumeric('init', { aSep: '.', aDec: ',', mDec: decimal, vMin: '-999999999.99', vMax: '999999999.99' });
+        else
+            $(this).autoNumeric('init', { aSep: '.', aDec: ',', vMin: '-999999999.99', vMax: '999999999.99' });
+    });
+
+    $(".moedaQuatroCasas").each(function () {
+        var decimal = $(this).attr("decimal");
+        if (decimal != "undefined")
+            $(this).autoNumeric('init', { aSep: '.', aDec: ',', mDec: decimal, vMax: '999999999.9999' });
+        else
+            $(this).autoNumeric('init', { aSep: '.', aDec: ',', vMax: '999999999.9999' });
+    });
+
+    $(".moeda14").each(function () {
+        var decimal = $(this).attr("decimal");
+        if (decimal != "undefined")
+            $(this).autoNumeric('init', { aSep: '.', aDec: ',', mDec: decimal, vMax: '99999999999999.99' });
+        else
+            $(this).autoNumeric('init', { aSep: '.', aDec: ',', vMax: '99999999999999.99' });
+
+    });
 }
 
 var waitingDialog = (function ($) {
@@ -215,7 +278,6 @@ var waitingDialog = (function ($) {
 
 })(jQuery);
 
-
 var saibaMaisDialog = (function ($) {
 
     // Creating modal dialog's DOM
@@ -243,10 +305,29 @@ var saibaMaisDialog = (function ($) {
             $dialog.find('iframe').attr("src", caminhoArquivo + "?#zoom=25");
             $dialog.find('a').attr("href", caminhoArquivo);
             $dialog.modal();
-        },        
+        },
         hide: function () {
             $dialog.modal('hide');
         }
     }
 
 })(jQuery);
+
+function AbrirModalExtrato(idExtrato) {
+
+    waitingDialog.show('Abrindo Extrato ' + idExtrato, { dialogSize: 'sm', progressType: 'success' });
+
+    $("#modalExtrato").modal("show");
+
+    $.ajax({
+        type: "GET",
+        url: $("#urlAbrirModalExtrato").val(),
+        data: { id: idExtrato },
+        datatype: "html",
+        success: function (data) {
+            $("#tituloModalExtrato").text("Visualizando Extrato " + idExtrato);
+            $("#divModalExtrato").html(data);
+            waitingDialog.hide();
+        }
+    });
+};

@@ -18,9 +18,9 @@ namespace SIIS.Models
         [Display(Name = "Índice")]
         public int Indice { get; set; }
         
-        [MaxLength(100)]
+        [MaxLength(2000)]
         [Display(Name = "Título")]
-        public string Nome { get; set; }
+        public string Descricao { get; set; }
 
         public virtual Composicao Composicao { get; set; }
     }

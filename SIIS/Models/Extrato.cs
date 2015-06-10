@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.SqlTypes;
 
 namespace SIIS.Models
 {
@@ -19,6 +20,14 @@ namespace SIIS.Models
         [MaxLength(100)]
         [Display(Name = "Nome do Arquivo")]
         public string NomeDoArquivo { get; set; }
+
+        [MaxLength(100)]
+        [Display(Name = "Plano de Saúde")]
+        public string PlanoSaude { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Display(Name = "Valor Cobrado")]
+        public decimal ValorCobrado { get; set; }
 
         /// <summary>
         /// Indicador para verificar se o arquivo foi importado.

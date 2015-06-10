@@ -23,7 +23,7 @@ namespace SIIS.Models
         [Display(Name = "Índice")]
         public int Indice { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(2000)]
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 

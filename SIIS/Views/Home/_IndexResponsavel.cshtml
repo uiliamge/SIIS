@@ -1,45 +1,56 @@
 ﻿@model SIIS.Models.Responsavel
 
+<h3>Consulte os seus Extratos no SIIS</h3>
 <div class="row">
-    <div class="col-md-8 boxComposicao" style="padding-bottom: 10px;">
-        <label style="color: rgb(164, 231, 236)">Pesquisar entre seus extratos</label>
-        <hr style="margin-top: 5px;" />
+    <div class="col-md-12" style="padding-bottom: 10px;">
+        <fieldset>
+            <legend style="font-size: 16px;">Filtros de Pesquisa</legend>
+            @*<label style="color: rgb(164, 231, 236)">Pesquisar entre seus extratos</label>*@
+            @*<hr style="margin-top: 5px;" />*@
 
-        <div class="row" style=" margin-bottom: 10px;">
-            <div class="col-sm-3">
-                @Html.TextBox("FiltroCodigo", null, new { @class = "numero form-control", @placeholder = "Código" })
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroCodigo", null, new {@class = "numero form-control", @placeholder = "Código"})
+                </div>
+                <div class="col-sm-1" style="width: 4.333333%;">
+                    <label style="margin-top: 10px; text-align: center; ">&nbsp;</label>
+                </div>
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroCpf", null, new {@class = "cpf form-control", @placeholder = "CPF do Paciente"})
+                </div>
+                <div class="col-sm-3">
+                    @Html.TextBox("FiltroPlano", null, new { @class = "form-control", @placeholder = "Plano de Saúde" })
+                </div>
             </div>
-            <div class="col-sm-4">
-                @Html.TextBox("FiltroCpf", null, new { @class = "cpf form-control", @placeholder = "CPF do Paciente" })
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroDataInicio", null, new {@class = "data form-control", @placeholder = "Data Inicial"})
+                </div>
+                <div class="col-sm-1" style="width: 4.333333%;">
+                    <label style="margin-top: 10px; text-align: center; ">até</label>
+                </div>
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroDataFim", null, new {@class = "data form-control", @placeholder = "Data Final"})
+                </div>
+                <div class="col-sm-3">
+                    @Html.TextBox("FiltroNome", null, new { @class = "form-control", @placeholder = "Nome do Paciente", @maxlength = "100" })
+                </div>
             </div>
-        </div>
-        <div class="row" style=" margin-bottom: 10px;">
-            <div class="col-sm-3">
-                @Html.TextBox("FiltroDataInicio", null, new { @class = "data form-control", @placeholder = "Data Inicial" })
+            <div class="row" style="margin-bottom: 10px;">
+                
+                <div class="col-sm-3">
+                    @Html.TextBox("FiltroCidade", null, new {@class = "form-control", @placeholder = "Cidade", @maxlength = "100"})
+                </div>
+                <div class="col-sm-6">
+                    <button onclick="LimparFiltroExtratosProfissional('@Model.Id')" class=" btn btn-default">Limpar Filtro</button>
+                    <button onclick="FiltrarExtratosProfissional('@Model.Id')" class="btn btn-success">Filtrar</button>
+                </div>
             </div>
-            <div class="col-sm-1">
-                <label style="margin-top: 10px; text-align: center;">até</label>
-            </div>
-            <div class="col-sm-3">
-                @Html.TextBox("FiltroDataFim", null, new { @class = "data form-control", @placeholder = "Data Final" })
-            </div>
-        </div>
-        <div class="row" style=" margin-bottom: 10px;">
-            <div class="col-sm-3">
-                @Html.TextBox("FiltroNome", null, new { @class = "form-control", @placeholder = "Nome do Paciente", @maxlength = "100" })
-            </div>
-            <div class="col-sm-4">
-                @Html.TextBox("FiltroCidade", null, new { @class = "form-control", @placeholder = "Cidade", @maxlength = "100" })
-            </div>
-            <div class="col-sm-5 pull-right">
-                <button onclick="LimparFiltroExtratosProfissional('@Model.Id')" class=" btn btn-default">Limpar Filtro</button>
-                <button onclick="FiltrarExtratosProfissional('@Model.Id')" class="btn btn-success">Filtrar</button>
-            </div>
-        </div>
+        </fieldset>
     </div>
 </div>
 <div id="divExtratosResponsavel">
     @*@Html.Partial("_ExtratosResponsavel", Model.Extratos)*@
 </div>
 
-@Html.Hidden("urlFiltrarExtratosResponsavel", Url.Action("FiltrarExtratosResponsavel"))
+@Html.Hidden("urlFiltrarExtratosResponsavel", Url.Action("ListarExtratos", "Home"))

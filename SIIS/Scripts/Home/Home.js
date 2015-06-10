@@ -1,24 +1,5 @@
 ﻿$(function () {
-    var getPage = function () {
-
-        var $a = $(this);
-
-        var options = {
-            url: $a.attr("href"),
-            data: $("form").serialize(),
-            type: "get"
-        };
-
-        $.ajax(options).done(function (data) {
-            var target = $a.parents("div.pagedList").attr("data-AL-target");
-            $(target).replaceWith(data);
-        });
-        return false;
-
-    };
-
-    $(".main-content").on("click", ".pagedList a", getPage);
-
+    
 });
 
 function AbrirExtrato(idExtrato) {
@@ -51,7 +32,9 @@ function FiltrarExtratosProfissional(idResponsavel) {
             dataInicio: $("#FiltroDataInicio").val(),
             dataFim: $("#FiltroDataFim").val(),
             nome: $("#FiltroNome").val(),
-            cidade: $("#FiltroCidade").val()
+            cidade: $("#FiltroCidade").val(),
+            plano: $("#FiltroPlano").val(),
+            page: 1
         },
         datatype: "html",
         success: function (data) {
@@ -61,7 +44,7 @@ function FiltrarExtratosProfissional(idResponsavel) {
     });
 };
 
-function OrdenarExtratosResponsavel(orderBy) {
+function OrdenarExtratosResponsavel(idResponsavel, page, orderBy) {
     waitingDialog.show('Ordernando os Extratos', { dialogSize: 'sm', progressType: 'success' });
 
     $.ajax({
@@ -75,6 +58,8 @@ function OrdenarExtratosResponsavel(orderBy) {
             dataFim: $("#FiltroDataFim").val(),
             nome: $("#FiltroNome").val(),
             cidade: $("#FiltroCidade").val(),
+            plano: $("#FiltroPlano").val(),
+            page: page,
             orderBy: orderBy
         },
         datatype: "html",
@@ -93,6 +78,7 @@ function LimparFiltroExtratosProfissional(idProfissional) {
     $("#FiltroDataFim").val("");
     $("#FiltroNome").val("");
     $("#FiltroCidade").val("");
+    $("#FiltroPlano").val("");
 
     FiltrarExtratosProfissional(idProfissional);
 }

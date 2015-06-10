@@ -9,6 +9,7 @@ using SIIS.Negocio;
 using System.Linq;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
+using PagedList;
 
 namespace SIIS.Controllers
 {
@@ -42,6 +43,11 @@ namespace SIIS.Controllers
             return View();
         }
 
+        public ActionResult Consulta()
+        {
+            return View();
+        }
+
         public ActionResult Importar()
         {
             return View();
@@ -67,7 +73,7 @@ namespace SIIS.Controllers
         {
             Extrato extrato;
 
-            if (id == null)
+            if (id == null || id == 0)
             {
                 string userId = HttpContext.GetOwinContext().Authentication.User.Identity.GetUserId();
                 var responsavel = Responsavel.GetByUserId(userId);
@@ -119,7 +125,7 @@ namespace SIIS.Controllers
                 //Deletar composição
                 if (composicaoParaDeletar != null)
                 {
-                    if(extrato.Composicoes.Count == 1)
+                    if (extrato.Composicoes.Count == 1)
                         throw new InvalidOperationException("O Extrato deve possuir ao menos uma Composição.");
 
                     extrato.Composicoes.Remove(extrato.Composicoes.FirstOrDefault(x => x.Id == composicaoParaDeletar));
@@ -240,6 +246,49 @@ namespace SIIS.Controllers
                 Danger(e.Message, true);
             }
             return PartialView("_DadosCadastraisPaciente", new Paciente());
+        }
+
+        public ActionResult ListarExtratos(string codigo, string cpf, string datainicio, string dataFim,
+            string cidade, string responsavel, string orderBy, int? page)
+        {
+            IPagedList<Extrato> extratos = new PagedList<Extrato>(new List<Extrato>(), 1, 10);
+
+            if (!string.IsNullOrEmpty(cpf))
+            {
+                var tipoOrderAnterior = TempData["tipoOrderByAnterior"] as string;
+                var orderByAnterior = TempData["orderByAnterior"] as string;
+
+                var tipoOrderBy = orderBy == orderByAnterior
+                    ? (tipoOrderAnterior == "asc" ? "desc" : "asc")
+                    : "asc";
+
+                TempData["tipoOrderByAnterior"] = tipoOrderBy;
+                TempData["orderByAnterior"] = orderBy;
+
+                using (ExtratoNeg extratoNeg = new ExtratoNeg())
+                {
+                    extratos = extratoNeg.Listar(codigo, cpf, datainicio, dataFim, cidade, responsavel, orderBy,
+                        tipoOrderBy, page);
+                }
+            }
+            return PartialView("_ExtratosConsulta", extratos);
+        }
+
+        public ActionResult AbrirModalExtrato(int id)
+        {            
+            var extrato = new Extrato();
+            try
+            {
+                using (ExtratoNeg extratoNeg = new ExtratoNeg())
+                {
+                    extrato = extratoNeg.Buscar(id);
+                }                
+            }
+            catch (Exception e)
+            {
+                Danger(e.Message, true);
+            }
+            return PartialView("_ConsultaExtratoModal", extrato);
         }
     }
 }

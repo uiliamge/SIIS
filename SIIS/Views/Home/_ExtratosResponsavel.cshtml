@@ -2,39 +2,48 @@
 @using PagedList.Mvc;
 @using SIIS.Models;
 @model IPagedList<Extrato>
+@{
+    var idResponsavel = Model.First().Responsavel.Id;
+    
+}
 
+<div id="divTableExtratosResponsavel">
     <div class="row">
-        <div class="col-md-8">
-            <table class="table table-bordered table-responsive">
+        <div class="col-md-12">
+            <table class="table table-bordered table-responsive" style="margin: 0;">
                 <thead>
-                <tr>
-                    <th onclick=" OrdenarExtratosResponsavel('Id'); " style="cursor: pointer;" class="text-center">Código</th>
-                    <th onclick=" OrdenarExtratosResponsavel('DataReferencia'); " style="cursor: pointer;" class="text-center">Data</th>
-                    <th onclick=" OrdenarExtratosResponsavel('CpfPaciente'); " style="cursor: pointer;" class="text-center">Paciente</th>
-                    <th onclick=" OrdenarExtratosResponsavel('Cidade'); " style="cursor: pointer;" class="text-center">Cidade</th>
-                </tr>
+                    <tr>
+                        <th onclick="OrdenarExtratosResponsavel('@idResponsavel', '@Model.PageNumber', 'Id'); " style="cursor: pointer;" class="text-center">Código</th>
+                        <th onclick="OrdenarExtratosResponsavel('@idResponsavel', '@Model.PageNumber', 'DataReferencia'); " style="cursor: pointer;" class="text-center">Data</th>
+                        <th onclick="OrdenarExtratosResponsavel('@idResponsavel', '@Model.PageNumber', 'CpfPaciente'); " style="cursor: pointer;" class="text-center">Paciente</th>
+                        <th onclick="OrdenarExtratosResponsavel('@idResponsavel', '@Model.PageNumber', 'PlanoSaude'); " style="cursor: pointer;" class="text-center">Plano de Saúde</th>
+                        <th onclick="OrdenarExtratosResponsavel('@idResponsavel', '@Model.PageNumber', 'ValorCobrado'); " style="cursor: pointer;" class="text-center">Valor Cobrado</th>
+                        <th onclick="OrdenarExtratosResponsavel('@idResponsavel', '@Model.PageNumber', 'Cidade'); " style="cursor: pointer;" class="text-center">Cidade</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var extrato in Model)
-                {
-                    var textoPaciente = extrato.Paciente != null
-                        ? extrato.Paciente.Nome + "(" + extrato.Paciente.CpfCnpj + ")"
-                        : extrato.CpfPaciente;
+                    @foreach (var extrato in Model)
+                    {
+                        var textoPaciente = extrato.Paciente != null
+                            ? extrato.Paciente.Nome + " (" + extrato.Paciente.CpfCnpj + ")"
+                            : extrato.CpfPaciente;
 
-                    <tr onclick="AbrirExtrato('@extrato.Id');" style="cursor: pointer;">
-                        <td style="text-align: right;">@extrato.Id</td>
-                        <td style="text-align: center;">@extrato.DataReferencia.ToShortDateString()</td>
-                        <td style="text-align: left;">@textoPaciente</td>
-                        <td style="text-align: right;">@extrato.Cidade - @extrato.Uf</td>
-                    </tr>
-                }
+                        <tr onclick="AbrirExtrato('@extrato.Id');" style="cursor: pointer;">
+                            <td style="text-align: right;">@extrato.Id</td>
+                            <td style="text-align: center;">@extrato.DataReferencia.ToShortDateString()</td>
+                            <td style="text-align: right;">@textoPaciente</td>
+                            <td style="text-align: left;">@extrato.PlanoSaude</td>
+                            <td style="text-align: right;">@extrato.ValorCobrado.FormataMoeda()</td>
+                            <td style="text-align: right;">@extrato.Cidade - @extrato.Uf</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
-            
+
             @if (Model.HasNextPage || Model.HasPreviousPage)
-{
-    <div style="text-align: center" class="pagedList" data-al-target="#consultantSearchResults">
-        @Html.PagedListPager(Model, page => Url.Action("FiltrarExtratosResponsavel", new
+            {
+                <div style="text-align: center" class="pagedList" data-al-target="#divTableExtratosResponsavel">
+                    @Html.PagedListPager(Model, page => Url.Action("ListarExtratos", new
                     {
                         page = page,
                         idResponsavel = Model.First().Responsavel.Id,
@@ -45,14 +54,10 @@
                         nome = "",
                         cidade = "",
                         orderBy = "Id"
-                    }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
-                    {
-                        HttpMethod = "GET",
-                        UpdateTargetId = "divExtratosResponsavel"
-                    }))
-    </div>
-}
+                    }), PagedListRenderOptions.Classic)
+                </div>
+            }
         </div>
     </div>
-
+</div>
 @* http://stackoverflow.com/questions/17075670/paging-not-working-asynchronously *@

@@ -9,6 +9,7 @@ namespace SIIS
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery.maskedinput.min.js",
+                        "~/Scripts/jquery.autoNumeric.js",
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

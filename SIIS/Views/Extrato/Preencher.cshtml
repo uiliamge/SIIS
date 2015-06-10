@@ -60,6 +60,7 @@
             </div>
         </div>
     </div>
+
     <br />
     <div class="row">
         <div class="form-group">
@@ -68,27 +69,47 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="form-group">
-            <div id="" class="row boxComposicao" style="margin-bottom: 10px; padding-top: 0;">
-                <button type="button" class="btn btn-sm btn-link" onclick="AddComposicao()">
-                    <span class="glyphicon glyphicon-plus"></span> Nova Composição
-                </button>
-            </div>
+            @if (Model.Id > 0)
+            {
+                <div id="" class="row boxComposicao" style="margin-bottom: 10px; padding-top: 0;">
+                    <button type="button" class="btn btn-sm btn-link" onclick="AddComposicao()">
+                        <span class="glyphicon glyphicon-plus"></span> Nova Composição
+                    </button>
+                </div>
+            }
         </div>
     </div>
+    if (Model.Id > 0)
+    {
+
+        <h4>Informações adicionais</h4>
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(m => m.PlanoSaude, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.PlanoSaude, new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(m => m.ValorCobrado, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.ValorCobrado, new { @class = "moeda form-control" })
+            </div>
+        </div>
+        <br />
+    }
+
     <div class="row">
         <div class="form-group">
             <a href="@Url.Action("Index")" class="btn btn-default"><span class="glyphicon glyphicon-backward"></span> Voltar</a>
-            <a href="@Url.Action("Preencher", "Extrato")" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Novo Extrato</a>
-            <button class="btn btn-success">Gravar</button>
+            @if (Model.Id > 0)
+            {
+                <a href="@Url.Action("Preencher", "Extrato", new {id = ""})" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Novo Extrato</a>
+                <button class="btn btn-success">Gravar</button>
+            }
         </div>
     </div>
 }
 
 @Html.Hidden("urlBuscarPaciente", Url.Action("BuscarPaciente", "Extrato"))
-@Html.Hidden("urlAddTempDataComposicoes", Url.Action("AddTempDataComposicoes", "Extrato"))
-@Html.Hidden("urlAddTempDataSecoes", Url.Action("AddTempDataSecoes", "Extrato"))
-@Html.Hidden("urlRemoveTempDataComposicoes", Url.Action("RemoveTempDataComposicoes", "Extrato"))
-@Html.Hidden("urlRemoveTempDataSecoes", Url.Action("RemoveTempDataSecoes", "Extrato"))
 @Html.Hidden("urlVerificarSalvarExtrato", Url.Action("VerificarSalvar", "Extrato"))
