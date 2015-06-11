@@ -2,7 +2,7 @@
 @model IEnumerable<Secao>
 
 @{
-    int indiceComposicao = Model.First().IndiceComposicao;
+    int idComposicao = Model.First().Composicao.Id;
 }
 
 @foreach (Secao secao in Model)
@@ -13,10 +13,10 @@
         <div class="form-group">
             <div class="col-md-12">
                 <label class="control-label">Procedimento</label>
-                @Html.TextArea("Secao_Nome", secao.Nome, new { @placeholder = "Reflete o fluxo de informação obtido durante um encontro médico.", @class = "form-control" })
+                @Html.TextArea("Secao_Nome", secao.Descricao, new { @placeholder = "Reflete o fluxo de informação obtido durante um encontro médico.", @class = "form-control" })
             </div>
             <div>
-                <button type="button" class="btn btn-sm btn-link" onclick="RemoveSecao(@secao.Indice, @secao.IndiceComposicao)">
+                <button type="button" class="btn btn-sm btn-link" onclick="RemoveSecao('@secao.Id')">
                     <span class="glyphicon glyphicon-remove"></span> Remover esta Seção
                 </button>
             </div>
@@ -24,7 +24,7 @@
     </div>
 }
 <div class="row">
-    <button type="button" class="btn btn-sm btn-link" onclick="AddSecao(@indiceComposicao)">
+    <button type="button" class="btn btn-sm btn-link" onclick="AddSecao('@idComposicao')">
         <span class="glyphicon glyphicon-plus"></span> Nova Seção
     </button>
 </div>
