@@ -367,7 +367,6 @@
     <Content Include="Views\Shared\EditorTemplates\Secao.cshtml" />
     <Content Include="Views\Home\_IndexResponsavel.cshtml" />
     <Content Include="Views\Home\_ExtratosResponsavel.cshtml" />
-    <Content Include="Views\Extrato\Consulta.cshtml" />
     <Content Include="Views\Extrato\_ExtratosConsulta.cshtml" />
     <Content Include="Views\Shared\_ConsultaExtratoModal.cshtml" />
     <Content Include="Views\Home\_IndexPaciente.cshtml" />
@@ -375,6 +374,7 @@
     <Content Include="Views\Home\_ExtratosPorAprovacao.cshtml" />
     <Content Include="Views\Shared\_MenuPacientePartial.cshtml" />
     <Content Include="Views\Extrato\Importar.cshtml" />
+    <Content Include="Views\Extrato\Consulta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

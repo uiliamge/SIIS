@@ -65,15 +65,13 @@ namespace SIIS.Controllers
                     extratoNeg.Importar(extrato, file);
                 }                
                 Success("Extrato importado com sucesso.", true);
-            }
-            catch (InvalidOperationException e)
+            }            
+            catch(Exception)
             {
-                Warning(e.Message, true);
+                Danger("O arquivo parece estar fora do padrão para ser importado.", true);
+                return View();
             }
-            catch(Exception e)
-            {
-                Danger(e.Message, true);
-            }
+
             return RedirectToAction("Preencher", new { id = extrato.Id });
         }
 
@@ -189,30 +187,7 @@ namespace SIIS.Controllers
         }
 
         private void SalvarExtrato(Extrato extrato)
-        {
-            ////Valida permissão do Paciente
-            //using (PacienteNeg pacienteNeg = new PacienteNeg())
-            //{
-            //    Paciente paciente = pacienteNeg.BuscarPorCpf(extrato.CpfPaciente);
-            //    if (paciente != null)
-            //    {
-            //        switch (paciente.TipoPermissao)
-            //        {
-            //            case TipoPermissaoEnum.EscolherQuemPodeAcessar:
-            //                {
-            //                    if (!paciente.PermissoesResponsavelPaciente.Select(x => x.NumeroConselho)
-            //                    .Contains(extrato.Responsavel.NumeroConselhoRegional))
-            //                    {
-            //                        throw new InvalidOperationException(
-            //                            "Não é possível preencher esse extrato porque o Paciente estabeleceu restrições.");
-            //                    }
-            //                }
-            //                break;
-            //            case TipoPermissaoEnum.Perguntarme: extrato.ExibicaoPermitida = false; break;
-            //            case TipoPermissaoEnum.QualquerProfissional: extrato.ExibicaoPermitida = true; break;
-            //        }
-            //    }
-            //}
+        {            
             using (ExtratoNeg extratoNeg = new ExtratoNeg())
             {
                 extrato.Ip = Request.UserHostAddress;
@@ -224,7 +199,7 @@ namespace SIIS.Controllers
                     composicao.Secoes.Add(secao);
                     extrato.Composicoes.Add(composicao);
 
-                    extratoNeg.Inserir(extrato);
+                    extratoNeg.Inserir(extrato, 0);
                 }
                 else
                 {

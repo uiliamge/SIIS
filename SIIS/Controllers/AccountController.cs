@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SIIS.Models;
@@ -78,7 +79,10 @@ namespace SIIS.Controllers
                     }
 
                     await SignInAsync(user, model.RememberMe);
-                        return RedirectToLocal(returnUrl);                    
+
+                    ApplicationUser.UsuarioLogado = user;
+                    
+                    return RedirectToLocal(returnUrl);
                 }
                 else
                 {

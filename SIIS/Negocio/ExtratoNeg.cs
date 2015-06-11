@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using System.IO;
+using System.Text;
+using SIIS.Helpers;
 
 namespace SIIS.Negocio
 {
@@ -16,13 +18,13 @@ namespace SIIS.Negocio
     {
         readonly SiteDataContext _contexto = new SiteDataContext();
 
-        public void Inserir(Extrato extrato)
+        public void Inserir(Extrato extrato, byte indImportado)
         {
             PacienteNeg pacienteNeg = new PacienteNeg(_contexto);
             ResponsavelNeg responsavelNeg = new ResponsavelNeg(_contexto);
 
             extrato.DataHora = DateTime.Now;
-            extrato.IndImportado = 0;
+            extrato.IndImportado = indImportado;
             extrato.Cidade = extrato.Responsavel.Cidade;
             extrato.Uf = extrato.Responsavel.Uf;
 
@@ -61,25 +63,59 @@ namespace SIIS.Negocio
                 _contexto.Entry(old).State = EntityState.Modified;
             }
         }
-
+            
         public void Importar(Extrato novoExtrato, HttpPostedFileBase arquivo)
         {
+            //e|01373784083|10/06/2015|unimed|120,00
+            //c|Texto da primeira composição
+            //s|Texto da primeira seção da primeira composição
+            //s|Texto da segunda seção da primeira composição
+            //c|Texto da segunda composição
+            
             int counter = 0;
+            int indiceComposicao = -1;
+            int indiceSecao = -1;
             string linha;
 
             novoExtrato.IndImportado = 1;
             novoExtrato.Responsavel = Responsavel.GetByUserId(ApplicationUser.UsuarioLogado.Id);
             
-            // Read the file and display it line by line.
-            //var reader = new StreamReader(@"c:\test.txt");
-            var reader = new StreamReader(arquivo.InputStream);
+            var reader = new StreamReader(arquivo.InputStream, Encoding.UTF8);
             while ((linha = reader.ReadLine()) != null)
             {
-                System.Console.WriteLine(linha);
+                var colunas = linha.Split('|');
+
+                switch (colunas[0])
+                {
+                    case "e":
+                    {
+                        novoExtrato.CpfPaciente = colunas[1].FormataCpf();
+                        novoExtrato.DataReferencia = Convert.ToDateTime(colunas[2]);
+                        novoExtrato.PlanoSaude = colunas[3];
+                        novoExtrato.ValorCobrado = colunas[4] != String.Empty ? Convert.ToDecimal(colunas[4]) : 0;
+                        break;
+                    }
+                    case "c":
+                    {
+                        indiceSecao = -1;
+                        indiceComposicao ++;
+                        novoExtrato.Composicoes.Add(new Composicao(){ Indice = indiceComposicao, Descricao = colunas[1]});
+                        break;
+                    }
+                    case "s":
+                    {
+                        indiceSecao ++;
+                        novoExtrato.Composicoes.FirstOrDefault(x => x.Indice == indiceComposicao).Secoes.Add(
+                            new Secao() { Indice = indiceComposicao, Descricao = colunas[1] });
+                        break;
+                    }
+                }
+
                 counter++;
             }
-
             reader.Close();
+            
+            Inserir(novoExtrato, 1);
         }
 
         public void Aprovar(int id)

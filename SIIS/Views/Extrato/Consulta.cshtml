@@ -1,0 +1,52 @@
+﻿@Scripts.Render("~/Scripts/Consulta/Consulta.js")
+
+<h3>Consulte na Base de Dados do SIIS</h3>
+<div class="row">
+    <div class="col-md-12" style="padding-bottom: 10px;">
+        <fieldset>
+            <legend style="font-size: 16px;">Filtros de Pesquisa</legend>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroCodigo", null, new { @class = "numero form-control", @placeholder = "Código" })
+                </div>
+                <div class="col-sm-1" style="width: 4.333333%;">
+                    <label style="margin-top: 10px; text-align: center; ">&nbsp;</label>
+                </div>
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroCpf", null, new { @class = "cpf form-control", @required = true, @placeholder = "CPF do Paciente" })
+                    <label id="validationFiltrarCpf" class="text-danger" style="display: none;">O campo CPF é obrigatório</label>
+                </div>
+                <div class="col-sm-3">
+                    @Html.TextBox("FiltroResponsavel", null, new { @class = "numero form-control", @placeholder = "Número no Conselho do Responsável" })
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroDataInicio", null, new { @class = "data form-control", @placeholder = "Data Inicial" })
+                </div>
+                <div class="col-sm-1" style="width: 4.333333%;">
+                    <label style="margin-top: 10px; text-align: center; ">até</label>
+                </div>
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroDataFim", null, new { @class = "data form-control", @placeholder = "Data Final" })
+                </div>
+                <div class="col-sm-3">
+                    @Html.TextBox("FiltroCidade", null, new { @class = "form-control", @placeholder = "Cidade", @maxlength = "100" })
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-7">
+                    <div class="pull-right">
+                        <button onclick="LimparFiltroExtratosConsulta()" class=" btn btn-default">Limpar Filtro</button>
+                        <button onclick="FiltrarConsultaExtratos()" class="btn btn-success">Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<div id="divExtratosConsulta">
+
+</div>
+
+@Html.Hidden("urlListarExtratos", Url.Action("ListarExtratos", "Extrato"))

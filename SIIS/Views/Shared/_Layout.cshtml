@@ -3,11 +3,13 @@
 @using Microsoft.AspNet.Identity.EntityFramework
 @using SIIS.Models
 
-@{
+@if (ApplicationUser.UsuarioLogado == null)
+{
     var userStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
     var manager = new UserManager<ApplicationUser>(userStore);
     ApplicationUser.UsuarioLogado = manager.FindById(User.Identity.GetUserId());
 }
+
 <!DOCTYPE html>
 <html>
 <head>
