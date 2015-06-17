@@ -1,9 +1,10 @@
-﻿@using PagedList;
+﻿@using System.Linq
+@using PagedList;
 @using PagedList.Mvc;
 @using SIIS.Models;
 @model IPagedList<Extrato>
     @{
-        var idPaciente = Model.First().Paciente.Id;
+        var idPaciente = Model.Count > 0 ? Model.First().Paciente.Id : 0;
 
     }
 

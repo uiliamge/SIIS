@@ -1,30 +1,32 @@
-﻿@using PagedList;
+﻿@using System.Linq
+@using PagedList;
 @using PagedList.Mvc;
 @using SIIS.Models;
 @model IPagedList<Extrato>
-    @{
+    @if (Model.Count > 0)
+    {
         var idPaciente = Model.First().Paciente.Id;
-    }
-    <div id="divTableExtratosPorAprovacao">
-        <label>Extratos aguardando por sua aprovação</label>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-bordered table-responsive" style="margin: 0;">
-                    <thead>
+
+        <div id="divTableExtratosPorAprovacao">
+            <label>Extratos aguardando por sua aprovação</label>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-responsive" style="margin: 0;">
+                        <thead>
                         <tr>
                             <th onclick="OrdenarExtratosPorAprovacao('@idPaciente', '@Model.PageNumber', 'Id'); " style="cursor: pointer;" class="text-center">Código</th>
                             <th onclick="OrdenarExtratosPorAprovacao('@idPaciente', '@Model.PageNumber', 'DataReferencia'); " style="cursor: pointer;" class="text-center">Data</th>
                             <th onclick="OrdenarExtratosPorAprovacao('@idPaciente', '@Model.PageNumber', 'Responsavel.Nome'); " style="cursor: pointer;" class="text-center">Responsável</th>
                             <th style="cursor: pointer;" class="text-center">Aprovar</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         @foreach (var extrato in Model)
                         {
                             var textoResponsavel = extrato.Responsavel.Nome + " (" +
-                                extrato.Responsavel.NumeroConselhoRegional + " " +
-                                extrato.Responsavel.SiglaConselhoRegional + "/" +
-                                extrato.Responsavel.UfConselhoRegional + ")";
+                                                   extrato.Responsavel.NumeroConselhoRegional + " " +
+                                                   extrato.Responsavel.SiglaConselhoRegional + "/" +
+                                                   extrato.Responsavel.UfConselhoRegional + ")";
 
                             <tr>
                                 <td style="text-align: right;">@extrato.Id</td>
@@ -38,18 +40,19 @@
                                 </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
-                @if (Model.HasNextPage || Model.HasPreviousPage)
-                {
-                    <div style="text-align: center" class="pagedList" data-al-target="#divTableExtratosPorAprovacao">
-                        @Html.PagedListPager(Model, page => Url.Action("ListarExtratosPorAprovacao", new
+                    @if (Model.HasNextPage || Model.HasPreviousPage)
                     {
-                        orderBy = "Id"
-                    }), PagedListRenderOptions.Classic)
-                    </div>
-                }
+                        <div style="text-align: center" class="pagedList" data-al-target="#divTableExtratosPorAprovacao">
+                            @Html.PagedListPager(Model, page => Url.Action("ListarExtratosPorAprovacao", new
+                            {
+                                orderBy = "Id"
+                            }), PagedListRenderOptions.Classic)
+                        </div>
+                    }
+                </div>
             </div>
         </div>
-    </div>
+    }

@@ -149,7 +149,7 @@ function LimparFiltroExtratosPaciente(idPaciente) {
 
 function ListarExtratosPorAprovacao(idPaciente) {
 
-    waitingDialog.show('Listando os extratos por aprovação', { dialogSize: 'sm', progressType: 'success' });
+    waitingDialog.show('Verificando extratos por aprovação', { dialogSize: 'sm', progressType: 'success' });
 
     $.ajax({
         type: "POST",
