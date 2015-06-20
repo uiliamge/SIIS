@@ -41,7 +41,10 @@ namespace SIIS.Controllers
             using (ExtratoNeg extratoNeg = new ExtratoNeg())
             {
                 extratos = extratoNeg.Listar(idResponsavel, codigo, cpf, datainicio, dataFim, nome, cidade, plano, orderBy, tipoOrderBy, page);
+                ViewBag.SomatorioValorCobrado = extratoNeg.SomarValorCobrado(idResponsavel, codigo, cpf, datainicio, dataFim, nome, cidade, plano, orderBy, tipoOrderBy, page);
             }
+
+            
 
             return PartialView("_ExtratosResponsavel", extratos);
         }

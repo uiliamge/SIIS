@@ -59,14 +59,22 @@ namespace SIIS.Controllers
             var extrato = new Extrato();
             try
             {
+                if (file.ContentType != "text/plain")
+                    throw new InvalidOperationException("Informe um arquivo com a extensão \".txt\".");
+
                 using (ExtratoNeg extratoNeg = new ExtratoNeg())
                 {
                     extrato.Ip = Request.UserHostAddress;
                     extratoNeg.Importar(extrato, file);
-                }                
+                }
                 Success("Extrato importado com sucesso.", true);
-            }            
-            catch(Exception)
+            }
+            catch (InvalidOperationException e)
+            {
+                Warning(e.Message, true);
+                return View();
+            }
+            catch (Exception)
             {
                 Danger("O arquivo parece estar fora do padrão para ser importado.", true);
                 return View();
@@ -109,7 +117,7 @@ namespace SIIS.Controllers
             int? composicaoParaDeletar, int? secaoParaDeletar, int? composicaoDaSecao)
         {
             try
-            {                
+            {
                 //Nova composição
                 if (addComposicao == true)
                 {
@@ -187,7 +195,7 @@ namespace SIIS.Controllers
         }
 
         private void SalvarExtrato(Extrato extrato)
-        {            
+        {
             using (ExtratoNeg extratoNeg = new ExtratoNeg())
             {
                 extrato.Ip = Request.UserHostAddress;

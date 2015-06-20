@@ -3,11 +3,19 @@
 @using SIIS.Models;
 @model IPagedList<Extrato>
 @{
-    var idResponsavel = Model.First().Responsavel.Id;
-    
+    var idResponsavel = Model.Any() ? Model.First().Responsavel.Id : 0;
+    var totalValorCobrado = ViewBag.SomatorioValorCobrado as decimal?;
 }
 
 <div id="divTableExtratosResponsavel">
+    <div class="row">
+        <div class="col-md-12">
+            @if (totalValorCobrado != null)
+            {
+                <label class="control-label pull-right">Somatório do Valor Cobrado: R$ @totalValorCobrado.</label>
+            }
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <table class="table table-bordered table-responsive" style="margin: 0;">
@@ -44,17 +52,17 @@
             {
                 <div style="text-align: center" class="pagedList" data-al-target="#divTableExtratosResponsavel">
                     @Html.PagedListPager(Model, page => Url.Action("ListarExtratos", new
-                    {
-                        page = page,
-                        idResponsavel = Model.First().Responsavel.Id,
-                        codigo = "",
-                        cpf = "",
-                        datainicio = "",
-                        dataFim = "",
-                        nome = "",
-                        cidade = "",
-                        orderBy = "Id"
-                    }), PagedListRenderOptions.Classic)
+                        {
+                            page = page,
+                            idResponsavel = Model.First().Responsavel.Id,
+                            codigo = "",
+                            cpf = "",
+                            datainicio = "",
+                            dataFim = "",
+                            nome = "",
+                            cidade = "",
+                            orderBy = "Id"
+                        }), PagedListRenderOptions.Classic)
                 </div>
             }
         </div>

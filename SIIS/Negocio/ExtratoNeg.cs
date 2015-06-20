@@ -198,6 +198,57 @@ namespace SIIS.Negocio
             return listaPaginada;
         }
 
+        public decimal SomarValorCobrado(int? idResponsavel, string codigo, string cpf, string datainicio,
+            string dataFim, string nome, string cidade, string plano, string orderBy, string tipoOrderBy, int? pagina)
+        {
+            #region expressões
+            DateTime dataInicial = new DateTime(1900, 1, 1);
+            DateTime dataFinal = new DateTime(9999, 1, 1);
+
+            if (!string.IsNullOrEmpty(datainicio))
+                dataInicial = Convert.ToDateTime(datainicio);
+            if (!string.IsNullOrEmpty(dataFim))
+                dataFinal = Convert.ToDateTime(dataFim);
+
+            Expression<Func<Extrato, bool>> expressaoResponsavel = x =>
+                (idResponsavel != null ? x.Responsavel.Id == idResponsavel : true);
+
+            Expression<Func<Extrato, bool>> expressaoCodigo = x =>
+                (string.IsNullOrEmpty(codigo) || x.Id.ToString().Contains(codigo));
+
+            Expression<Func<Extrato, bool>> expressaoCpf = x =>
+                (string.IsNullOrEmpty(cpf) || x.CpfPaciente.Contains(cpf));
+
+            Expression<Func<Extrato, bool>> expressaoDatas = x =>
+                x.DataReferencia >= dataInicial && x.DataReferencia <= dataFinal;
+
+            Expression<Func<Extrato, bool>> expressaoNome = x =>
+                (string.IsNullOrEmpty(nome) || x.Paciente == null || x.Paciente.Nome.Contains(nome));
+
+            Expression<Func<Extrato, bool>> expressaoCidade = x =>
+                (string.IsNullOrEmpty(cidade) || x.Cidade.Contains(cidade));
+
+            Expression<Func<Extrato, bool>> expressaoPlano = x =>
+                (string.IsNullOrEmpty(plano) || x.PlanoSaude.ToLower().Contains(plano.ToLower()));
+
+            #endregion
+
+            var lista = _contexto.Extratos
+                .Where(expressaoResponsavel)
+                .Where(expressaoCodigo)
+                .Where(expressaoCpf)
+                .Where(expressaoDatas)
+                .Where(expressaoNome)
+                .Where(expressaoCidade)
+                .Where(expressaoPlano)
+                .Select(x => x.ValorCobrado);
+
+            if (lista.Any())
+                return lista.Sum();
+
+            return 0;
+        }
+
         #region Para o Paciente
         public IPagedList<Extrato> ListarPorPaciente(int idPaciente, string codigo, string responsavel, string datainicio,
             string dataFim, string cidade, string plano, string orderBy, string tipoOrderBy, int? pagina)
