@@ -63,7 +63,7 @@ namespace SIIS.Negocio
                 _contexto.Entry(old).State = EntityState.Modified;
             }
         }
-            
+
         public void Importar(Extrato novoExtrato, HttpPostedFileBase arquivo)
         {
             //e|01373784083|10/06/2015|unimed|120,00
@@ -71,7 +71,7 @@ namespace SIIS.Negocio
             //s|Texto da primeira seção da primeira composição
             //s|Texto da segunda seção da primeira composição
             //c|Texto da segunda composição
-            
+
             int counter = 0;
             int indiceComposicao = -1;
             int indiceSecao = -1;
@@ -79,7 +79,7 @@ namespace SIIS.Negocio
 
             novoExtrato.IndImportado = 1;
             novoExtrato.Responsavel = Responsavel.GetByUserId(ApplicationUser.UsuarioLogado.Id);
-            
+
             var reader = new StreamReader(arquivo.InputStream, Encoding.UTF8);
             while ((linha = reader.ReadLine()) != null)
             {
@@ -88,33 +88,33 @@ namespace SIIS.Negocio
                 switch (colunas[0])
                 {
                     case "e":
-                    {
-                        novoExtrato.CpfPaciente = colunas[1].FormataCpf();
-                        novoExtrato.DataReferencia = Convert.ToDateTime(colunas[2]);
-                        novoExtrato.PlanoSaude = colunas[3];
-                        novoExtrato.ValorCobrado = colunas[4] != String.Empty ? Convert.ToDecimal(colunas[4]) : 0;
-                        break;
-                    }
+                        {
+                            novoExtrato.CpfPaciente = colunas[1].FormataCpf();
+                            novoExtrato.DataReferencia = Convert.ToDateTime(colunas[2]);
+                            novoExtrato.PlanoSaude = colunas[3];
+                            novoExtrato.ValorCobrado = colunas[4] != String.Empty ? Convert.ToDecimal(colunas[4]) : 0;
+                            break;
+                        }
                     case "c":
-                    {
-                        indiceSecao = -1;
-                        indiceComposicao ++;
-                        novoExtrato.Composicoes.Add(new Composicao(){ Indice = indiceComposicao, Descricao = colunas[1]});
-                        break;
-                    }
+                        {
+                            indiceSecao = -1;
+                            indiceComposicao++;
+                            novoExtrato.Composicoes.Add(new Composicao() { Indice = indiceComposicao, Descricao = colunas[1] });
+                            break;
+                        }
                     case "s":
-                    {
-                        indiceSecao ++;
-                        novoExtrato.Composicoes.FirstOrDefault(x => x.Indice == indiceComposicao).Secoes.Add(
-                            new Secao() { Indice = indiceComposicao, Descricao = colunas[1] });
-                        break;
-                    }
+                        {
+                            indiceSecao++;
+                            novoExtrato.Composicoes.FirstOrDefault(x => x.Indice == indiceComposicao).Secoes.Add(
+                                new Secao() { Indice = indiceComposicao, Descricao = colunas[1] });
+                            break;
+                        }
                 }
 
                 counter++;
             }
             reader.Close();
-            
+
             Inserir(novoExtrato, 1);
         }
 
@@ -280,8 +280,8 @@ namespace SIIS.Negocio
             #endregion
 
             var lista = _contexto.Extratos.Include(x => x.Composicoes)
-                .Where(x => x.Paciente == null && x.CpfPaciente == ApplicationUser.UsuarioLogado.Cpf)
-                .Where(x => x.Paciente != null && x.Paciente.Id == idPaciente)
+                .Where(x => (x.Paciente == null && x.CpfPaciente == ApplicationUser.UsuarioLogado.Cpf)
+                    || (x.Paciente != null && x.Paciente.Id == idPaciente))
                 .Where(expressaoResponsavel)
                 .Where(expressaoCodigo)
                 .Where(expressaoDatas)
@@ -307,10 +307,10 @@ namespace SIIS.Negocio
 
         public IPagedList<Extrato> ListarPorAprovacao(int idPaciente, string orderBy, string tipoOrderBy, int? pagina)
         {
-            var lista = _contexto.Extratos.Include(x => x.Composicoes)
+            var lista = _contexto.Extratos
                 .Where(x => !x.ExibicaoPermitida)
-                .Where(x => x.Paciente == null && x.CpfPaciente == ApplicationUser.UsuarioLogado.Cpf)
-                .Where(x => x.Paciente != null && x.Paciente.Id == idPaciente);
+                .Where(x => (x.Paciente == null && x.CpfPaciente == ApplicationUser.UsuarioLogado.Cpf)
+                    || (x.Paciente != null && x.Paciente.Id == idPaciente));
 
             #region orderBy
 
@@ -372,9 +372,9 @@ namespace SIIS.Negocio
                 .Where(expressaoCidade)
                 .Where(expressaoResponsavel)
                 .Where(x => x.Paciente != null)
-                .Where(x => x.Paciente.TipoPermissao != TipoPermissaoEnum.EscolherQuemPodeAcessar 
+                .Where(x => x.Paciente.TipoPermissao != TipoPermissaoEnum.EscolherQuemPodeAcessar
                     || x.Paciente.PermissoesResponsavelPaciente.Select(p => p.NumeroConselho).Contains(usuario.NumeroConselho));
-                
+
 
             #region orderBy
 
