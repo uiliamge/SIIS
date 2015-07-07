@@ -274,36 +274,45 @@ namespace SIIS.Controllers
         {
             IPagedList<Extrato> extratos = new PagedList<Extrato>(new List<Extrato>(), 1, 10);
 
-            if (!string.IsNullOrEmpty(cpf))
+            try
             {
-                var tipoOrderAnterior = TempData["tipoOrderByAnterior"] as string;
-                var orderByAnterior = TempData["orderByAnterior"] as string;
 
-                var tipoOrderBy = orderBy == orderByAnterior
-                    ? (tipoOrderAnterior == "asc" ? "desc" : "asc")
-                    : "asc";
 
-                TempData["tipoOrderByAnterior"] = tipoOrderBy;
-                TempData["orderByAnterior"] = orderBy;
-
-                using (LogAcessoNeg logNeg = new LogAcessoNeg())
+                if (!string.IsNullOrEmpty(cpf))
                 {
-                    Paciente paciente = new PacienteNeg().BuscarPorCpf(cpf);
-                    if (paciente != null)
+                    var tipoOrderAnterior = TempData["tipoOrderByAnterior"] as string;
+                    var orderByAnterior = TempData["orderByAnterior"] as string;
+
+                    var tipoOrderBy = orderBy == orderByAnterior
+                        ? (tipoOrderAnterior == "asc" ? "desc" : "asc")
+                        : "asc";
+
+                    TempData["tipoOrderByAnterior"] = tipoOrderBy;
+                    TempData["orderByAnterior"] = orderBy;
+
+                    using (LogAcessoNeg logNeg = new LogAcessoNeg())
                     {
-                        logNeg.Inserir(new LogAcessoResponsavel
+                        Paciente paciente = new PacienteNeg().BuscarPorCpf(cpf);
+                        if (paciente != null)
                         {
-                            DataHora = DateTime.Now,
-                            Ip = Request.UserHostAddress
-                        }, cpf, User.Identity.GetUserId());
+                            logNeg.Inserir(new LogAcessoResponsavel
+                            {
+                                DataHora = DateTime.Now,
+                                Ip = Request.UserHostAddress
+                            }, cpf, User.Identity.GetUserId());
+                        }
+                    }
+
+                    using (ExtratoNeg extratoNeg = new ExtratoNeg())
+                    {
+                        extratos = extratoNeg.Listar(codigo, cpf, datainicio, dataFim, cidade, responsavel, orderBy,
+                            tipoOrderBy, page);
                     }
                 }
-
-                using (ExtratoNeg extratoNeg = new ExtratoNeg())
-                {
-                    extratos = extratoNeg.Listar(codigo, cpf, datainicio, dataFim, cidade, responsavel, orderBy,
-                        tipoOrderBy, page);
-                }
+            }
+            catch (Exception e)
+            {
+                Danger(e.Message, true);
             }
             return PartialView("_ExtratosConsulta", extratos);
         }
