@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -284,6 +285,19 @@ namespace SIIS.Controllers
 
                 TempData["tipoOrderByAnterior"] = tipoOrderBy;
                 TempData["orderByAnterior"] = orderBy;
+
+                using (LogAcessoNeg logNeg = new LogAcessoNeg())
+                {
+                    Paciente paciente = new PacienteNeg().BuscarPorCpf(cpf);
+                    if (paciente != null)
+                    {
+                        logNeg.Inserir(new LogAcessoResponsavel
+                        {
+                            DataHora = DateTime.Now,
+                            Ip = Request.UserHostAddress
+                        }, cpf, User.Identity.GetUserId());
+                    }
+                }
 
                 using (ExtratoNeg extratoNeg = new ExtratoNeg())
                 {

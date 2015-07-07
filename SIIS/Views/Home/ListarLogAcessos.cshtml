@@ -1,0 +1,44 @@
+﻿@model SIIS.Models.Paciente
+
+@Scripts.Render("~/Scripts/Log/Log.js")
+
+<h3>Consulte os acessos ao seu Histórico</h3>
+<div class="row boxComposicao" style="padding: 10px;">    
+    <div class="col-md-12" style="padding-bottom: 10px;">
+        <fieldset>
+            <legend style="font-size: 16px;">Filtros de Pesquisa</legend>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-2">
+                    @Html.TextBox("NumeroConselho", null, new { @class = "numero form-control", @placeholder = "Nº Conselho Regional" })
+                </div>
+                <div class="col-sm-1" style="width: 4.333333%;">
+                    <label style="margin-top: 10px; text-align: center;">&nbsp;</label>
+                </div>
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroResponsavel", null, new { @class = "form-control", @placeholder = "Nome do Responsável" })
+                </div>                
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroDataInicio", null, new { @class = "data form-control", @placeholder = "Data Inicial" })
+                </div>
+                <div class="col-sm-1" style="width: 4.333333%;">
+                    <label style="margin-top: 10px; text-align: center;">até</label>
+                </div>
+                <div class="col-sm-2">
+                    @Html.TextBox("FiltroDataFim", null, new { @class = "data form-control", @placeholder = "Data Final" })
+                </div>                
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-sm-6">
+                    @*<button onclick="limparfiltroextratospaciente('@Model.Id') " class=" btn btn-default">Limpar Filtro</button>*@
+                    <button onclick="FiltrarLogAcessos('@Model.Id');" class="btn btn-success">Consultar</button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div id="divLogAcessos">
+    </div>
+</div>
+@Html.Hidden("urlListarLog", Url.Action("_ListarLogAcessos", "Home"))

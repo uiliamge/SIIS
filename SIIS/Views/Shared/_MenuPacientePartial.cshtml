@@ -1,7 +1,8 @@
-﻿@using SIIS.Models
+﻿@using Microsoft.AspNet.Identity
+@using SIIS.Models
 <ul class="nav navbar-nav" style="margin: 7.5px 7px 7px 7px;">
     <li>@Html.ActionLink("Início", "Index", "Home")</li>
-    
+    <li>@Html.ActionLink("Acessos ao Seu Histórico", "ListarLogAcessos", "Home", new { userId = User.Identity.GetUserId() }, null)</li>
     @if (ViewBag.Notifications != null)
     {
         foreach (NotificationViewModel notification in ViewBag.Notifications)

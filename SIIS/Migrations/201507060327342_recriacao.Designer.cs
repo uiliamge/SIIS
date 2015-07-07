@@ -7,13 +7,13 @@ namespace SIIS.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class AjusteValorExtrato : IMigrationMetadata
+    public sealed partial class recriacao : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AjusteValorExtrato));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(recriacao));
         
         string IMigrationMetadata.Id
         {
-            get { return "201506100046378_AjusteValorExtrato"; }
+            get { return "201507060327342_recriacao"; }
         }
         
         string IMigrationMetadata.Source

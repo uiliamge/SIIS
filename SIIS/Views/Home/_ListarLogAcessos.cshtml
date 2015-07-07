@@ -1,0 +1,50 @@
+﻿@using System.Linq
+@using PagedList;
+@using PagedList.Mvc;
+@using SIIS.Models;
+@model IPagedList<LogAcessoResponsavel>
+    @if (Model.Count > 0)
+    {
+        var idPaciente = Model.First().Paciente.Id;
+
+        <div id="">
+            <label></label>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-responsive" style="margin: 0;">
+                        <thead>
+                        <tr>
+                            <th onclick="OrdenarLog('@idPaciente', '@Model.PageNumber', 'Data'); " style="cursor: pointer; width: 35%;" class="text-center">Data e Hora do Acesso</th>
+                            <th onclick="OrdenarLog('@idPaciente', '@Model.PageNumber', 'NomeResponsavel'); " style="cursor: pointer; width: 35%;" class="text-center">Nome do Profissional</th>
+                            <th onclick="OrdenarLog('@idPaciente', '@Model.PageNumber', 'NumeroConselho'); " style="cursor: pointer; width: 30%;" class="text-center">Conselho Regional</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var log in Model)
+                        {
+                            var textoConselho = log.Responsavel.NumeroConselhoRegional + " " +
+                                                log.Responsavel.SiglaConselhoRegional + "/" +
+                                                log.Responsavel.UfConselhoRegional;
+
+                            <tr>
+                                <td style="text-align: center;">@log.DataHora.ToLongDateString()  às  @log.DataHora.ToLongTimeString()</td>
+                                <td style="text-align: left;">@log.Responsavel.Nome</td>
+                                <td style="text-align: left;">@textoConselho</td>                                
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+
+                    @if (Model.HasNextPage || Model.HasPreviousPage)
+                    {
+                        <div style="text-align: center" class="pagedList" data-al-target="#divLogAcessos">
+                            @Html.PagedListPager(Model, page => Url.Action("_ListarLogAcessos", new
+                            {
+                                orderBy = "Data"
+                            }), PagedListRenderOptions.Classic)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }

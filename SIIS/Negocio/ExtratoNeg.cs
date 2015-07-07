@@ -364,6 +364,7 @@ namespace SIIS.Negocio
 
             var usuario = ApplicationUser.UsuarioLogado;
 
+            
             var lista = _contexto.Extratos.Include(x => x.Composicoes)
                 .Where(x => x.ExibicaoPermitida)
                 .Where(expressaoCodigo)

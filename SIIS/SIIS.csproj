@@ -179,46 +179,14 @@
     <Compile Include="Helpers\GravatarHelper.cs" />
     <Compile Include="Helpers\GravatarOptions.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
-    <Compile Include="Migrations\201506031639016_Inicial.cs" />
-    <Compile Include="Migrations\201506031639016_Inicial.Designer.cs">
-      <DependentUpon>201506031639016_Inicial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506051717179_IndiceEmComposicaoESecao.cs" />
-    <Compile Include="Migrations\201506051717179_IndiceEmComposicaoESecao.Designer.cs">
-      <DependentUpon>201506051717179_IndiceEmComposicaoESecao.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506062354337_indiceDaComposicaoNaSecao.cs" />
-    <Compile Include="Migrations\201506062354337_indiceDaComposicaoNaSecao.Designer.cs">
-      <DependentUpon>201506062354337_indiceDaComposicaoNaSecao.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506081837159_extratoEComposicao.cs" />
-    <Compile Include="Migrations\201506081837159_extratoEComposicao.Designer.cs">
-      <DependentUpon>201506081837159_extratoEComposicao.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506100024395_PlanoDeSaudeEValorNoExtrato.cs" />
-    <Compile Include="Migrations\201506100024395_PlanoDeSaudeEValorNoExtrato.Designer.cs">
-      <DependentUpon>201506100024395_PlanoDeSaudeEValorNoExtrato.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506100046378_AjusteValorExtrato.cs" />
-    <Compile Include="Migrations\201506100046378_AjusteValorExtrato.Designer.cs">
-      <DependentUpon>201506100046378_AjusteValorExtrato.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506100625292_AjusteTamanhoTextoComposicaoSecao.cs" />
-    <Compile Include="Migrations\201506100625292_AjusteTamanhoTextoComposicaoSecao.Designer.cs">
-      <DependentUpon>201506100625292_AjusteTamanhoTextoComposicaoSecao.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506101604219_PermissaoExibicaoExtrato.cs" />
-    <Compile Include="Migrations\201506101604219_PermissaoExibicaoExtrato.Designer.cs">
-      <DependentUpon>201506101604219_PermissaoExibicaoExtrato.cs</DependentUpon>
+    <Compile Include="Migrations\201507060327342_recriacao.cs" />
+    <Compile Include="Migrations\201507060327342_recriacao.Designer.cs">
+      <DependentUpon>201507060327342_recriacao.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Migrations\Identity\201505302151575_Inicial.cs" />
-    <Compile Include="Migrations\Identity\201505302151575_Inicial.Designer.cs">
-      <DependentUpon>201505302151575_Inicial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Identity\201506031640084_Ajuste.cs" />
-    <Compile Include="Migrations\Identity\201506031640084_Ajuste.Designer.cs">
-      <DependentUpon>201506031640084_Ajuste.cs</DependentUpon>
+    <Compile Include="Migrations\Identity\201507060328186_recriacao.cs" />
+    <Compile Include="Migrations\Identity\201507060328186_recriacao.Designer.cs">
+      <DependentUpon>201507060328186_recriacao.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Identity\ConfigurationIdentity.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -242,6 +210,7 @@
     <Compile Include="Models\Responsavel.cs" />
     <Compile Include="Models\Secao.cs" />
     <Compile Include="Models\SiteDataContext.cs" />
+    <Compile Include="Negocio\LogAcessoNeg.cs" />
     <Compile Include="Negocio\ExtratoNeg.cs" />
     <Compile Include="Negocio\SecaoNeg.cs" />
     <Compile Include="Negocio\ComposicaoNeg.cs" />
@@ -299,6 +268,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Log\Log.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
@@ -375,6 +345,8 @@
     <Content Include="Views\Shared\_MenuPacientePartial.cshtml" />
     <Content Include="Views\Extrato\Importar.cshtml" />
     <Content Include="Views\Extrato\Consulta.cshtml" />
+    <None Include="Views\Home\ListarLogAcessos.cshtml" />
+    <Content Include="Views\Home\_ListarLogAcessos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -390,35 +362,11 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201506031639016_Inicial.resx">
-      <DependentUpon>201506031639016_Inicial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201507060327342_recriacao.resx">
+      <DependentUpon>201507060327342_recriacao.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506051717179_IndiceEmComposicaoESecao.resx">
-      <DependentUpon>201506051717179_IndiceEmComposicaoESecao.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506062354337_indiceDaComposicaoNaSecao.resx">
-      <DependentUpon>201506062354337_indiceDaComposicaoNaSecao.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506081837159_extratoEComposicao.resx">
-      <DependentUpon>201506081837159_extratoEComposicao.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506100024395_PlanoDeSaudeEValorNoExtrato.resx">
-      <DependentUpon>201506100024395_PlanoDeSaudeEValorNoExtrato.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506100046378_AjusteValorExtrato.resx">
-      <DependentUpon>201506100046378_AjusteValorExtrato.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506100625292_AjusteTamanhoTextoComposicaoSecao.resx">
-      <DependentUpon>201506100625292_AjusteTamanhoTextoComposicaoSecao.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506101604219_PermissaoExibicaoExtrato.resx">
-      <DependentUpon>201506101604219_PermissaoExibicaoExtrato.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Identity\201505302151575_Inicial.resx">
-      <DependentUpon>201505302151575_Inicial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Identity\201506031640084_Ajuste.resx">
-      <DependentUpon>201506031640084_Ajuste.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Identity\201507060328186_recriacao.resx">
+      <DependentUpon>201507060328186_recriacao.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

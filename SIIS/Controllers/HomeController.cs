@@ -101,5 +101,33 @@ namespace SIIS.Controllers
                 extratoNeg.Aprovar(id);
             }
         }
+
+        public ActionResult ListarLogAcessos(string userId)
+        {            
+            return View(Paciente.GetByUserId(userId));
+        }
+
+        public ActionResult _ListarLogAcessos(int idPaciente, int? numeroConselho, string responsavel,
+            string datainicio, string dataFim, string orderBy, int? page)
+        {
+            IPagedList<LogAcessoResponsavel> logs;
+
+            var tipoOrderAnterior = TempData["tipoOrderByAnterior"] as string;
+            var orderByAnterior = TempData["orderByAnterior"] as string;
+
+            var tipoOrderBy = orderBy == orderByAnterior
+                ? (tipoOrderAnterior == "asc" ? "desc" : "asc")
+                : "asc";
+
+            TempData["tipoOrderByAnterior"] = tipoOrderBy;
+            TempData["orderByAnterior"] = orderBy;
+
+            using (LogAcessoNeg logNeg = new LogAcessoNeg())
+            {
+                logs = logNeg.Listar(idPaciente, numeroConselho, responsavel, datainicio, dataFim, orderBy, tipoOrderBy, page);
+            }
+
+            return PartialView("_ListarLogAcessos", logs);
+        }
     }
 }
